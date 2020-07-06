@@ -22,7 +22,7 @@ color_image: /assets/img/lineart.png                    # A bit transparent for 
 # Features
 katex: false                                             # Enable if using math markup
 google_analytics: "UA-77793311-12"
-cookie_consent: false                                   # To respect the usage of cookies
+cookie_consent: true                                   # To respect the usage of cookies
 disqus_shortname: "rykowski-dev"
 layout_variables:                                       # Open the "_sass > base" folder, and open "_variables.scss"
 footer_icons:                                           # In _data/social.yml
