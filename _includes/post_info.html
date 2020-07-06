@@ -7,7 +7,23 @@
       <img src="{{ author.avatar | relative_url }}">
     {% endif %}
     <p class="meta">
-      {% if author.name %}{{ author.name }} - {% endif %}{{ date | date: "%B %-d, %Y" }}
+      {% if author.name %}{{ author.name }} - {% endif %}
+      {% assign month = date | date: "%-m" %}
+      {% case month %}
+        {% when '1' %}Styczeń
+        {% when '2' %}Luty
+        {% when '3' %}Marzec
+        {% when '4' %}Kwiecień
+        {% when '5' %}Maj
+        {% when '6' %}Czerwiec
+        {% when '7' %}Lipiec
+        {% when '8' %}Sierpień
+        {% when '9' %}Wrzesień
+        {% when '10' %}Październik
+        {% when '11' %}Listopad
+        {% when '12' %}Grudzień
+      {% endcase %}
+      {{ date | date: "%Y" }}
     </p>
   {%- if author.url -%}</a>{%- endif -%}
 </div>
