@@ -21,10 +21,10 @@ color_image: /assets/img/lineart.png                    # A bit transparent for 
 
 # Features
 katex: false                                             # Enable if using math markup
-google_analytics:                                       # Tracking ID, e.g. "UA-000000-01"
+google_analytics: "UA-77793311-12"
 cookie_consent: false                                   # To respect the usage of cookies
 cookie_consent_disclaimer: We would like to use third party cookies and scripts to improve the functionality of this website.
-disqus_shortname:                                       # Your discus shortname for comments
+disqus_shortname: "rykowski-dev"
 layout_variables:                                       # Open the "_sass > base" folder, and open "_variables.scss"
 footer_icons:                                           # In _data/social.yml
 share_buttons:                                          # In _data/social.yml
@@ -37,6 +37,8 @@ paginate_path: "/page/:num"
 
 # PORTFOLIO
 collections:
+  posts:
+    permalink: /blog/:title/
   portfolio:
     output: true
     permalink: /:collection/:name
