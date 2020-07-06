@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/flutter-state-management-stateful/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Zarządzanie stanem aplikacji - StatefulWidget | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Zarządzanie stanem aplikacji - StatefulWidget" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Interakcja użytkownika często wymaga aktualizacji wyświetlanych danych na ekranie - m.in. zmiana języka w sekcji ustawień, czy żonglowanie ulubionym elementem. Zarządzaj stanem aplikacji dzięki wbudowanemu rozwiązaniu StatefulWidget." />
+<meta property="og:description" content="Interakcja użytkownika często wymaga aktualizacji wyświetlanych danych na ekranie - m.in. zmiana języka w sekcji ustawień, czy żonglowanie ulubionym elementem. Zarządzaj stanem aplikacji dzięki wbudowanemu rozwiązaniu StatefulWidget." />
+<link rel="canonical" href="https://rykowski.dev/blog/flutter-state-management-stateful/" />
+<meta property="og:url" content="https://rykowski.dev/blog/flutter-state-management-stateful/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-07-05T00:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/flutter-state-management-stateful/","headline":"Zarządzanie stanem aplikacji - StatefulWidget","dateModified":"2019-07-05T00:00:00+02:00","datePublished":"2019-07-05T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-state-management-stateful/"},"description":"Interakcja użytkownika często wymaga aktualizacji wyświetlanych danych na ekranie - m.in. zmiana języka w sekcji ustawień, czy żonglowanie ulubionym elementem. Zarządzaj stanem aplikacji dzięki wbudowanemu rozwiązaniu StatefulWidget.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/triangular.jpeg " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Zarz%C4%85dzanie+stanem+aplikacji+-+StatefulWidget" class="title">Zarządzanie stanem aplikacji - StatefulWidget</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Lipiec
+        
+      2019
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p><strong>Aplikacje mobilne</strong> - a także webowe, czy desktopowe - nie opierają się wyłącznie na statycznych kontrolkach, które widzi nasz użytkownik. Aplikacja to nie tylko zbiór obrazków, przycisków i list, zawsze jest coś więcej. W przeciwnym wypadku zbudowaliśmy wydmuszkę której jedynym zadaniem jest jej podziwianie - dzieło sztuki, nieprawdaż?</p>
+
+<p>Nie ma znaczenia na jaką platformę budujemy nasz program - zawsze potrzebujemy interakcji ze strony użytkownika. Skupmy się jednak na wersji mobilnej. Jakie przykładowe akcje mogą zajść w aplikacji na które musimy odpowiednio zareagować?</p>
+
+<ul>
+  <li>oznaczenie elementu jako ulubiony</li>
+  <li>dodanie przedmiotu do koszyka</li>
+  <li>stuknięcie w ikonkę koszyka</li>
+</ul>
+
+<p>Każda z tych akcji, wymaga odpowiedniej reakcji po stronie naszego kodu. Musimy przykładowo zaprezentować użytkownikowi co ma w koszyku, ale żeby tego dokonać potrzebujemy … tak - informacji o stanie koszyka (co w nim właściwie jest). Możemy także żonglować ulubionymi produktami, aby łatwiej móc je odnaleźć w przyszłości. Wszystkie wymienione funkcjonalności łączy część wspólna - <strong>operują na danych (stanie) aplikacji</strong> w trakcie jej działania.</p>
+
+<p><img src="/assets/img/blog/state_stateful/logo.png" alt="logo.png" /></p>
+
+<h2 id="stan-aplikacji">Stan aplikacji</h2>
+
+<p>Stanem aplikacji nazywamy taki zestaw danych, który spełnia następujące kryteria:</p>
+<ul>
+  <li>odczyt danych dostępny jest w sposób synchroniczny podczas budowania widgetu (metoda <code class="language-plaintext highlighter-rouge">build</code>).</li>
+  <li>dane mogą (ale nie muszą) zmieniać się w trakcie trwania programu.</li>
+</ul>
+
+<p>Jeśli masz doświadczenie z <em>backendem (np. API)</em> w aplikacjach webowych, to tam również operujesz na stanie. Nazywa się co prawda bardziej formalnie - <strong>baza danych</strong> - ale chodzi podobny koncept. Przechowujesz w niej dane, które od czasu do czasu się zmieniają i korzystasz z nich, aby odpowiadać aplikacji mobilnej na przesłane żądania (np. zwracając listę wszystkich zamówień użytkownika).</p>
+
+<p>I tyle? To ten szumny <strong>stan aplikacji</strong>? W skrócie to tak, trudno się bardziej nad nim rozpisywać - formułka oddaje całość tego czym jest. Bardziej złożonym problemem jest jednak to w jaki sposób nim zarządzać, ale o tym dowiesz się już za chwilę.</p>
+
+<h2 id="zarządzanie-stanem">Zarządzanie stanem</h2>
+
+<p>Skoro stan aplikacji oznacza zbiór danych używanych podczas działania programu, to zarządzanie stanem odnosi się do manipulacji tymi danymi i reagowaniem w interfejsie na te zmiany. Przykładowo poprzez usunięcie danej pozycji z koszyka, gdy użytkownik tapnie w ikonkę ❌ obok jej nazwy. Jako że mam podłoże mocno backendowe, to często utożsamiam akcje na stanie jako typowy <strong>CRUD</strong> (<strong>C</strong>reate <strong>R</strong>ead <strong>U</strong>pdate <strong>D</strong>elete):</p>
+
+<ul>
+  <li><strong>Odczyt</strong> danych (wyświetlenie wszystkich pozycji w koszyku)</li>
+  <li><strong>Dodawanie</strong> nowych danych (dodanie nowego produktu do koszyka)</li>
+  <li><strong>Modyfikacja</strong> istniejących rekordów (zmiana ilości danego produktu w koszyku)</li>
+  <li><strong>Usuwanie</strong> zbędnych wpisów (usunięcie produktu z koszyka)</li>
+</ul>
+
+<p>Każda z tych akcji (poza odczytem) zmienia dane, które trzymamy w stanie. Pamiętaj - zmienia dane, ale nie modyfikuje <strong>BEZPOŚREDNIO</strong> elementów wyświetlanych na ekranie. Funkcja uruchamiana w celu usunięcia pozycji z koszyka, aktualizuje tylko stan aplikacji i nic więcej. Nie odpowiada za to, żeby listing koszyka się <em>magicznie</em> odświeżył i usunął z ekranu stary element. Programowanie wokół stanu, a nie bezpośrednio na UI nazywamy <strong>programowaniem deklaratywnym</strong>.</p>
+
+<h2 id="deklaratywny-vs-imperatywny">Deklaratywny vs imperatywny</h2>
+
+<p>Trudne słowa, które w rzeczywistości łatwo jest zrozumieć. Osobiście sporo czasu pisałem w sposób <strong>deklaratywny</strong>, a jeszcze więcej w <strong>imperatywny</strong>, a dopiero dwa lata temu dowiedziałem się o istnieniu tych dwóch pojęć. Chodzi o sposób w jaki programujemy nasz interfejs użytkownika - o to jak wygląda początkowo (po uruchomieniu aplikacji) i jak zmienia się w trakcie działania.</p>
+
+<h3 id="styl-imperatywny">Styl imperatywny</h3>
+
+<p>Styl imperatywny dotyczy przede wszystkim starszych technologii - Android SDK, czy iOS UIKit. Nie mam z nimi większego komercyjnego doświadczenia, dlatego posłużę się przykładem z aplikacji webowych i technologią jQuery. Niegdyś brylująca technologia do tworzenia aplikacji, dzisiaj leciwy i schorowany dziad(ek). Nie jesteśmy tu jednak żeby wspominać historię, czy wgłębiać się w wady-zalety jQuery, a zrozumieć imperatywny UI. Spójrzmy więc na prosty przykład, który łatwo zrozumieć nawet bez znajomości tej biblioteki:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">input.name</span><span class="dl">"</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">change</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+  <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.greeting</span><span class="dl">"</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="dl">"</span><span class="s2">Witaj </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">name</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Nasłuchujemy eventu <em>change</em> na polu tekstowym <em>name</em> i gdy on nastąpi - aktualizujemy komponent <em>greeting</em> o nową wartość tekstową np. <em>“Witaj Kamil”</em>. Rozsądne i eleganckie rozwiązanie, prawda? <del><strong>TAK</strong></del> <strong>NIE</strong>. O ile trudno odmówić prostoty, to mamy tutaj co najmniej dwa problemy:</p>
+
+<ol>
+  <li>Jeśli jakikolwiek inny komponent w aplikacji chciałby również się aktualizować po zmianie imienia to musimy rozszerzyć naszą funkcję (fuj), lub w innym miejscu w kodzie również wpiąć się w ten sam event (genialne). Co jednak zrobisz, gdy w pewnym momencie okaże się, że imię można zmieniać w inny sposób niż początkowy <strong>input.name</strong>? Tak - zaktualizujesz 100 miejsc w aplikacji (nikt tego nie lubi).</li>
+  <li>Debugowanie jest tak trudne jak granie w Diablo 2 w trybie <strong>hardcore</strong> (no wiesz - permanentna śmierć). Im większa aplikacja, tym więcej się dzieje i w pewnym momencie nie potrafisz odpowiedzieć na pytanie kolegi z działu QA - <em>“Dlaczego ten przycisk jest zablokowany?”</em> (swoją drogą - autentyk). Wchodzisz do kodu, odnajdujesz stosowny przycisk, ale nie ma on w swojej deklaracji nic o blokowaniu. To czy jest zablokowany, czy też nie jest wysterowane przez 50 funkcji, które żonglują jego dostępnością.</li>
+</ol>
+
+<p>Podsumowując - styl imperatywny jest <strong>łatwy w zrozumieniu</strong> (<em>“zmieniam imię to zmienia się nagłówek”</em>), ale niesie ze sobą <strong>burdel w kodzie</strong>, szczególnie gdy aplikacja się rozrasta i dochodzą nowe funkcjonalności. W pewnym momencie utrzymanie takiego stwora staje się problematyczne i czasochłonne - acz możliwe. Na rynku mamy miliony aplikacji napisanych w taki sposób - nie twierdzę bynajmniej że to coś nierealnego.</p>
+
+<h3 id="styl-deklaratywny">Styl deklaratywny</h3>
+
+<p>Nowy nurt w tworzeniu interfejsu użytkownika, który zakłada, że my jako programiści nie musimy przejmować się tym, aby konkretny element na ekranie zmienił swoje właściwości (kolor, tekst, cokolwiek) po zadziałaniu się akcji X. Naszym zadaniem jest natomiast stworzenie komponentów (widgetów), które w zależności od otrzymanego stanu mogą zmienić swój “wizerunek”. Jest to styl wykorzystywany przez takie technologie jak Swift UI, React, a także rzecz jasna <strong>Flutter</strong>.</p>
+
+<p>A teraz podejdźmy do tego bardziej łopatologicznie na pseudo-przykładzie (pamiętaj - to jest pseudokod, nie używaj go w domu):</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RaisedButton</span><span class="o">(</span>
+  <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="o">{</span> <span class="n">clickCount</span><span class="o">++</span> <span class="o">},</span>
+  <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Kliki: </span><span class="si">${clickCount}</span><span class="s">"</span><span class="o">),</span>
+<span class="o">)</span>
+<span class="c1">// ...</span>
+<span class="n">Text</span><span class="o">(</span><span class="n">clickCount</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">?</span> <span class="s">"Za klikanie jest nagroda."</span> <span class="o">:</span> <span class="s">"Żartowałem :)"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Mamy tutaj przycisk, który po tapnięciu zwiększa wartość zmiennej <strong>clickCount</strong>, a dodatkowo wyświetla jej aktualny stan jako tekst. Dalej w drzewie umieściliśmy dodatkowy tekst, który w zależności od wspomnianego stanu zmienia prezentowaną formę.</p>
+
+<p>Jak widzisz w funkcji <strong>onPressed</strong> nie zmieniamy ani tekstu na przycisku, ani tego na dole drzewa. Aktualizujemy wyłącznie stan aplikacji, a Flutter sam zajmie się resztą. Automatycznie rozwiązują nam się problemy stylu imperatywnego:</p>
+
+<ol>
+  <li>Stan jest jedynym źródłem prawdy, które każdy komponent może odczytać w dowolnym momencie. Nie ma znaczenia kiedy i jaka akcja zmieni stan - nasz UI odświeży się samoczynnie.</li>
+  <li>Ponownie - tylko stan aplikacji określa obecny UI. Wystarczy znaleźć zbugowany komponent i określić jaki stan musi zajść, aby przycisk się zablokował.</li>
+</ol>
+
+<p>W zależności od Twoich poprzednich doświadczeń - albo już to zaakceptowałeś i czujesz się w domu, albo będziesz potrzebował trochę czasu aby przestawić swój proces myślowy na nowe tory. Z własnego doświadczenia (a naprawdę długo pisałem imperatywnie) powiem, że <strong>WARTO</strong>.</p>
+
+<p>Jeśli chciałbym w jednym zdaniu podsumować styl deklaratywny to byłaba to następująca fraza:</p>
+
+<blockquote>
+  <p>UI aplikacji budowany jest w celu zaprezentowania aktualnie posiadanego stanu.</p>
+</blockquote>
+
+<h2 id="poketap">PokeTap</h2>
+
+<p>Dość teorii, daj praktykę! Najłatwiej uczyć się i walidować zdobytą wiedzę na przykładach, tak też zrobimy w tym przypadku. Nie lubię jednak demonstrować czegokolwiek na kolejnej aplikacji typu <em>lista TODO</em>. Możliwe że to niezdiagnozowane uczulenie, a może po prostu jest w sieci zbyt wiele rozwiązań tego typu i gdy widzę że będę poznawał nowe zagadnienie przez <em>“listę rzeczy do zrobienia”</em> to dopada mnie nagły atak <del>spawacza</del> mini-migreny.</p>
+
+<p>Co więc proponuję? <strong>GRĘ!</strong> Duże (bo drukowane) słowo na mały projekt, ale stworzymy prostego clickera limitowanego czasem. Nie będzie miał zbyt wiele polotu, ale na pewno będziemy się przy nim lepiej bawili niż wiesz przy czym (⬆️), a dodatkowo opanujemy niezbędne <strong>techniki zarządzania stanem</strong>. Poniżej możesz zerknąć na nasz docelowy design, który będzie nam towarzyszył przez resztę wpisu.</p>
+
+<p><img src="/assets/img/blog/poketap_layout.png" alt="poketap_layout.png" />
+<em>&lt;div align="center"&gt;PokeTap - wytrenuj swojego stworka.&lt;/div&gt;</em></p>
+
+<p>Gra polega na klikanie w przycisk <strong>Trenuj</strong> tak wiele razy jak to możliwe w ciągu limitowanego czasu 60 sekund. Każdy klik zwiększa nasz poziom oraz atrybuty ataku i obrony. Typowy <strong>grind</strong>, ale bez endgame. Zaczynajmy!</p>
+
+<h2 id="szybki-prototyp-statelesswidget">Szybki prototyp (StatelessWidget)</h2>
+
+<p><strong>StatelessWidget</strong> (z ang. widget bezstanowy) to prosty element wizualny nie posiadający z definicji stanu oraz nie potrafiący sam się przerysować, gdy użytkownik wykona odpowiednią akcję. Przykładami są wbudowane we Fluttera <strong>Text</strong>, <strong>RaisedButton</strong>, czy <strong>Container</strong>. Przyjmują one parametry podczas tworzenia, ale nie zmieniają swojego wyglądu same z siebie podczas działania aplikacji.</p>
+
+<p>Od designu do kodu. Nie potrafimy jeszcze wykorzystać możliwości stanu, ale nic nie stoi na przeszkodzie, aby skupić się wpierw na części wizualnej. Tajemnicą poliszynela jest fakt, że tak przygotowany layout przekłada się 1:1 na wersję stanową, więc nie tracimy nawet minuty na bezsensowną implementację.</p>
+
+<blockquote>
+  <p><strong>StatelessWidget</strong> - używaj go zawsze, gdy nie potrzebujesz przechowywać wewnętrznego stanu, który doprowadziłby do przerysowania komponentu.</p>
+</blockquote>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">runApp</span><span class="o">(</span><span class="n">App</span><span class="o">());</span>
+
+<span class="kd">class</span> <span class="nc">App</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">MaterialApp</span><span class="o">(</span>
+      <span class="nl">home:</span> <span class="n">Scaffold</span><span class="o">(</span>
+        <span class="nl">backgroundColor:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">amber</span><span class="o">,</span>
+        <span class="nl">body:</span> <span class="n">HomeScreen</span><span class="o">(),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">HomeScreen</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Column</span><span class="o">(</span>
+      <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceAround</span><span class="o">,</span>
+      <span class="nl">children:</span> <span class="o">[</span>
+        <span class="n">Text</span><span class="o">(</span>
+          <span class="s">"60 sekund"</span><span class="o">,</span>
+          <span class="nl">style:</span> <span class="n">TextStyle</span><span class="o">(</span>
+            <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">,</span>
+            <span class="nl">fontSize:</span> <span class="mi">32</span><span class="o">,</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+        <span class="n">Image</span><span class="o">.</span><span class="na">network</span><span class="o">(</span>
+          <span class="s">"http://pluspng.com/img-png/pikachu-face-png-png-svg-512.png"</span><span class="o">,</span>
+          <span class="nl">width:</span> <span class="mi">160</span><span class="o">,</span>
+          <span class="nl">height:</span> <span class="mi">160</span><span class="o">,</span>
+        <span class="o">),</span>
+        <span class="n">RaisedButton</span><span class="o">(</span>
+          <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">{},</span>
+          <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">,</span>
+          <span class="nl">child:</span> <span class="n">Padding</span><span class="o">(</span>
+            <span class="nl">padding:</span> <span class="kd">const</span> <span class="n">EdgeInsets</span><span class="o">.</span><span class="na">all</span><span class="o">(</span><span class="mi">16</span><span class="o">),</span>
+            <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Trenuj"</span><span class="o">,</span> <span class="nl">style:</span> <span class="n">TextStyle</span><span class="o">(</span><span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">white</span><span class="o">)),</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+        <span class="n">Container</span><span class="o">(</span>
+          <span class="nl">padding:</span> <span class="n">EdgeInsets</span><span class="o">.</span><span class="na">all</span><span class="o">(</span><span class="mi">16</span><span class="o">),</span>
+          <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">,</span>
+          <span class="nl">child:</span> <span class="n">Row</span><span class="o">(</span>
+            <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceEvenly</span><span class="o">,</span>
+            <span class="nl">children:</span> <span class="o">[</span>
+              <span class="n">StatsBox</span><span class="o">(</span><span class="nl">label:</span> <span class="s">"Poziom"</span><span class="o">,</span> <span class="nl">value:</span> <span class="mi">1</span><span class="o">),</span>
+              <span class="n">StatsBox</span><span class="o">(</span><span class="nl">label:</span> <span class="s">"Atak"</span><span class="o">,</span> <span class="nl">value:</span> <span class="mi">0</span><span class="o">),</span>
+              <span class="n">StatsBox</span><span class="o">(</span><span class="nl">label:</span> <span class="s">"Obrona"</span><span class="o">,</span> <span class="nl">value:</span> <span class="mi">0</span><span class="o">),</span>
+            <span class="o">],</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">],</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">StatsBox</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="n">StatsBox</span><span class="o">({</span>
+    <span class="n">Key</span> <span class="n">key</span><span class="o">,</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">label</span><span class="o">,</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">value</span><span class="o">,</span>
+  <span class="o">})</span> <span class="o">:</span> <span class="k">super</span><span class="o">(</span><span class="nl">key:</span> <span class="n">key</span><span class="o">);</span>
+
+  <span class="kd">final</span> <span class="kt">String</span> <span class="n">label</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
+
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Column</span><span class="o">(</span>
+      <span class="nl">children:</span> <span class="o">[</span>
+        <span class="n">Text</span><span class="o">(</span>
+          <span class="n">label</span><span class="o">,</span>
+          <span class="nl">style:</span> <span class="n">TextStyle</span><span class="o">(</span>
+            <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">amber</span><span class="o">,</span>
+            <span class="nl">fontSize:</span> <span class="mi">13</span><span class="o">,</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+        <span class="n">Padding</span><span class="o">(</span>
+          <span class="nl">padding:</span> <span class="kd">const</span> <span class="n">EdgeInsets</span><span class="o">.</span><span class="na">only</span><span class="o">(</span><span class="nl">top:</span> <span class="mf">8.0</span><span class="o">),</span>
+          <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span>
+            <span class="n">value</span><span class="o">.</span><span class="na">toString</span><span class="o">(),</span>
+            <span class="nl">style:</span> <span class="n">TextStyle</span><span class="o">(</span>
+              <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">white</span><span class="o">,</span>
+              <span class="nl">fontSize:</span> <span class="mi">24</span><span class="o">,</span>
+              <span class="nl">fontWeight:</span> <span class="n">FontWeight</span><span class="o">.</span><span class="na">bold</span><span class="o">,</span>
+            <span class="o">),</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">],</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Rozbiliśmy nasz layout na 3 widgety:</p>
+
+<ol>
+  <li><strong>App</strong> - komponent startowy, okala resztę aplikacji pod kątem wykorzystania <em>Material UI</em></li>
+  <li><strong>HomeScreen</strong> - główny ekran rysujący naszą aplikację</li>
+  <li><strong>StatsBox</strong> - pojedynczy rekord, który wyświetla jedną z dostępnych statystyk: poziom, atak, obrona.</li>
+</ol>
+
+<p>Kod wygląda sensownie, więc budujemy naszą aplikację na emulatorze, lub urządzeniu. Po chwili mamy zbudowanego i działającego <em>PokeTapa</em>! Kliknięcie w przycisk <strong>Trenuj</strong> nie aktualizuje oczywiście naszych statystyk, a czasomierz na górze nie odlicza nieuniknionego. Zdawaliśmy sobie z tego sprawę (mam nadzieję) i wiemy co stanowi problem - brakuje nam <strong>stanu aplikacji</strong>.</p>
+
+<h2 id="praktyczny-stan-statefulwidget">Praktyczny stan (StatefulWidget)</h2>
+
+<p><strong>StatefulWidget</strong> (z ang. widget stanowy) to element posiadający własny stan, którego zmiana wywołuje przerysowanie elementu wizualnego na ekranie. Dobrymi przykładami są widgety używane w formularzach takie jak <strong>TextField</strong>, czy <strong>Checkbox</strong>, które “pamiętają” wprowadzone do siebie dane i każda taka zmiana (np. wpisanie litery w polu tekstowym) prowadzi do automatycznej aktualizacji kontrolki na ekranie.</p>
+
+<p>W przeciwieństwie do widgetu bezstanowego, który swoje działanie opiera na pojedynczej klasie dziedziczącej po <em>StatelessWidget</em>, tutaj musimy się napracować ciut mocniej. Potrzebujemy dwóch części - <strong>stałej</strong> (publicznej) i <strong>zmiennej</strong> (prywatnej).</p>
+
+<h3 id="definicja-publiczna-stała">Definicja publiczna (stała)</h3>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MyWidget</span> <span class="kd">extends</span> <span class="n">StatefulWidget</span> <span class="o">{</span>
+    <span class="n">MyWidget</span><span class="o">({</span>
+      <span class="n">Key</span> <span class="n">key</span><span class="o">,</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">,</span>
+    <span class="o">}):</span> <span class="k">super</span><span class="o">(</span><span class="nl">key:</span> <span class="n">key</span><span class="o">);</span>
+    
+    <span class="kd">final</span> <span class="n">string</span> <span class="n">name</span><span class="o">;</span>
+    
+	<span class="nd">@override</span>
+	<span class="n">_MyWidgetState</span> <span class="n">createState</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="n">_MyWidgetState</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Publiczna część komponentu, której używasz w kodzie wyżej zupełnie jak dowolny <strong>StatelessWidget</strong>. W momencie gdy chcesz dodać element stanowy do drzewa - tworzysz instancję klasy poprzez <code class="language-plaintext highlighter-rouge">new MyWidget()</code> i gotowe.</p>
+
+<p>Z racji tego, że <strong>StatefulWidget</strong> rozszerza klasę <strong>Widget</strong> - wymusza to na niej bycie niezmienną (<strong>immutable</strong>) - jest to główny powód, dla którego wymagana jest dodatkowa część (z reguły prywatna). Więcej na ten temat znajdziesz na <a href="https://stackoverflow.com/a/50613000/1047825">Stack Overflow</a>.</p>
+
+<h3 id="definicja-prywatna-zmienna">Definicja prywatna (zmienna)</h3>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">_MyWidgetState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">MyWidget</span><span class="o">&gt;</span> <span class="o">{</span>
+	<span class="nd">@override</span>
+	<span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+	    <span class="k">return</span> <span class="n">Text</span><span class="o">(</span><span class="n">widget</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Druga wymagana składowa do utworzenia widgetu stanowego. Jest to część zmienna (<strong>mutable</strong>), która może zmieniać swoje dane w trakcie życia - co spowoduje automatyczne przebudowanie elementu wizualnego. Zwróć uwagę na znak <strong><em>** przed nazwą klasy - oznacza on, że klasa jest prywatna i nie można jej przykładowo zaimportować z innego pliku. Jeśli potrzebujesz do niej dostępu z zewnątrz - nie używaj prefixu **</em></strong>, nie jest on wymagany, lecz zalecany.</p>
+
+<p>Dostęp do parametrów <code class="language-plaintext highlighter-rouge">MyWidget</code> z klasy <code class="language-plaintext highlighter-rouge">_MyWidgetState</code> odbywa się poprzez obiekt <strong>widget</strong>. W zademonstrowanym przykładie metoda build rysuje wartość z pola <em>widget.name</em> (<em>name</em> zadeklarowane jest w <em>MyWidget</em>).</p>
+
+<p>Obiekt stanu przechowuje wszelkie dane, które mogą zmieniać się w trakcie działania (np. poziom naszego stworka), a także metodę <em>build</em>, która jest uruchamiana przy każdorazowej zmianie stanu przez wywołanie funkcji <strong>setState(() {})</strong>.</p>
+
+<h3 id="zmiana-stanu-setstate">Zmiana stanu (setState)</h3>
+
+<p>W celu zmiany aktualnego stanu obiektu posługujemy się funkcją <strong>setState</strong>, która dostępna jest na StatefulWidget. Powiadomi ona framework o tym, że stan został zmieniony, co spowoduje automatyczne przerysowanie. Mamy dwie możliwości na jego używanie - brzydką, lub oficjalną.</p>
+
+<p><strong>Brzydka</strong>:</p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">fn</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">clickCount</span><span class="o">++;</span>
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{});</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>Oficjalna:</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">fn</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">clickCount</span><span class="o">++;</span>
+  <span class="o">});</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Obie zadziałają identycznie, jednak ze względu na czytelność kodu mocno zalecam wariant <strong>oficjalny</strong>, bo:</p>
+
+<ol>
+  <li>Oficjalny jest zalecany przez framework</li>
+  <li>Przy code review od razu widać co się dzieje i mamy zgrupowane miejsce w którym dokonujemy zmiany stanu.</li>
+</ol>
+
+<p>Korzystając z podejścia oficjalnego pamiętaj o jeszcze jednej rzeczy - wewnątrz funkcji dostarczanej do <em>setState</em> nie wykonuj ciężkich obliczeń, ani innych operacji - dokonaj w niej jedynie przypisania wartości do stanu.</p>
+
+<p><strong>Źle:</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">fn</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">doSomeHeavyCalc</span><span class="o">();</span>
+    <span class="n">clickCount</span><span class="o">++;</span>
+    <span class="n">someMoreExtraWork</span><span class="o">();</span>
+  <span class="o">});</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>Dobrze:</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">fn</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">clickCount</span><span class="o">++;</span>
+  <span class="o">});</span>
+  
+  <span class="n">doSomeHeavyCalc</span><span class="o">();</span>
+  <span class="n">someMoreExtraWork</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Używaj widgetu stanowego, gdy potrzebujesz wewnętrznego stanu, który będzie automatycznie aktualizował wizualną część kontrolki.</p>
+</blockquote>
+
+<h3 id="zebranie-myśli">Zebranie myśli</h3>
+
+<p>Wiemy już co należy zrobić - musimy <strong>zamienić StatelessWidget na StatefulWidget</strong> i stworzyć dodatkową klasę na wymagany stan. Tylko który widget ma być stanowy? Wszystkie, czy wystarczy jeden? Żadna interakcja nie zachodzi zarówno w <em>App</em> jak i w <em>StatsBox</em>, możemy je więc zostawić w spokoju. <strong>HomeScreen</strong> jednak definitywnie potrzebuje pomocy - ma przycisk, który zmienia stan, a dodatkowo powinien się umieć przerysować w odpowiednim momencie. Mamy kandydata do przerobienia, <strong>sukces</strong>!</p>
+
+<h2 id="działający-prototyp-statefulwidget">Działający prototyp (StatefulWidget)</h2>
+
+<p>Wprowadzanie niezbędnych zmian zaczniemy od przemiany <code class="language-plaintext highlighter-rouge">HomeScreen</code> na wersję stanową. Będziemy potrzebować dwóch klas, pamiętasz?</p>
+
+<p><strong>Przed:</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">HomeScreen</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>Po:</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">HomeScreen</span> <span class="kd">extends</span> <span class="n">StatefulWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">_HomeScreenState</span> <span class="n">createState</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="n">_HomeScreenState</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">_HomeScreenState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">HomeScreen</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kt">int</span> <span class="n">secondsLeft</span> <span class="o">=</span> <span class="mi">60</span><span class="o">;</span>
+  <span class="kt">int</span> <span class="n">level</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+  <span class="kt">int</span> <span class="n">attack</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="kt">int</span> <span class="n">defense</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Widget nabiera kształtu/rzeźby/masy. Sprawiliśmy, że potrafi się automatycznie przebudować poprzez posiadany stan, a dodatkowo zadeklarowaliśmy atrybuty, które przydadzą nam się już za moment do nadania trochę życia tej smutnej grze.</p>
+
+<p>Mam nadzieję, że zadajesz sobie teraz pytanie <em>“Co dalej?”</em>, a nie <em>“Dlaczego to jeszcze nie działa?”</em>. Kolejną rzeczą której potrzebujemy jest wykorzystanie zadeklarowanych atrybutów w metodzie <code class="language-plaintext highlighter-rouge">build</code>, zamiast zahardkodowanych wartości. Mamy takie miejsca dwa - licznik na górze ekranu i statystyki na dole. Do pracy!</p>
+
+<p><strong>Przed:</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Text</span><span class="o">(</span>
+  <span class="s">"60 sekund"</span><span class="o">,</span>
+  <span class="c1">// ...</span>
+<span class="o">)</span>
+<span class="c1">// ...</span>
+<span class="nl">children:</span> <span class="o">[</span>
+  <span class="n">StatsBox</span><span class="o">(</span><span class="nl">label:</span> <span class="s">"Poziom"</span><span class="o">,</span> <span class="nl">value:</span> <span class="mi">1</span><span class="o">),</span>
+  <span class="n">StatsBox</span><span class="o">(</span><span class="nl">label:</span> <span class="s">"Atak"</span><span class="o">,</span> <span class="nl">value:</span> <span class="mi">0</span><span class="o">),</span>
+  <span class="n">StatsBox</span><span class="o">(</span><span class="nl">label:</span> <span class="s">"Obrona"</span><span class="o">,</span> <span class="nl">value:</span> <span class="mi">0</span><span class="o">),</span>
+<span class="o">]</span>
+</code></pre></div></div>
+
+<p><strong>Po:</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Text</span><span class="o">(</span>
+  <span class="s">"</span><span class="si">$secondsLeft</span><span class="s"> sekund"</span><span class="o">,</span>
+  <span class="c1">// ...</span>
+<span class="o">),</span>
+<span class="c1">// ...</span>
+<span class="nl">children:</span> <span class="o">[</span>
+  <span class="n">StatsBox</span><span class="o">(</span><span class="nl">label:</span> <span class="s">"Poziom"</span><span class="o">,</span> <span class="nl">value:</span> <span class="n">level</span><span class="o">),</span>
+  <span class="n">StatsBox</span><span class="o">(</span><span class="nl">label:</span> <span class="s">"Atak"</span><span class="o">,</span> <span class="nl">value:</span> <span class="n">attack</span><span class="o">),</span>
+  <span class="n">StatsBox</span><span class="o">(</span><span class="nl">label:</span> <span class="s">"Obrona"</span><span class="o">,</span> <span class="nl">value:</span> <span class="n">defense</span><span class="o">),</span>
+<span class="o">]</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Jeśli nie spotkałeś się wcześniej z zapisem w formacie <strong>“$secondsLeft sekund”</strong> to jest to tzw. string interpolation. Służy on do wyświetlania ciągu znaków z dynamicznymi wartościami w środku.</p>
+</blockquote>
+
+<p>Jesteśmy prawie u celu ukończenia naszej gry. Działa co prawda zupełnie jak wersja bezstanowa (wydmuszka), ale stan jest i czeka tylko aż go uaktywnimy. A kiedy chcemy to zrobić? Co w naszej aplikacji wymusza odświeżenie ekranu jak nie kliknięcie przycisku <em>Trenuj</em>! <strong>Eureka</strong> - brakuje obsługi kliknięcia w przycisk!</p>
+
+<p><strong>Przed:</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RaisedButton</span><span class="o">(</span>
+  <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">{},</span>
+  <span class="c1">// ...</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p><strong>Po:</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RaisedButton</span><span class="o">(</span>
+  <span class="nl">onPressed:</span> <span class="n">train</span><span class="o">,</span>
+  <span class="c1">// ...</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Dodatkowo w obrębie klasy trzymającej stan zaimplementuj metodę <strong>train</strong>, która przeprowadzi jednorazowy trening stworka. Co powinna zrobić? Przede wszystkim zwiększyć poziom o jedno oczko (szybki grind) i podbić statystyki zgodnie ze wzorem podbijania statystyk:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">train</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="kd">var</span> <span class="n">random</span> <span class="o">=</span> <span class="n">Random</span><span class="o">();</span>
+
+    <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="n">attack</span> <span class="o">+=</span> <span class="n">random</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">4</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="n">defense</span> <span class="o">+=</span> <span class="n">random</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+  <span class="o">});</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Mój wzór opiera się na wartościach losowych, gdzie atak zwiększam między 1-4, a obronę o 1-3 punkty. Jeśli podoba Ci się koncept losowości (każda rozgrywka będzie inna!) to pamiętaj o zaimportowaniu na górze pliku <strong>modułu obsługującego liczby pseudolosowe</strong>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'dart:math'</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>Jeśli masz inny pomysł, np. zależny od tego jaki poziom już posiadamy, lub ile czasu pozostało w grze to śmiało zrób to po swojemu - jesteś od teraz Indie Game Developerem.</p>
+
+<p>Gra gotowa - można się zagrywać <del>godzinami</del> sekundami. A jeśli już przy sekundach jesteśmy to co z licznikiem czasu? Dlaczego nie odlicza nieuniknionego i pozwala expić w nieskończoność? Cóż - <strong>secondsLeft</strong> otrzymuje na starcie wartość <em>60</em> i nigdy jej nie zmienia, bo i kiedy? Jaką akcję ma wykonać użytkownik, żebyśmy zareagowali odjęciem sekundy z zegarka?</p>
+
+<blockquote>
+  <p>…</p>
+</blockquote>
+
+<p>To było ciut podchwytliwe, bo przecież użytkownik nie musi podejmować żadnej akcji żeby czas upływał (zupełnie jak w realnym życiu). Ot - czas płynie nieubłaganie nawet jeśli nasz gracz patrzy tylko w ekran, nie dotykając i nie stukając w żadne miejsce na ekranie. Czy to oznacza, że <strong>stan można zaktualizować bez zewnętrznej ingerencji</strong>? Nie inaczej. To, że w większości przypadków aktualizujemy go po stosownej akcji, nie oznacza że nie możemy robić tego w dowolnym momencie. No to wio!</p>
+
+<h2 id="oszlifowany-diament-lifecycle-events">Oszlifowany diament (lifecycle events)</h2>
+
+<p>Na zakończenie potrzebujemy aktualizować zmienną <strong>secondsLeft</strong>, co sekundę odejmując <em>1</em> od jej aktualnej wartości, aż do momentu gdy osiągniemy zero. Zero arbitralnie - po prostu nie chciałbym pokazywać użytkownikowi ujemnego czasu. Na nasze szczęście Dart dostarcza nam gotowe rozwiązanie w postaci <strong>Timer.periodic</strong>, którego zadanie polega na ciągłym odliczaniu określonego czasu (np. 1 sekundy) i uruchamianiu określonego kodu (np. setState). Brzmi legitnie. Zdefiniujmy funkcję aktualizującą stan zegara (na tym samym poziomie co funkcja <strong>train</strong>):</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">updateClock</span><span class="p">(</span><span class="n">Timer</span> <span class="n">timer</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">secondsLeft</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Do nothing</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+    
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>    
+    <span class="n">secondsLeft</span> <span class="o">-=</span> <span class="mi">1</span><span class="o">;</span>
+  <span class="o">});</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Funkcja <strong>updateClock</strong> przyjmuje obiekt typu <strong>Timer</strong> - jest to wymaganie pochodzące z faktu, iż <strong>Timer.periodic</strong> jako parametru wymaga właśnie funkcji o takiej sygnaturze. Dodajmy brakujący import na górze pliku:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'dart:async'</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>Ostatni krok stanowi uruchamianie funkcji <strong>updateClock</strong> co sekundę, do czego przyda nam się poniższa wstawka:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Timer</span><span class="o">.</span><span class="na">periodic</span><span class="o">(</span><span class="n">Duration</span><span class="o">(</span><span class="nl">seconds:</span> <span class="mi">1</span><span class="o">),</span> <span class="n">updateClock</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>Umieść ją <strong>na samym początku metody build</strong> - chcemy aby licznik zaczął się odświeżać niezwłocznie przed pierwszym narysowaniem. Uruchamiamy aplikację i voila - dostępny czas ucieka jak przez palce. Zaraz, zaraz. Chyba jednak trochę za szybko!</p>
+
+<p><img src="/assets/img/blog/poketap_broken_counter.gif" alt="poketap_broken_counter.gif" /></p>
+
+<p>Uruchamiamy nowy timer za każdym przebudowaniem widgetu, które następuje po każdorazowej aktualizacji stanu, które z kolei … dzieje się raz na sekundę za sprawą licznika. Zobrazujmy sobie początek tego szaleństwa:</p>
+
+<ol>
+  <li>Pierwsze narysowanie widgetu tworzy timer, który co sekundę zmienia pozostały czas (stan)</li>
+  <li>Po sekundzie timer zmienia <em>secondsLeft</em> z <strong>60 na 59</strong> poprzez wywołanie <strong>setState</strong></li>
+  <li>Następuje przerysowanie komponentu (uruchamiana jest metoda <em>build</em>) i wystartowanie dodatkowego timera (taki sam jak w punkcie 1)</li>
+  <li>Po kolejnej sekundzie timer1 aktualizuje stan z <strong>59 na 58</strong></li>
+  <li>Mikrosekundę po nim timer2 aktualizuje stan z <strong>58 na 57</strong></li>
+  <li>Każda aktualizacja stanu rozpędza zegar coraz mocniej</li>
+  <li>No profit</li>
+</ol>
+
+<p>Idealnym rozwiązaniem problemu wydaje się uruchomienie tylko jednego timera i to w momencie pierwszego rysowania. Można by dodać flagę typu <strong>isFirstDraw</strong>, ale z pomocą przychodzą nam specjalne metody wbudowane, które automatycznie wołane są przez Fluttera w odpowiednim czasie życia widgetu tzw. <strong>lifecycle</strong>.</p>
+
+<h3 id="dodanie-do-drzewa-initstate">Dodanie do drzewa (initState)</h3>
+
+<p>Funkcja <strong>initState</strong> uruchamiana jest jednorazowo na czas życia widgetu. Nazwa sugeruje, że możemy tutaj zainicjalizować wstępny stan, ale możemy również bez obaw wystartować nasz unikalny timer i mieć pewność, że <strong>initState</strong> nie zostanie zawołany więcej niż raz. Wyrzuć timer z builda i dodaj następującą funkcję:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Timer</span> <span class="n">timer</span><span class="o">;</span>
+
+<span class="nd">@override</span>
+<span class="n">initState</span><span class="o">()</span> <span class="o">{</span>
+  <span class="k">super</span><span class="o">.</span><span class="na">initState</span><span class="o">();</span>
+  <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="o">.</span><span class="na">periodic</span><span class="o">(</span><span class="n">Duration</span><span class="o">(</span><span class="nl">seconds:</span> <span class="mi">1</span><span class="o">),</span> <span class="n">updateClock</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Od razu lepiej - licznik nie gna na złamanie karku i odlicza sekunda-po-sekundzie. Właśnie tego oczekiwaliśmy po naszej spokojnej grze.</p>
+
+<p><img src="/assets/img/blog/poketap_fixed_counter.gif" alt="poketap_fixed_counter.gif" /></p>
+
+<h3 id="zdjęcie-z-drzewa-dispose">Zdjęcie z drzewa (dispose)</h3>
+
+<p><em>PokeTap</em> jest grą bardzo prostą, która posiada wyłącznie jeden ekran. Wyobraź sobie jednak sytuację w której się rozrasta i możliwa jest nawigacja między różnymi ekranami (np. listing stworków). W takim przypadku warto rozważyć czy kod, który uruchamiamy w <strong>initState</strong> wymaga “posprzątania” przed opuszczeniem ekranu.</p>
+
+<p><strong>initState</strong> startuje nowy timer, który co sekundę wywoła funkcję <em>uploadClock</em>. Jeśli wyjdziemy z tego ekranu (w przyszłości, gdy będzie to możliwe) to timer dalej będzie robił swoje. Flutter nie posprząta za nas wszystkiego - wyczyści widget oraz jego stan, ale nie zdaje sobie sprawy z naszych programistycznych poczynań. Musimy znaleźć więc sposób aby wykonać dodatkowy kod, który zatrzyma timer w momencie usuwania widgetu z ekranu. <strong>Dispose</strong> <em>to the rescue!</em></p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@override</span>
+<span class="kt">void</span> <span class="nf">dispose</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">timer</span><span class="o">.</span><span class="na">cancel</span><span class="o">();</span>
+  <span class="k">super</span><span class="o">.</span><span class="na">dispose</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Pamiętaj - kod nie ma żadnego praktycznego zastosowania w aktualnej wersji aplikacji, nie musisz go więc nanosić na swój projekt. Wspominam o metodzie <strong>dispose</strong> wyłącznie dla dopełnienia przeciwieństwa <strong>initState</strong>. Sam temat metod <strong>lifecycle</strong> jest na tyle ważny i warty poznania, że na pewno pojawi się krótki wpis na blogu dedykowany właśnie nim.</p>
+
+<h2 id="dalsze-plany">Dalsze plany</h2>
+
+<p>Mamy to - <strong>w pełni działająca gra</strong> typu clicker, bez żadnych udziwnień. Możesz je rzecz jasna dodać i rozszerzyć koncept, a ostatecznie nawet wydać na Android i iOSa. Wierzę, że wszystko okazało się jasne i potrafisz zarządzać stanem swojej Flutterowej aplikacji. Skomentuj wpis jeśli chciałbyś się czymś podzielić, lub masz dowolne pytanie. Wyszeruj dalej, aby więcej Flutter devów dowiedziało się co i jak. Do następnego wpisu!</p>
+
+<p>Pełny kod aplikacji PokeTap znajdziesz na <a href="https://github.com/vintage/rykowski.dev/blob/master/samples/poketap.dart">GitHubie</a>.</p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-state-management-stateful%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Zarz%C4%85dzanie+stanem+aplikacji+-+StatefulWidget%20https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-state-management-stateful%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/flutter-state-management-stateful/&title=Zarz%C4%85dzanie+stanem+aplikacji+-+StatefulWidget%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Zarz%C4%85dzanie+stanem+aplikacji+-+StatefulWidget%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/flutter-state-management-stateful/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="Zarabianie i monetyzacja - Reklamy AdMob" href="/blog/flutter-monetization-admob/">
+            <p>Poprzedni wpis</p>
+            Zarabianie i monetyzacja - Reklamy AdMob
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="Pozycjonowanie elementów w gridzie - Row i Column" href="/blog/flutter-layout-grid/">
+            <p>Następny wpis</p>
+            Pozycjonowanie elementów w gridzie - Row i Column
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>

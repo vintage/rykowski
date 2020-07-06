@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/flutter-state-management-provider/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Zarządzanie stanem aplikacji - Provider | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Zarządzanie stanem aplikacji - Provider" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Każda średnia i duża aplikacja we Flutterze wymaga narzędzia do zarządzania stanem globalnym. Kiedy go potrzebujesz i dlaczego stan lokalny to za mało? Poznaj Providera - bibliotekę, która ułatwia proces do granic możliwości." />
+<meta property="og:description" content="Każda średnia i duża aplikacja we Flutterze wymaga narzędzia do zarządzania stanem globalnym. Kiedy go potrzebujesz i dlaczego stan lokalny to za mało? Poznaj Providera - bibliotekę, która ułatwia proces do granic możliwości." />
+<link rel="canonical" href="https://rykowski.dev/blog/flutter-state-management-provider/" />
+<meta property="og:url" content="https://rykowski.dev/blog/flutter-state-management-provider/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-16T00:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/flutter-state-management-provider/","headline":"Zarządzanie stanem aplikacji - Provider","dateModified":"2019-08-16T00:00:00+02:00","datePublished":"2019-08-16T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-state-management-provider/"},"description":"Każda średnia i duża aplikacja we Flutterze wymaga narzędzia do zarządzania stanem globalnym. Kiedy go potrzebujesz i dlaczego stan lokalny to za mało? Poznaj Providera - bibliotekę, która ułatwia proces do granic możliwości.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/triangular.jpeg " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Zarz%C4%85dzanie+stanem+aplikacji+-+Provider" class="title">Zarządzanie stanem aplikacji - Provider</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Sierpień
+        
+      2019
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>Jest to druga część serii o zarządzaniu stanem aplikacji we Flutterze. W <a href="/blog/flutter-state-management-stateful/">poprzednim wpisie</a> rozmawialiśmy o tym czym dokładnie jest stan i w jaki sposób odbywa się jego zarządzanie (<strong>state management</strong>). Stworzyliśmy prostą grę typu clicker, która korzysta ze stanu, aby móc prezentować wciąż aktualne dane graczowi. Wszystko odbywało się w <strong>formie lokalnej</strong>, czyli takiej która jest ograniczona wyłącznie do widgetu w którym stan został zadeklarowany.</p>
+
+<p>W dzisiejszym wpisie poznasz zagadnienie nieco bardziej złożone, lecz niezbędne z punktu widzenia średnich i dużych aplikacji. <strong>Stan globalny</strong>, nazywany również <strong>współdzielonym</strong>. Cała wiedza którą posiadasz na temat stanu lokalnego (czym jest, jak nim zarządzać) jest jak najbardziej nadal aktualna! Co więcej - jest niezbędna w przyswojeniu nowego konceptu. Jeśli jej nie posiadasz - zapraszam Cię do pierwszej części serii. Zmienia się wyłącznie zakres w obrębie którego mamy dostęp do naszego stanu. Przechodzimy z zasięgu <strong>per widget</strong> na <strong>per drzewo</strong>.</p>
+
+<p><img src="/assets/img/blog/state_provider/logo.png" alt="logo.png" /></p>
+
+<h2 id="stan-lokalny-vs-stan-globalny">Stan lokalny vs stan globalny</h2>
+
+<p>Wyróżniamy dwa rodzaje stanu aplikacji - <strong>lokalny</strong> i <strong>globalny</strong>. Nie ma w tych pojęciach nic podchwytliwego i oznaczają właśnie to co sugeruje ich nazwa. Różnica między nimi jest taka jak między zmienną prywatną, a publiczną w kodzie - chodzi o zasięg określający gdzie dokładnie można skorzystać z danego stanu, czy zmiennej. Jest to co prawda spore uproszczenie, ale warto trzymać je z tyłu głowy aby mieć na start jakikolwiek punkt odniesienia (później możesz go wyrzucić z głowy).</p>
+
+<p>Większość aplikacji korzysta z obu tych wariantów, pomimo tego, że zawsze istnieje sposób aby napisać projekt w kompletnym oparciu się tylko o jeden z nich. Dlaczego więc programiści komplikują sobie życie i nie wybierają jedynego słusznego rozwiązania? Bo takowe nie istnieje i wszystko zależy od rodzaju danych, którymi chcemy zarządzać. <strong>Zawsze dobieraj odpowiednie narzędzie do konkretnej sytuacji.</strong></p>
+
+<blockquote>
+  <p>To że bułkę można przekroić nożyczkami, nie znaczy że jest to najlepszy sposób. Nie strzelaj sobie w kolano i dobieraj rodzaj stanu według aktualnych potrzeb. Nie daj się również ocyganić, że stan lokalny to anty-pattern.</p>
+</blockquote>
+
+<h3 id="stan-lokalny">Stan lokalny</h3>
+
+<p>Zarządzanie stanem lokalnym we Flutterze odbywa się poprzez dobrze nam już znany <code class="language-plaintext highlighter-rouge">StatefulWidget</code>. Stan lokalny to zestaw danych wykorzystywany wyłącznie na potrzeby pojedynczego ekranu (precyzyjniej - widgetu), gdzie nie ma potrzeby, aby inne komponenty w aplikacji zaprzątały sobie nim głowę, lub miały do niego dostęp.</p>
+
+<p>Idealnym przykładem może być odliczanie czasu do rozpoczęcia rozgrywki w dowolnej grze mobilnej. Gracz wybiera postać oraz poziom na którym chce zagrać, a następnie pojawia się ekran typu <em>“3 … 2 … 1 … Start!”</em> mający dać mu chwilę na przygotowanie. Informacja o tym ile sekund pozostało do rozpoczęcia potyczki jest najprawdopodobniej istotna wyłącznie dla aktualnego ekranu - żaden inny nie będzie tą informacją zainteresowany i udostępnianie jej to strata czasu i często <strong>over-engineering</strong>.</p>
+
+<p><img src="/assets/img/blog/state_provider/local_state.gif" alt="zgadula_countdown.png" /></p>
+
+<blockquote>
+  <p>Używaj śmiało stanu lokalnego wszędzie tam, gdzie nie chcesz go współdzielić między różnymi widgetami. Wybór leży po Twojej stronie i może się okazać, że nawet powyższy timer ma sens na trafienie do <del>nieba</del> stanu globalnego.</p>
+</blockquote>
+
+<p>Kiedy stan lokalny przestaje się sprawdzać? Przy złożonej aplikacji rośnie nam głębokość drzewa rysowanych widgetów i schodzimy coraz niżej w dół. Pojawia się także sporo własnych klas widgetów, aby zachować jakość i czytelność kodu. W tym wszystkim zachodzi komunikacja między widgetami na różnym poziomie. Wduszam <em>przycisk A</em> na dole strony, a na górze pojawiają się nowe wartości. Zmieniam język na ekranie ustawień, a przez to cała reszta aplikacji jest po polsku.</p>
+
+<p><img src="/assets/img/blog/state_provider/global_state_diagram.png" alt="global_state_diagram.png" /></p>
+
+<blockquote>
+  <p>Diagram przedstawiający główny problem stanu lokalnego. W jaki sposób przekazać wartość <strong>Username</strong> do <strong>WidgetA1</strong> i <strong>WidgetB1</strong> bez ręcznego przekazywania przez wszystkie warstwy w stylu <em>MyApp -&gt; HomePage -&gt; WidgetA -&gt; WidgetA1</em>, a dodatkowo umożliwić zmianę tego pola z dowolnego miejsca drzewa?</p>
+</blockquote>
+
+<p>Co z tym fantem zrobić? Gdzie trzymać ich wspólny stan? Co w przypadku gdy musisz dzielić się danymi pomiędzy różnymi komponentami systemu? Oto zadanie specjalne dla …</p>
+
+<h3 id="stan-globalny">Stan globalny</h3>
+
+<p>… stanu globalnego! Podobnie jak w przypadku stanu lokalnego, Flutter również tutaj dostarcza własny i wbudowany mechanizm w postaci <code class="language-plaintext highlighter-rouge">InheritedWidget</code>. Przechowuje on stan w taki sposób, że niemal każdy widget jest w stanie go samodzielnie odczytać i przebudować się w razie potrzeby. Czy oznacza to więc, że będziemy go używać w dalszej części wpisu? Otóż nie tym razem. Widget ten jest dość <strong>niskopoziomowy</strong> i <strong>niezbyt przyjemy</strong> w codziennym użytkowaniu. W moim odczuciu wymaga <strong>zbyt wiele kodu</strong>, aby zrealizować nawet najprostszy efekt.</p>
+
+<p>Właśnie dlatego powstała biblioteka <strong>Provider</strong>, której głównym zadaniem jest dostarczenie tzw. lukru składniowego (syntax sugar) na wbudowany i toporny <code class="language-plaintext highlighter-rouge">InheritedWidget</code>. Cel swój realizuje w 100% - praca z nią jest przyjemna i szybka, a dodatkowo została namaszczona przez Google jako niemal oficjalne rozwiązanie do zarządzania stanem. <strong>Solidna rekomendacja.</strong></p>
+
+<p><img src="/assets/img/blog/state_provider/zgadula_countdown.gif" alt="zgadula_countdown.png" /></p>
+
+<p>Do <strong>Providera</strong> wrócimy w dalszej części, spójrz jednak na gifa umieszczonego powyżej. Mamy w nim uwzględnione trzy różne ekrany przez które przechodzi gracz.</p>
+
+<ol>
+  <li>Skrolowalna lista kategorii z której wybierana jest dowolna pozycja. W stanie globalnym przechowujemy pełną listę kategorii (<strong>categories</strong>) oraz informację o aktualnie zaznaczonej (<strong>active_category</strong>), która w obecnej chwili jest pusta (<em>null</em>). Po stuknięciu w dowolny element, <strong>active_category</strong> zyska wartość, która może być następnie odczytywana przez inne widgety.</li>
+</ol>
+
+<p><img src="/assets/img/blog/state_provider/step_1.png" alt="step_1.png" /></p>
+
+<ol>
+  <li>Detal kategorii prezentujący aktualny wybór z grafiką i dodatkowym opisem. W celu prezentacji odpowiednich danych wykorzystywany jest stan <strong>active_category</strong>, aby określić identyfikator aktywnej kategorii (<em>12</em>), a następnie lista <strong>categories</strong> jest przeszukiwania pod kątem danego identyfikatora, aby wyszukać pełny obiekt*. Użytkownik ma również możliwość zmiany czasu rundy (30-60-90-120), która także przechowywana jest w globalnym stanie.</li>
+</ol>
+
+<p><img src="/assets/img/blog/state_provider/step_2.png" alt="step_2.png" /></p>
+
+<p><sup><sub>*Pod kątem wydajnościowym lepiej byłoby przechowywać strukturę w formie mapy, gdzie kluczem jest identyfikator, a wartością obiekt z danymi. Nie ma to jednak znaczenia pod względem merytorycznym.</sub></sup></p>
+
+<ol>
+  <li>Ekran końcowy na którym w górnej części widoczna jest nazwa wybranej kategorii to ponownie tandem <strong>active_category</strong>+<strong>categories</strong>. W dolnej widoczny jest pozostały czas rundy, która rozpoczyna odliczanie od wartości <strong>round_time</strong>. Czas pozostały do końca gry nie jest trzymany w stanie globalnym, a jedynie w lokalnym - inne widgety nie będą potrzebowały go konsumować w żadnym celu.</li>
+</ol>
+
+<p><img src="/assets/img/blog/state_provider/step_3.png" alt="step_3.png" /></p>
+
+<p>Ekrany <em>#2 i #3</em> potrzebują w jakiś sposób uzyskać informację, jaka kategoria została wybrana na ekranie #1, a ekran #3 potrzebuje dodatkowo wiedzieć jaki jest maksymalny czas rundy z ekranu #2. Jako, że są to widgety całkowicie od siebie niezależne nie możemy wykorzystać stanu lokalnego - w takim przypadku tylko ekran #1 wiedziałby która z kategorii jest aktywna, pozostałe żyłyby w niewiedzy. A wiedza ta jest im niezbędna do zaprezentowania poprawnej grafiki, czy nazwy.</p>
+
+<p>Tym właśnie zajmuje się stan globalny. Dba o to, aby wskazane dane były ogólnodostępne dla wszystkich zainteresowanych. Zajmuje się także (jak to stan) informowaniem o wszelkich zmianach, aby możliwe było automatyczne przebudowanie widgetów. Zupełnie jak wywołanie <code class="language-plaintext highlighter-rouge">setState</code>.</p>
+
+<blockquote>
+  <p>Nie przejmuj się jeśli w głowie masz pytania o to który stan powinien być globalny, a który lokalny. Początkowo wszystko może być lokalne, a następnie zrefaktorowane gdy najdzie taka potrzeba. Z czasem nabierzesz fachowego przeczucia i określanie zasięgu będzie przychodziło naturalnie. Nie lubię frazesów, ale <strong>Praktyka czyni mistrza</strong>.</p>
+</blockquote>
+
+<h2 id="provider">Provider</h2>
+
+<p>Jednym z najpopularniejszych i przystępnych narzędzi we Flutterze do zarządzania stanem globalnym jest wspomniana już paczka <a href="https://pub.dev/packages/provider">Provider</a>. Przychylność developerów zyskała  dzięki niskiemu progowi wejścia oraz minimalną ilością kodu, którą trzeba wklepywać raz-po-raz, a nie jest związana bezpośrednio z logiką naszej aplikacji. Chodzi fachowo o <strong>boilerplate</strong> - kod którego każdy chce unikać jak ognia. Nie ma go tutaj praktycznie wcale, co skutkuje tym, że mamy mniej kodu do utrzymania. <strong>WIN-WIN</strong>. Ciekawa jest również sama historia która stoi za biblioteką, którą możesz prześledzić na <a href="https://github.com/google/flutter-provide/issues/3">GitHubie</a>.</p>
+
+<p><strong>TL;DR</strong> <em>Google w podobnym czasie co Remi (authora Providera) pracował nad bliźniaczym rozwiązaniem. Wycofał się jednak z niego i pobłogosławił Providera jako “oficjalne” rozwiązanie.</em>.</p>
+
+<p>Starczy jednak tego wywodu teoretyczno-historycznego. Zajmijmy się tym co naprawdę istotne. Co robi ten cały Provider i jak nam pomoże w pisaniu aplikacji mobilnej? <strong>Pora na warsztaty!</strong></p>
+
+<h2 id="przygotowanie-aplikacji">Przygotowanie aplikacji</h2>
+
+<p>Usiądźmy do praktycznego przykładu, aby lepiej poznać niezbędne tajniki stanu globalnego. Nie weźmiemy na warsztat co prawda aplikacji z powyższego gifa, bo jest zbyt skomplikowana jako punkt referencyjny. Zbyt wiele się w niej dzieje. Wolę abyśmy skupili się jedynie na tym co jest naprawdę istotne, czyli kwestii zarządzania stanem. Co więc proponuję? <strong>Colorek</strong> - mini program do mieszania kolorów.</p>
+
+<p><img src="/assets/img/blog/state_provider/colorek.gif" alt="colorek.gif" /></p>
+<blockquote>
+  <p>Colorek w wersji 1.0.0</p>
+</blockquote>
+
+<p>Aplikacja polega na dobieraniu proporcji trzech bazowych kolorów przy pomocy suwaków. W trakcie doboru są one mieszane i prezentowane jako pojedynczy kolor <strong>RGB</strong> (<strong>R</strong>ed <strong>G</strong>reen <strong>B</strong>lue) na dole ekranu. Jeśli nie słyszałeś nigdy o RGB - jest to model kolorystyczny w którym dobieramy wartości trzech tytułowych kolorów z przedziału od 0 do 255, a z mieszanki tej powstaje kolor wynikowy. Skrajnymi kolorami są biały (wszystkie wartości na 0) oraz czarny (255).</p>
+
+<p>Ale, ale! Gdzie tu jest niby stan globalny? Wszystko jak na dłoni widać na pojedynczym ekranie, można to więc ograć stanem lokalnym i zakończyć materiał szkoleniowy. No niby tak, ale nie do końca. Można by się pokusić o użycie stanu lokalnego - jak zawsze. Jednak z punktu widzenia dobrych praktyk i tego że najłatwiej się uczyć na prostych przykładach zostaniemy przy nim. Zaufaj mi, że to pierwszy krok ku lepszemu światu i nieograniczonym możliwościom.</p>
+
+<h3 id="punkt-wejściowy-maindart">Punkt wejściowy (main.dart)</h3>
+
+<p>Plik <strong>main.dart</strong> wykorzystamy jedynie jako punkt wejściowy do aplikacji. W trakcie dalszej implementacji będzie rozszerzany o dodatkowe konfiguracje, ale bez żadnej logiki, czy stylowania. Na start jego głównym zadaniem będzie narysowanie widgetu <code class="language-plaintext highlighter-rouge">HomePage</code>. Nie jest to widget wbudowany we Fluttera, musimy go za chwilę sami zakodować.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="s">'pages/home_page.dart'</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">runApp</span><span class="o">(</span><span class="n">MyApp</span><span class="o">());</span>
+
+<span class="kd">class</span> <span class="nc">MyApp</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">MaterialApp</span><span class="o">(</span>
+      <span class="nl">title:</span> <span class="s">'Provider Demo'</span><span class="o">,</span>
+      <span class="nl">home:</span> <span class="n">HomePage</span><span class="o">(),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Nie ma magii, nie ma czarów. Prosty bezstanowy widget, który niemal nic nie robi. Zwróć jedynie uwagę, że <code class="language-plaintext highlighter-rouge">HomePage</code> pochodzi z innego pliku (import).</p>
+</blockquote>
+
+<h3 id="ekran-główny-pageshome_pagedart">Ekran główny (pages/home_page.dart)</h3>
+
+<p>Stwórzmy katalog <strong>pages</strong>, a w nim plik <strong>home_page.dart</strong>. Będzie to nasz widget reprezentujący ekran główny aplikacji - rysowany zaraz po jej uruchomieniu. Zwróć uwagę, że pomimo faktu bycia widgetem wyświetlającym pełny ekran (w praktyce - złożonym) <strong>nie jest on stanowy</strong>. Taki też pozostanie.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="s">'../components/rgb_slider.dart'</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">'../components/rgb_preview.dart'</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">HomePage</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">Column</span><span class="o">(</span>
+        <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceEvenly</span><span class="o">,</span>
+        <span class="nl">children:</span> <span class="o">[</span>
+          <span class="n">RGBSlider</span><span class="o">(),</span>
+          <span class="n">Expanded</span><span class="o">(</span>
+            <span class="nl">child:</span> <span class="n">RGBPreview</span><span class="o">(),</span>
+          <span class="o">)</span>
+        <span class="o">],</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>W celu rozproszenia odpowiedzialności rozbiliśmy nasz ekran na dwa główne komponenty, które same sobie rzepkę skrobią:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">RGBSlider</code> - część służąca do zmiany wartości kolorów przy pomocy interaktywnych suwaków.</li>
+  <li><code class="language-plaintext highlighter-rouge">RGBPreview</code> - podgląd koloru wynikowego, który aktualizuje się automatycznie na zmianę wartości w stanie aplikacji.</li>
+</ol>
+
+<p>Możliwe że zapaliła Ci się mała lampka kontrolna patrząc na powyższy przykład. Wygląda na tyle prosto, że z tego miejsca mógłbyś zakopać pomysł o globalnym stanie, a samo rozwiązanie oprzeć o stan lokalny. Ot poprosisz <code class="language-plaintext highlighter-rouge">HomePage</code> żeby przytrzymał Ci <del>piwo</del> wartości kolorów, które przekażesz manualnie w dół do <code class="language-plaintext highlighter-rouge">RGBSlider</code> i <code class="language-plaintext highlighter-rouge">RGBPreview</code> a slider dostanie jeszcze funkcje do ich zmiany. Właśnie tak:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="s">'../components/rgb_slider.dart'</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">'../components/rgb_preview.dart'</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">HomePage</span> <span class="kd">extends</span> <span class="n">StatefulWidget</span> <span class="o">{</span>
+  <span class="n">HomePage</span><span class="o">({</span><span class="n">Key</span> <span class="n">key</span><span class="o">})</span> <span class="o">:</span> <span class="k">super</span><span class="o">(</span><span class="nl">key:</span> <span class="n">key</span><span class="o">);</span>
+
+  <span class="nd">@override</span>
+  <span class="n">HomePageState</span> <span class="n">createState</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="n">HomePageState</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">HomePageState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">HomePage</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kt">int</span> <span class="n">red</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="kt">int</span> <span class="n">green</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="kt">int</span> <span class="n">blue</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">Column</span><span class="o">(</span>
+        <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceEvenly</span><span class="o">,</span>
+        <span class="nl">children:</span> <span class="o">[</span>
+          <span class="n">RGBSlider</span><span class="o">(</span>
+            <span class="nl">red:</span> <span class="n">red</span><span class="o">,</span>
+            <span class="nl">onRedChange:</span> <span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span> <span class="n">red</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span> <span class="o">}),</span>
+            <span class="nl">green:</span> <span class="n">green</span><span class="o">,</span>
+            <span class="nl">onGreenChange:</span> <span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span> <span class="n">green</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span> <span class="o">}),</span>
+            <span class="nl">blue:</span> <span class="n">blue</span><span class="o">,</span>
+            <span class="nl">onBlueChange:</span> <span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span> <span class="n">blue</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span> <span class="o">}),</span>
+          <span class="o">),</span>
+          <span class="n">Expanded</span><span class="o">(</span>
+            <span class="nl">child:</span> <span class="n">RGBPreview</span><span class="o">(</span>
+              <span class="nl">red:</span> <span class="n">red</span><span class="o">,</span>
+              <span class="nl">green:</span> <span class="n">green</span><span class="o">,</span>
+              <span class="nl">blue:</span> <span class="n">blue</span><span class="o">,</span>
+            <span class="o">),</span>
+          <span class="o">)</span>
+        <span class="o">],</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Zadziała? Pewnie że tak! Czy jest to dobre rozwiązanie? Być może. Czy stan globalny będzie lepszym wyborem? To zależy. Powyższa struktura wygląda mocno pokracznie - co zrobisz gdy będzie trzeba przekazać kolory jeszcze jeden poziom w dół? <strong>Kod spaghetti</strong>. Właśnie dlatego z zaciekawieniem patrzymy na stan globalny.</p>
+
+<p>Do pełni możliwości skompilowania projektu - a to pierwszy krok ku temu aby działał poprawnie - brakuje nam już tylko dwóch rzeczy. A raczej widgetów. Wspomniamy <code class="language-plaintext highlighter-rouge">RGBSlider</code> i <code class="language-plaintext highlighter-rouge">RGBPreview</code>, które umieścimy w katalogu <strong>components</strong> stworzonym na tym samym poziomie co <strong>pages</strong>.</p>
+
+<p><img src="/assets/img/blog/state_provider/project_structure.png" alt="project_structure.png" /></p>
+<blockquote>
+  <p>Struktura projektu. Pojawiają się w niej <strong>details_page.dart</strong> oraz <strong>login_page.dart</strong>, które możesz narazie zignorować. Są to zadania bonusowe do zrobienia w formie pracy domowej.</p>
+</blockquote>
+
+<h3 id="modyfikator-kolorów-componentsrgb_sliderdart">Modyfikator kolorów (components/rgb_slider.dart)</h3>
+
+<p>Trzy suwaki gdzie każdy służy do określenia wartości innego koloru. Jako, że są to widgety bliźniacze i różnią je jedynie drobne szczegóły (np. wyświetlany tekst, czy kolor suwaka) - skorzystamy z funkcji pomocniczej <code class="language-plaintext highlighter-rouge">buildSlider</code>. Narysuje ona pojedynczy suwak na ekranie z odpowiednią konfiguracją.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">RGBSlider</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="n">Widget</span> <span class="n">buildSlider</span><span class="o">(</span>
+      <span class="o">{</span><span class="kt">String</span> <span class="n">label</span><span class="o">,</span> <span class="n">Color</span> <span class="n">color</span><span class="o">,</span> <span class="kt">double</span> <span class="n">value</span><span class="o">,</span> <span class="n">Function</span> <span class="n">onChanged</span><span class="o">})</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Padding</span><span class="o">(</span>
+      <span class="nl">padding:</span> <span class="kd">const</span> <span class="n">EdgeInsets</span><span class="o">.</span><span class="na">only</span><span class="o">(</span><span class="nl">bottom:</span> <span class="mi">16</span><span class="o">),</span>
+      <span class="nl">child:</span> <span class="n">Column</span><span class="o">(</span>
+        <span class="nl">children:</span> <span class="o">[</span>
+          <span class="n">Text</span><span class="o">(</span><span class="n">label</span><span class="o">),</span>
+          <span class="n">Slider</span><span class="o">(</span>
+            <span class="nl">value:</span> <span class="n">value</span><span class="o">,</span>
+            <span class="nl">min:</span> <span class="mi">0</span><span class="o">,</span>
+            <span class="nl">max:</span> <span class="mi">255</span><span class="o">,</span>
+            <span class="nl">onChanged:</span> <span class="n">onChanged</span><span class="o">,</span>
+            <span class="nl">activeColor:</span> <span class="n">color</span><span class="o">,</span>
+          <span class="o">),</span>
+        <span class="o">],</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Column</span><span class="o">(</span>
+      <span class="nl">children:</span> <span class="o">[</span>
+        <span class="n">buildSlider</span><span class="o">(</span>
+          <span class="nl">label:</span> <span class="s">"Red"</span><span class="o">,</span>
+          <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">red</span><span class="o">,</span>
+          <span class="nl">value:</span> <span class="mi">0</span><span class="o">,</span>
+          <span class="nl">onChanged:</span> <span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"Red </span><span class="si">$value</span><span class="s">"</span><span class="o">),</span>
+        <span class="o">),</span>
+        <span class="n">buildSlider</span><span class="o">(</span>
+          <span class="nl">label:</span> <span class="s">"Green"</span><span class="o">,</span>
+          <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">green</span><span class="o">,</span>
+          <span class="nl">value:</span> <span class="mi">0</span><span class="o">,</span>
+          <span class="nl">onChanged:</span> <span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"Green </span><span class="si">$value</span><span class="s">"</span><span class="o">),</span>
+        <span class="o">),</span>
+        <span class="n">buildSlider</span><span class="o">(</span>
+          <span class="nl">label:</span> <span class="s">"Blue"</span><span class="o">,</span>
+          <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">blue</span><span class="o">,</span>
+          <span class="nl">value:</span> <span class="mi">0</span><span class="o">,</span>
+          <span class="nl">onChanged:</span> <span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"Blue </span><span class="si">$value</span><span class="s">"</span><span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">],</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Do funkcji <code class="language-plaintext highlighter-rouge">buildSlider</code> przekazujemy dwa kluczowe parametry odpowiadające za jego działanie: wartość (<strong>value</strong>) i funkcję do uruchomienia gdy wartość powinna się zaktualizować (<strong>onChanged</strong>). Nasza wartość jest zawsze zerem, a gdy dostajemy informację że powinniśmy ją zaktualizować - robimy <strong>printa</strong>. Wszystko prawie dobrze, ale można by to zrobić delikatnie lepiej (bardziej działająco).</p>
+
+<h3 id="podglądacz-koloru-componentsrgb_previewdart">Podglądacz koloru (components/rgb_preview.dart)</h3>
+
+<p>Naprostszy możliwy widget we Flutterze w postaci kolorowego kwadratu. A my go jeszcze honorujemy własnym plikiem i dumną nazwą <code class="language-plaintext highlighter-rouge">RGBPreview</code>. Nie da się jednak ukryć że robi to co sugeruje, czyli wyświetla podgląd kolorystyczny.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">RGBPreview</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Center</span><span class="o">(</span>
+      <span class="nl">child:</span> <span class="n">Container</span><span class="o">(</span>
+        <span class="nl">width:</span> <span class="mi">200</span><span class="o">,</span>
+        <span class="nl">height:</span> <span class="mi">200</span><span class="o">,</span>
+        <span class="nl">color:</span> <span class="n">Color</span><span class="o">.</span><span class="na">fromRGBO</span><span class="o">(</span><span class="mi">11</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">218</span><span class="o">,</span> <span class="mi">1</span><span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">Color.fromRGBO(11, 7, 218, 1)</code> wygeneruje nam kolor, który składa się z 11 jednostek czerwonego, 7 zielonego, 218 niebieskiego. Jedynka na końcu określa przezroczystość, a raczej jej brak.</p>
+
+<p><img src="/assets/img/blog/state_provider/colorek_draft.png" alt="colorek_draft.png" /></p>
+<blockquote>
+  <p>Colorek w wersji 0.0.1-alpha</p>
+</blockquote>
+
+<p>Właśnie w tym miejsciu kończymy nieciekawy <strong>boilerplate</strong> w postaci części wizualnej i rozpoczynamy oprogramowanie stanu. Aplikacja już w tym momencie powinna się poprawnie budować, zachęcam Cię do sprawdzenia, abyśmy na pewno byli w tym samym punkcie. Nie działa jednak jeszcze prawidłowo, czas to zmienić!</p>
+
+<h2 id="dostarczanie-stanu">Dostarczanie stanu</h2>
+
+<p>Mamy już przygotowany pełen layout aplikacji, a nie dotknęliśmy jeszcze nawet w najmniejszym stopniu kwestii stanu. O to się nie martw. Właśnie teraz, w tym momencie rozpoczynamy proces nadrabiania strat i wyrównywania szans. Pora na turbo dawkę wiedzy praktycznej dotyczącej stanu globalnego, a w szczególności Providera. Ożywmy nasz projekt! ⚡</p>
+
+<p>Zarządzanie stanem w Providerze wymaga trzech bazowych elementów:</p>
+
+<ol>
+  <li>Dostawca (<strong>Provider</strong>) - widget umieszczony na górze drzewa i propagujący swoje dane (stan) nieprzerwanie w dół do zainteresowanych odbiorców.</li>
+  <li>Odbiorca (<strong>Consumer</strong>) - element ulokowany na dole drzewa i nasłuchujący wskazanych dostawców (jednego lub wielu). Poza odczytem, może także zmieniać dostarczony stan oraz automatycznie się przebudować na dowolną jego zmianę.</li>
+  <li>Stan (<strong>State</strong>) - paczka z danymi która wędruje od dostawcy do odbiorcy.</li>
+</ol>
+
+<p>Obrazową analogią wymienionych elementów jest klasyczna gra <strong>Donkey Kong</strong> z NES-a (lokalnie zwanego pegazusem). Tytułowy goryl (dostawca) miota w dół planszy (drzewa) beczkami (stanem), które Mario (odbiorca) łapie aby dowiedzieć się co jest w środku. Gdy tylko Mario złapie beczkę zmienia swój stan - ginie, umiera, znika na zawsze. Główna różnica polega na tym, że Mario nie chce zmieniać swojego stanu (nie dziwi mnie to). My chcemy! Będziemy więc łapać interesujące nas “beczki” i aktualizować w locie warstwę prezentacyjną.</p>
+
+<p><img src="/assets/img/blog/state_provider/donkey_kong.png" alt="donkey_kong.png" /></p>
+
+<h3 id="instalacja-zależności">Instalacja zależności</h3>
+
+<p>W pliku <em>pubspec.yaml</em> dodaj nową zależność i zainstaluj ją:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">dependencies</span><span class="pi">:</span>
+  <span class="na">provider</span><span class="pi">:</span> <span class="s">^3.0.0+1</span>
+</code></pre></div></div>
+
+<p>Nie wiesz jak zainstalować dodaną zależność? W konsoli przejdź do katalogu projektu i wykonaj następującą komendę:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flutter pub get
+</code></pre></div></div>
+
+<h3 id="stan-state">Stan (state)</h3>
+
+<p>Pierwszym elementem łańcucha który weźmiemy na warsztat jest stan. Definiujemy go poprzez utworzenie własnej klasy rozszerzającej Flutterowy <code class="language-plaintext highlighter-rouge">ChangeNotifier</code>. Jest to bazowa klasa, która udostępnia ogólne API do powiadamiania o zmianach - idealnie więc wpasowuje się w tematykę zmiany stanu.</p>
+
+<p>Tuż obok <strong>main.dart</strong> stwórzmy plik <strong>models.dart</strong> w którym przechowamy definicję stanu dla kolorów.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">ColorModel</span> <span class="kd">extends</span> <span class="n">ChangeNotifier</span> <span class="o">{</span>
+  <span class="kt">double</span> <span class="n">_red</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="kt">double</span> <span class="n">_green</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="kt">double</span> <span class="n">_blue</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+  <span class="kt">double</span> <span class="kd">get</span> <span class="n">red</span> <span class="o">=&gt;</span> <span class="n">_red</span><span class="o">;</span>
+  <span class="kd">set</span> <span class="n">red</span><span class="o">(</span><span class="kt">double</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">_red</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+    <span class="n">notifyListeners</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="kt">double</span> <span class="kd">get</span> <span class="n">green</span> <span class="o">=&gt;</span> <span class="n">_green</span><span class="o">;</span>
+  <span class="kd">set</span> <span class="n">green</span><span class="o">(</span><span class="kt">double</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">_green</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+    <span class="n">notifyListeners</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="kt">double</span> <span class="kd">get</span> <span class="n">blue</span> <span class="o">=&gt;</span> <span class="n">_blue</span><span class="o">;</span>
+  <span class="kd">set</span> <span class="n">blue</span><span class="o">(</span><span class="kt">double</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">_blue</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+    <span class="n">notifyListeners</span><span class="o">();</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Powyższa klasa przechowuje informacje o wartościach trzech kolorów: czerwony, zielony, niebieski. Pola zdefiniowane są jako prywatne (poprzedzone znakiem <strong>_</strong>), aby nikt poza klasą nie mógł ich zmienić w sposób niekontrolowany. Jest to ostatnia rzecz jakiej potrzebujesz w swojej aplikacji. Kontrolowany stan to dobry stan.</p>
+
+<p>Publiczny odczyt (<strong>get</strong>) odbywa się po identycznej nazwie jak nazwa pola prywatnego z tym że bez podkreślnika - standardowy zabieg. W celu odczytu wartości pola <code class="language-plaintext highlighter-rouge">double _red</code>, poprosisz po prostu o <code class="language-plaintext highlighter-rouge">model.red</code>, gdzie <code class="language-plaintext highlighter-rouge">model</code> to instancja klasy. Publiczna zmiana (<strong>set</strong>) dokonuje stosownej zmiany pola (norma), a dodatkowo wywołuje <code class="language-plaintext highlighter-rouge">notifyListeners()</code>, aby poinformować o zmianie wszystkich zainteresowanych odbiorców. W ten sposób kontrolujemy wartość stanu, a dodatkowo to jakie informacje mają w danym czasie wszyscy odbiorcy.</p>
+
+<p>Moglibyśmy rzecz jasna zaimplementować wszystko bez gettera i settera. Dzięki takiemu zabiegowi kod będzie znacząco krótszy …</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">ColorModel</span> <span class="kd">extends</span> <span class="n">ChangeNotifier</span> <span class="o">{</span>
+  <span class="kt">double</span> <span class="n">red</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="kt">double</span> <span class="n">green</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="kt">double</span> <span class="n">blue</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>… ale jednocześnie niedziałający w sposób jakiego oczekujemy. Można co prawda zmieniać dowolnie wartości kolorów, ale żaden odbiorca nie zostanie o tym fakcie poinformowany, bo brakuje w kluczowym momencie wywołania <code class="language-plaintext highlighter-rouge">notifyListeners()</code>. Po co zmieniać stan, skoro aplikacja nie może na niego zareagować? Fajna ta implementacja, taka nie za mądra.</p>
+
+<blockquote>
+  <p>Reasumując - lepsza dłuższa implementacja która działa, niż krótsza która nie robi nic.</p>
+</blockquote>
+
+<p>Pracując z klasą stanu pamiętaj o kilku prostych <del>trikach</del> zasadach:</p>
+
+<ol>
+  <li>Przerysowanie drzewa odbędzie się tylko gdy spełnione są następujące kryteria:
+    <ul>
+      <li>Aktualnie wyświetlany widget zarejestrował się jako odbiorca (o tym w kolejnej sekcji)</li>
+      <li>Klasa stanu uruchomi funkcję <code class="language-plaintext highlighter-rouge">notifyListeners()</code>, która jest kluczowa z punktu widzenia zarządzania stanem. Można ją przyrównać do <code class="language-plaintext highlighter-rouge">setState</code>, który również przebudowuje fragment drzewa.</li>
+    </ul>
+  </li>
+  <li>Każdorazowe zawołanie <code class="language-plaintext highlighter-rouge">notifyListeners()</code> prowadzi do przebudowania zależnych widgetów. Nie wykonuj go więc częściej niż naprawdę potrzebujesz. Unikaj sytuacji w której pojedyncza funkcja zmieniająca stan wywołuje ją więcej niż jeden-dwa razy.</li>
+  <li>Do wykonania akcji na stanie (np. zmiana koloru) wymagane jest zarejestrowanie się jako odbiorca. Nie możesz zmienić globalnego stanu, nie będąc jego odbiorcą. Kropka.</li>
+</ol>
+
+<h3 id="dostawca-provider">Dostawca (provider)</h3>
+
+<p>Dostawca jest widegetem nadrzędnym, który umieszczony w dowolnym miejscu drzewa, propaguje/informuje wszystkie swoje dzieci (również te zagnieżdzone X poziomów w dół) o aktualnym stanie aplikacji.</p>
+
+<p>Pomimo tego, że dostawca może być umieszczony w dowolnym miejscu drzewa, w praktyce często definiuje się go bezpośrednio w pliku konfiguracyjnym <code class="language-plaintext highlighter-rouge">main.dart</code>. Chodzi o to, aby umieścić go w szczytowym miejscu drzewa (korona drzewa?) skąd jest w stanie obsłużyć całą aplikację bez wyjątku.</p>
+
+<p>Przejdźmy do pliku <strong>main.dart</strong>, aby skonfigurować dostawcę stanu dla aplikacji.</p>
+
+<p><strong>Przed:</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">runApp</span><span class="o">(</span><span class="n">MyApp</span><span class="o">());</span>
+</code></pre></div></div>
+
+<p><strong>Po:</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:provider/provider.dart'</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="s">'models.dart'</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">runApp</span><span class="o">(</span>
+  <span class="n">MultiProvider</span><span class="o">(</span>
+    <span class="nl">providers:</span> <span class="o">[</span>
+      <span class="n">ChangeNotifierProvider</span><span class="o">(</span><span class="nl">builder:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">ColorModel</span><span class="o">()),</span>
+    <span class="o">],</span>
+    <span class="nl">child:</span> <span class="n">MyApp</span><span class="o">(),</span>
+  <span class="o">),</span>
+<span class="o">);</span>
+</code></pre></div></div>
+
+<p>Do osadzenia potrzebujemy trzech rzeczy:</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">MultiProvider</code> widget rejestrujący wielu dostawców na raz. Klasyczny syntax sugar, który jedynie upraszcza sposób rejestracji - można to robić również jeden po drugim (ale wymaga więcej kodu).</li>
+  <li><code class="language-plaintext highlighter-rouge">ChangeNotifierProvider</code> pojedynczy dostawca stanu, budowany na podstawie klasy pochodnej od <code class="language-plaintext highlighter-rouge">ChangeNotifier</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">ColorModel</code>  klasa przechowująca stan, którą dopiero co utworzyliśmy.</li>
+</ol>
+
+<p>Alternatywnym (i krótszym) rozwiązaniem jest pominięcie <code class="language-plaintext highlighter-rouge">MultiProvider</code>. Ma on realne zastosowanie tylko gdy mamy więcej niż jedną klasę stanu, a bazowa wersja Colorka nie jest na tyle złożona aby jej wymagała.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">runApp</span><span class="o">(</span>
+  <span class="n">ChangeNotifierProvider</span><span class="o">.</span><span class="na">value</span><span class="o">(</span>
+    <span class="nl">value:</span> <span class="n">ColorModel</span><span class="o">(),</span>
+    <span class="nl">child:</span> <span class="n">MyApp</span><span class="o">(),</span>
+  <span class="o">)</span>
+<span class="o">);</span>
+</code></pre></div></div>
+
+<h3 id="odbiorca-consumer">Odbiorca (consumer)</h3>
+
+<p>Jesteśmy na etapie w którym mamy zbudowany layout oraz dwie z trzech częsci stanu. Aplikacja poprawnie się buduje i uruchamia na emulatorze, bądź urządzeniu. Nie jest jednak interaktywna. Brakuje ostatniego klocka w wieży lego, ostatniej nutki w symfonii. Jest nim odbiorca stanu. Coś co konsumuje stan i wyświetla go na ekranie, a rownocześnie moze go aktualizować jeśli uzna że istnieje taka potrzeba.</p>
+
+<p>Przed rozpoczęciem konsumowania stanu wymagany jest … import biblioteki. Wiadomo - przy dostawcy zrobiliśmy to samo, ale chcę mieć pewność że o tym pamiętasz. W każdym pliku który korzystać będzie z Providera potrzebujemy poniższego importu.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:provider/provider.dart'</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>Pozostało nam jedynie wybranie sposobu w jaki skonsumujemy dostępny stan. Wybranie? Tak. Provider dostarcza dwa niezależne sposoby na to, aby móc korzystać i operować stanem. Są one bardzo zbliżone, niemal identyczne - różnią je jak zawsze detale implementacyjne.</p>
+
+<blockquote>
+  <p>Żaden ze sposobów nie jest lepszy, lub gorszy. Mają delikatnie różne zastosowanie, jednak osobiście częściej korzystam z Consumera.</p>
+</blockquote>
+
+<h4 id="providerof">Provider.of</h4>
+
+<p>Pierwszym sposobem na korzystanie ze stanu jest statyczna funkcja <code class="language-plaintext highlighter-rouge">Provider.of</code>. Wymaga ona podania klasy stanu którą chcemy odnaleźć, oraz aktualnego kontekstu. Dodatkowo przyjmuje specjalną flagę <strong>listen</strong> (domyślnie <em>true</em>), która określa czy widget który wywołał funkcję będzie automatycznie przebudowywany po jakiejkolwiek zmianie stanu w obrębie odnalezionej klasy.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Provider</span><span class="o">.</span><span class="na">of</span><span class="o">&lt;</span><span class="n">ColorModel</span><span class="o">&gt;(</span>
+  <span class="n">context</span><span class="o">,</span> <span class="nl">listen:</span> <span class="kc">true</span><span class="o">,</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Zwraca instancję stanu z której możemy wyciągnąć interesujące dane, a dodatkowo wywoływać dowolne metody na nim występujące. Widget na poziomie którego wykonamy to polecenie będzie automatycznie przebudowywany za każdym razem gdy w <code class="language-plaintext highlighter-rouge">ColorModel</code> wywołana zostanie funkcja <code class="language-plaintext highlighter-rouge">notifyListeners()</code>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Provider</span><span class="o">.</span><span class="na">of</span><span class="o">&lt;</span><span class="n">ColorModel</span><span class="o">&gt;(</span>
+  <span class="n">context</span><span class="o">,</span> <span class="nl">listen:</span> <span class="kc">false</span><span class="o">,</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Analogicznie jak powyżej, z tą różnicą że widget nigdy automatycznie się nie przebuduje. Używaj z rozwagą - wyłącznie w przypadkach gdy chcesz zmieniać stan, ale bezpośrednio od niego nie zależysz (nie wyświetlasz go).</p>
+
+<p><strong>Prosty przykład:</strong></p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="n">state</span> <span class="o">=</span> <span class="n">Provider</span><span class="o">.</span><span class="na">of</span><span class="o">&lt;</span><span class="n">ColorModel</span><span class="o">&gt;(</span><span class="n">context</span><span class="o">,</span> <span class="nl">listen:</span> <span class="kc">true</span><span class="o">);</span>
+
+<span class="k">return</span> <span class="nf">RaisedButton</span><span class="p">(</span>
+  <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="n">state</span><span class="o">.</span><span class="na">red</span><span class="o">),</span>
+  <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">state</span><span class="o">.</span><span class="na">red</span><span class="o">++;</span>
+<span class="o">);</span>
+</code></pre></div></div>
+
+<p><strong>Zalety:</strong></p>
+<ul>
+  <li>Mało kodu</li>
+  <li>Możliwość operowania stanem bez konieczności przebudowania</li>
+</ul>
+
+<p><strong>Wady:</strong></p>
+<ul>
+  <li>Zmiana stanu powoduje przebudowanie całego widgetu odbiorcy</li>
+</ul>
+
+<p>W celu zademonstrowania działania na żyjącym organizmie, użyjmy tego sposobu zapisu do obsługi suwaków. Przejdźmy do pliku <strong>components/rgb_slider.dart</strong> i wymieńmy całkowicie metodę build.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'../models.dart'</span><span class="o">;</span>
+
+<span class="c1">// ...</span>
+
+<span class="nd">@override</span>
+<span class="n">Widget</span> <span class="nf">build</span><span class="p">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">var</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Provider</span><span class="o">.</span><span class="na">of</span><span class="o">&lt;</span><span class="n">ColorModel</span><span class="o">&gt;(</span><span class="n">context</span><span class="o">,</span> <span class="nl">listen:</span> <span class="kc">true</span><span class="o">);</span>
+
+  <span class="k">return</span> <span class="n">Column</span><span class="o">(</span>
+    <span class="nl">children:</span> <span class="o">[</span>
+      <span class="n">buildSlider</span><span class="o">(</span>
+        <span class="nl">label:</span> <span class="s">"Red"</span><span class="o">,</span>
+        <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">red</span><span class="o">,</span>
+        <span class="nl">value:</span> <span class="n">color</span><span class="o">.</span><span class="na">red</span><span class="o">,</span>
+        <span class="nl">onChanged:</span> <span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">color</span><span class="o">.</span><span class="na">red</span> <span class="o">=</span> <span class="n">value</span><span class="o">,</span>
+      <span class="o">),</span>
+      <span class="n">buildSlider</span><span class="o">(</span>
+        <span class="nl">label:</span> <span class="s">"Green"</span><span class="o">,</span>
+        <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">green</span><span class="o">,</span>
+        <span class="nl">value:</span> <span class="n">color</span><span class="o">.</span><span class="na">green</span><span class="o">,</span>
+        <span class="nl">onChanged:</span> <span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">color</span><span class="o">.</span><span class="na">green</span> <span class="o">=</span> <span class="n">value</span><span class="o">,</span>
+      <span class="o">),</span>
+      <span class="n">buildSlider</span><span class="o">(</span>
+        <span class="nl">label:</span> <span class="s">"Blue"</span><span class="o">,</span>
+        <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">blue</span><span class="o">,</span>
+        <span class="nl">value:</span> <span class="n">color</span><span class="o">.</span><span class="na">blue</span><span class="o">,</span>
+        <span class="nl">onChanged:</span> <span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">color</span><span class="o">.</span><span class="na">blue</span> <span class="o">=</span> <span class="n">value</span><span class="o">,</span>
+      <span class="o">),</span>
+    <span class="o">],</span>
+  <span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Co zmieniło się w porównaniu z poprzednią wersją? Niewiele. Do funkcji <code class="language-plaintext highlighter-rouge">buildSlider</code> przekazujemy prawdziwą wartość koloru pobraną ze stanu, a także funkcję która będzie aktualizować na bieżąco dany kolor. Przyznaj sam, że jest to naprawdę mała ilość kodu i trudno sobie wyobrazić go mniej.</p>
+
+<p>Od teraz po uruchomieniu aplikacji możesz targać suwakami na lewo/prawo i zmienią one swoje położenie. Wartość każdego koloru jest ogólnodostępna, a nie tylko zamknięta do aktualnego widgeta. W praktyce oznacza to, że jesteśmy o krok od skonsumowania stanu w <strong>components/rgb_preview.dart</strong>. Spójrzmy jednak na alternatywny sposób konsumcji.</p>
+
+<h4 id="consumer">Consumer</h4>
+
+<p>Jak to we Flutterze - wszystko jest widgetem, Provider też może zostać tak wykorzystany. Otrzymujemy z pudełka widget <code class="language-plaintext highlighter-rouge">Consumer</code>, który działa na zasadzie <strong>buildera</strong> - zamiast parametru <em>child</em> występuje <em>builder</em>, będący funkcją uruchamianą w trakcie budowania drzewa (w uproszczeniu).</p>
+
+<p>Builder przyjmuje łącznie trzy parametry, z czego istotne dla nas będą tylko dwa pierwsze:</p>
+
+<ul>
+  <li>context - dobrze znany <em>BuildContext</em> w ramach którego budowane jest drzewo.</li>
+  <li>value - instanacja stanu o który pytaliśmy. Identyczny obiekt jak ten uzyskany przez <code class="language-plaintext highlighter-rouge">Provider.of</code>.</li>
+</ul>
+
+<p>Ostatni argument nazwaliśmy lakonicznie <strong>_</strong> co jest konwencją języka Dart na parametr który wiemy że istnieje, ale stanowczo nie będziemy go do niczego wykorzystywali.</p>
+
+<p><strong>Prosty przykład:</strong></p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">return</span> <span class="n">Consumer</span><span class="o">&lt;</span><span class="n">ColorModel</span><span class="o">&gt;(</span>
+  <span class="nl">builder:</span> <span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">RaisedButton</span><span class="o">(</span>
+      <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="n">value</span><span class="o">.</span><span class="na">red</span><span class="o">),</span>
+      <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">value</span><span class="o">.</span><span class="na">red</span><span class="o">++;</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">);</span>
+</code></pre></div></div>
+
+<p><strong>Zalety:</strong></p>
+<ul>
+  <li>Jest widgetem</li>
+  <li>Umożliwia przebudowywanie tylko fragmentu drzewa</li>
+</ul>
+
+<p><strong>Wady:</strong></p>
+<ul>
+  <li>Zawsze nasłuchuje na zmiany stanu (konieczne rebuildy)</li>
+</ul>
+
+<p>Czas na deser i finalizację aplikacji. Wykorzystamy jeden prosty trik, aby narysować podgląd koloru wybranego przez użytkownika. Przejdźmy tym razem do pliku <strong>components/rgb_preview.dart</strong> i skorzystajmy z Consumera.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'../models.dart'</span><span class="o">;</span>
+
+<span class="c1">// ...</span>
+
+<span class="nd">@override</span>
+<span class="n">Widget</span> <span class="nf">build</span><span class="p">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="n">Consumer</span><span class="o">&lt;</span><span class="n">ColorModel</span><span class="o">&gt;(</span>
+    <span class="nl">builder:</span> <span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">color</span><span class="o">,</span> <span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">Center</span><span class="o">(</span>
+        <span class="nl">child:</span> <span class="n">Container</span><span class="o">(</span>
+          <span class="nl">width:</span> <span class="mi">200</span><span class="o">,</span>
+          <span class="nl">height:</span> <span class="mi">200</span><span class="o">,</span>
+          <span class="nl">color:</span> <span class="n">Color</span><span class="o">.</span><span class="na">fromRGBO</span><span class="o">(</span>
+            <span class="n">color</span><span class="o">.</span><span class="na">red</span><span class="o">.</span><span class="na">toInt</span><span class="o">(),</span>
+            <span class="n">color</span><span class="o">.</span><span class="na">green</span><span class="o">.</span><span class="na">toInt</span><span class="o">(),</span>
+            <span class="n">color</span><span class="o">.</span><span class="na">blue</span><span class="o">.</span><span class="na">toInt</span><span class="o">(),</span>
+            <span class="mi">1</span><span class="o">,</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">);</span>
+    <span class="o">},</span>
+  <span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Otoczyliśmy nasz poprzedni kod builderem <code class="language-plaintext highlighter-rouge">Consumer</code> i zamiast przekazywać losowe wartości poszczególnych kolorów - używamy tych które zapisane są w stanie. Mogliśmy użyć co prawda <code class="language-plaintext highlighter-rouge">Provider.of</code> - chcę jednak abyś wiedział że możesz ich używać zamiennie w oparciu o ich wady/zalety.</p>
+
+<p>Aplikacja działa już teraz w 100%. Osiągnęliśmy zamierzony cel i mimo tego, że nie jest to cud techniki to masz teraz solidną wiedzę odnośnie pełnego zarządzania stanem - możesz zbudować jakąkolwiek apkę sobie wymarzysz (tylko nie przesadzaj).</p>
+
+<h3 id="podsumowanie">Podsumowanie</h3>
+
+<p>Oto i cały Provider w pigułce. Jest ktoś na górze drzewa kto dostarcza aktualny stan (dostawca), jest także ten który czeka na dole drzewa i nasłuchuja na zmiany (odbiorca). Jest też ostatecznie sam stan wysyłany od dostawcy do odbiorcy.</p>
+
+<p>Przypomnienie jak korzystać z providera:</p>
+
+<ol>
+  <li>W pliku <em>main.dart</em> (lub innym wybranym) dodaj nowy wpis do <code class="language-plaintext highlighter-rouge">MultiProvider</code>.</li>
+  <li>Zdefiniuj klasę stanu dziedziczącą po <code class="language-plaintext highlighter-rouge">ChangeNotifier</code>.</li>
+  <li>W dowolnym widgecie w drzewie poniżej użyj <code class="language-plaintext highlighter-rouge">Provider.of</code> lub <code class="language-plaintext highlighter-rouge">Consumer</code> aby móc korzystać ze stanu.</li>
+  <li>Pamiętaj o wywołaniu <code class="language-plaintext highlighter-rouge">notifyListeners()</code>, aby wymusić przebudowanie drzewa.</li>
+</ol>
+
+<p>Pełny kod aplikacji znajdziesz jak zawsze na <a href="https://github.com/vintage/flutter_demo_provider">GitHubie</a>. A co dalej z projektem? Jak go rozbudować, aby upewnić się, że opanowałeś w pełni zarządzanie stanem? Oto kilka pomysłów które po części uwzględniłem w referencyjnej aplikacji:</p>
+
+<ul>
+  <li>Dodanie ekranu logowania w którym użytkownik podaje swoją nazwę przed rozpoczęciem wyboru kolorów.</li>
+  <li>Wyświetlanie na wszystkich kolejnych ekranach nazwy użytkownika w belce aplikacji (<strong>AppBar</strong>).</li>
+  <li>Po stuknięciu w podgląd koloru przeniesienie użytkownika na kolejny ekran prezentujący te same dane ale w inny sposób (bez suwaków? podgląd w formie koła zamiast kwadratu?).</li>
+  <li>Dodanie nowego suwaka do ustawiania przezroczystości i uwzględnienie tej wartości w podglądzie (ostatni parametr funkcji <strong>Color.fromRGBO</strong>).</li>
+  <li>… i wiele więcej - ogranicza Cię tylko wyobraźnia (i ograniczenia sprzętowe).</li>
+</ul>
+
+<p><img src="/assets/img/blog/state_provider/colorek_final.gif" alt="colorek_final.gif" /></p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-state-management-provider%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Zarz%C4%85dzanie+stanem+aplikacji+-+Provider%20https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-state-management-provider%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/flutter-state-management-provider/&title=Zarz%C4%85dzanie+stanem+aplikacji+-+Provider%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Zarz%C4%85dzanie+stanem+aplikacji+-+Provider%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/flutter-state-management-provider/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="Nawigowanie między ekranami - Navigator" href="/blog/flutter-navigation/">
+            <p>Poprzedni wpis</p>
+            Nawigowanie między ekranami - Navigator
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="Zarabianie i monetyzacja - Reklamy AdMob" href="/blog/flutter-monetization-admob/">
+            <p>Następny wpis</p>
+            Zarabianie i monetyzacja - Reklamy AdMob
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/flutter-layout-grid/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Pozycjonowanie elementów w gridzie - Row i Column | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Pozycjonowanie elementów w gridzie - Row i Column" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Jedną z głównych zalet Fluttera jest jego niemal doskonały mechanizm do tworzenia layoutów. Dowiedz się w jaki sposób powiązać ze sobą elementy, aby wyświetlały się dokładnie tam, gdzie im każesz." />
+<meta property="og:description" content="Jedną z głównych zalet Fluttera jest jego niemal doskonały mechanizm do tworzenia layoutów. Dowiedz się w jaki sposób powiązać ze sobą elementy, aby wyświetlały się dokładnie tam, gdzie im każesz." />
+<link rel="canonical" href="https://rykowski.dev/blog/flutter-layout-grid/" />
+<meta property="og:url" content="https://rykowski.dev/blog/flutter-layout-grid/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-23T00:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/flutter-layout-grid/","headline":"Pozycjonowanie elementów w gridzie - Row i Column","dateModified":"2019-06-23T00:00:00+02:00","datePublished":"2019-06-23T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-layout-grid/"},"description":"Jedną z głównych zalet Fluttera jest jego niemal doskonały mechanizm do tworzenia layoutów. Dowiedz się w jaki sposób powiązać ze sobą elementy, aby wyświetlały się dokładnie tam, gdzie im każesz.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/triangular.jpeg " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Pozycjonowanie+element%C3%B3w+w+gridzie+-+Row+i+Column" class="title">Pozycjonowanie elementów w gridzie - Row i Column</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Czerwiec
+        
+      2019
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>Ogromną rolę przy tworzeniu aplikacji mobilnych odgrywa część wizualna, czyli User Interface (<strong>UI</strong>). Możemy tutaj wyodrębnić kilka składowych elementów, które w połączeniu wygenerują nam to co użytkownik zobaczy na ekranie po odpaleniu naszej apki:</p>
+
+<ul>
+  <li>wygląd komponentów (<em>design</em>)</li>
+  <li>animacje</li>
+  <li>rozmieszczenie komponentów (<em>layout</em>)</li>
+</ul>
+
+<p>Wszystkie z nich są ważne i trudno sobie wyobrazić profesjonalny produkt bez chociażby jednej z nich. Dzisiaj skupię się na ostatniej, czyli w jaki sposób rozmieszczać komponenty na ekranie, aby spełniały nasze oczekiwania (lub oczekiwania <em>Design Team-u</em>). Jest to rzecz, która potrafi być frustrująca - zwłaszcza na początku przygody z technologią. O ile łatwo wyszukać w dokumentacji elementy wizualne, które umiemy sobie wyobrazić - przycisk, listę, czy belkę nawigacji - to znalezienie odpowiedzi na pytanie jak sprawić, żeby rzecz <em>X</em> była obok rzeczy <em>Y</em>, która jest nad rzeczą <em>Z</em> bywa zdecydowanie trudniejsze.</p>
+
+<h2 id="layout--widget">Layout == widget</h2>
+
+<p>Tak jak człowiek w większości składa się z wody, tak Flutter opiera się w znacznej części na <strong>widgetach</strong>. Są nimi zarówno przyciski, przełączniki, ikony, a nawet wyświetlany na ekranie tekst, jak również obiekty których nie widzi nasz użytkownik, a mimo to znajdują się na ekranie i pełnią krytyczną rolę. Mowa tutaj o wierszach (<code class="language-plaintext highlighter-rouge">Row</code>) i kolumnach (<code class="language-plaintext highlighter-rouge">Column</code>), które w elegancki sposób organizują kolejność wyświetlania widgetów wizualnych.</p>
+
+<p>W dostępnej skrzynce narzędziowej mamy rzecz jasna do dyspozycji więcej narzędzi niż tylko wiersz/kolumna - o tym przeczytasz w kolejnym wpisie. Nie przedłużając wstępu - przejdźmy do praktyki i realnych zastosowań gridu!</p>
+
+<h2 id="centralna-rozgrzewka">Centralna rozgrzewka</h2>
+
+<p>Pamiętasz jak zaczyna się każdy kurs dowolnego języka programowania? Oczywiście że tak, trudno zapomnieć te dwa magiczne słowa: <code class="language-plaintext highlighter-rouge">Hello world</code>. Tak samo zaczniemy i my - wyświetlimy ten napis na samym środku ekranu. Jedyna różnica będzie polegała na tym, że posłużymy się polską wersją językową tego zwrotu.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">runApp</span><span class="o">(</span><span class="n">App</span><span class="o">());</span>
+
+<span class="kd">class</span> <span class="nc">App</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">MaterialApp</span><span class="o">(</span>
+      <span class="nl">home:</span> <span class="n">Scaffold</span><span class="o">(</span>
+        <span class="nl">backgroundColor:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">,</span>
+        <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+          <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span>
+            <span class="s">"Witaj świecie"</span><span class="o">,</span>
+            <span class="nl">style:</span> <span class="n">TextStyle</span><span class="o">(</span>
+              <span class="nl">fontSize:</span> <span class="mi">32</span><span class="o">,</span>
+              <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">white</span><span class="o">,</span>
+            <span class="o">),</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Na urządzeniu zobaczysz czarne tło na całej powierzchni, a na środku ekranu napis “Witaj świecie” - tak jak na załączonym poniżej zrzucie. Nie jest to co prawda przykład zbyt złożony, ale od czegoś trzeba zacząć - teraz będzie tylko <del>trudniej</del> lepiej.</p>
+
+<p><img src="/assets/img/blog/layout_center.png" alt="layout_center.png" /></p>
+
+<p><em>Czy taki layout ma realne zastosowanie w produkcyjnej aplikacji?</em> Oczywiście! W jednej ze swoich gier wyświetlam ekran informujący gracza o poprawnej odpowiedzi. Jest to prosty ekran z tłem i zadowoloną buźką w środku. Rozwiązanie proste i dające efekt który chciałem osiągnąć:</p>
+
+<p><img src="/assets/img/blog/zgadula_correct.png" alt="zgadula_correct.png" /></p>
+
+<h2 id="grid">Grid</h2>
+
+<p>Pierwsze rozmieszczenie za nami, jednak trudno zbudować aplikację której layout będzie opierał się wyłącznie na pojedynczym elemencie wyświetlanym na środku ekranu. W przykładzie powyżej możesz zaobserwować, że zarówno <code class="language-plaintext highlighter-rouge">Container</code> jak i <code class="language-plaintext highlighter-rouge">Center</code> przyjmują parametr <code class="language-plaintext highlighter-rouge">child</code> (z angielskiego dziecko - liczba pojedyncza), któremu można przekazać tylko jeden widget. Nie mamy możliwości przekazania listy elementów które chcemy narysować. <del><strong>Żegnaj przygodo.</strong></del></p>
+
+<p>Jeśli posiadasz doświadczenie jako <em>Web Developer</em> i pracowałeś chociaż przez krótką chwilę z <em>HTML</em> to coś Ci tu nie pasuje. Przecież do <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code>, czy dowolnego innego znacznika można przekazać tyle elementów ile sobie zażyczę! Co to za herezja, aby blokować taką możliwość? Odpowiedź jest następująca: Flutter musi wiedzieć jak poukładać listę komponentów - <em>pionowo? poziomo?</em> - i dlatego dostarcza nam dedykowane widgety, które wiedzą co i jak.</p>
+
+<h3 id="row">Row</h3>
+
+<p>Do umieszczania elementów w poziomie (jeden obok drugiego) posługujemy się widgetem <code class="language-plaintext highlighter-rouge">Row</code>. W odróżnieniu od wielu innych wbudowanych komponentów nie przyjmuje on parametru <del><code class="language-plaintext highlighter-rouge">child</code></del>, lecz <code class="language-plaintext highlighter-rouge">children</code> (z angielskiego dzieci - liczba mnoga) do którego jesteśmy w stanie przekazać listę obiektów do narysowania.</p>
+
+<p>Napiszmy prostą aplikację, której zadaniem będzie wyświetlanie pojedynczych liter ze słowa <em>Witaj</em> w kolorowych bloczkach, które narysujemy jeden obok drugiego (od lewej do prawej).</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">App</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="n">Widget</span> <span class="n">buildItem</span><span class="o">(</span><span class="kt">String</span> <span class="n">letter</span><span class="o">,</span> <span class="n">Color</span> <span class="n">color</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Container</span><span class="o">(</span>
+        <span class="nl">padding:</span> <span class="n">EdgeInsets</span><span class="o">.</span><span class="na">all</span><span class="o">(</span><span class="mi">16</span><span class="o">),</span>
+        <span class="nl">decoration:</span> <span class="n">BoxDecoration</span><span class="o">(</span><span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">blue</span><span class="o">),</span>
+        <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span>
+          <span class="n">letter</span><span class="o">,</span>
+          <span class="nl">style:</span> <span class="n">TextStyle</span><span class="o">(</span>
+            <span class="nl">fontSize:</span> <span class="mi">32</span><span class="o">,</span>
+            <span class="nl">color:</span> <span class="n">color</span><span class="o">,</span>
+          <span class="o">),</span>
+        <span class="o">)</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+  
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">MaterialApp</span><span class="o">(</span>
+      <span class="nl">home:</span> <span class="n">Scaffold</span><span class="o">(</span>
+        <span class="nl">backgroundColor:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">,</span>
+        <span class="nl">body:</span> <span class="n">Container</span><span class="o">(</span>
+          <span class="nl">height:</span> <span class="mi">300</span><span class="o">,</span>
+          <span class="nl">decoration:</span> <span class="n">BoxDecoration</span><span class="o">(</span><span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">green</span><span class="o">),</span>
+          <span class="nl">child:</span> <span class="n">Row</span><span class="o">(</span>
+            <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceAround</span><span class="o">,</span>
+            <span class="nl">crossAxisAlignment:</span> <span class="n">CrossAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+            <span class="nl">children:</span> <span class="o">[</span>
+              <span class="n">buildItem</span><span class="o">(</span><span class="s">"W"</span><span class="o">,</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">),</span>
+              <span class="n">buildItem</span><span class="o">(</span><span class="s">"I"</span><span class="o">,</span> <span class="n">Colors</span><span class="o">.</span><span class="na">white</span><span class="o">),</span>
+              <span class="n">buildItem</span><span class="o">(</span><span class="s">"T"</span><span class="o">,</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">),</span>
+              <span class="n">buildItem</span><span class="o">(</span><span class="s">"A"</span><span class="o">,</span> <span class="n">Colors</span><span class="o">.</span><span class="na">white</span><span class="o">),</span>
+              <span class="n">buildItem</span><span class="o">(</span><span class="s">"J"</span><span class="o">,</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">),</span>
+            <span class="o">],</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Po uruchomieniu aplikacji powinieneś zobaczyć następujący zrzut:</p>
+
+<p><img src="/assets/img/blog/layout_row.png" alt="layout_row.png" /></p>
+
+<p>O to dokładnie nam chodziło! Czarne tło pochodzi z <code class="language-plaintext highlighter-rouge">Scaffold</code>, który zawsze okupuje pełny rozmiar ekranu. Na górze widzimy zieloną część o wysokości 300 jednostek z kontenera <code class="language-plaintext highlighter-rouge">Container</code>. Dlaczego ustawiliśmy sztywną wysokość? Widget ten domyślnie zajmie tyle miejsca na ekranie, ile miejsca potrzebuje jego dziecko - w tym wypadku <code class="language-plaintext highlighter-rouge">Row</code>. W celu demonstracyjnym konfiguracji tego ostatniego - narzuciliśmy mu wymiar umożliwiający swobodną zmianę dostępnych parametrów pozycjonowania.</p>
+
+<h4 id="mainaxisalignment">mainAxisAlignment</h4>
+
+<p><img src="/assets/img/blog/flutter_row_axis_main.png" alt="flutter_row_axis_main.png" /></p>
+
+<p>Główna oś na której rozmieszczone są elementy. Jeśli pamiętasz ze szkoły oś współrzędnych <strong>X Y</strong> to mamy tutaj naszego <strong>X</strong>. W przykładzie wykorzystaliśmy wartość <code class="language-plaintext highlighter-rouge">spaceAround</code>, jednak dostępne są również inne  warianty konfiguracyjne.</p>
+
+<ul>
+  <li><strong>spaceAround</strong> - układa elementy na całej dostępnej szerokości i z każdej ze stron dodaje tzw. <em>światło</em>, czyli pustą przestrzeń. Wolna przestrzeń między dziećmi jest 2x większa, niż ta oddzielająca dziecko od rodzica</li>
+  <li><strong>spaceEvenly</strong> - identyczne zachowanie jak <strong>spaceAround</strong>, z tą różnicą, że przestrzeń między elementami i rodzicem jest jednakowej wielkości.</li>
+  <li><strong>spaceBetween</strong> - podobnie jak <strong>spaceAround</strong> elementy rozłożone są na całej szerokości, jednak bez pustej przestrzeni z przodu i na końcu (przyleganie do krawędzi rodzica).</li>
+  <li><strong>start</strong> - elementy przylegają do siebie i ustawiane są na początku osi (lewa strona).</li>
+  <li><strong>center</strong> - elementy przylegają do siebie i ustawiane są na środku osi.</li>
+  <li><strong>end</strong> - analogicznie jak <strong>start</strong> z tym, że elementy stłoczone są na końcu osi (prawa strona).</li>
+</ul>
+
+<p><img src="/assets/img/blog/flutter_row_axis_main_table.png" alt="flutter_row_axis_main_table.png" /></p>
+
+<h4 id="crossaxisalignment">crossAxisAlignment</h4>
+
+<p><img src="/assets/img/blog/flutter_row_axis_cross.png" alt="flutter_row_axis_cross.png" /></p>
+
+<p>Dodatkowa oś, która odpowiada za pionowe rozmieszczenie elementów (<strong>Y</strong>). Nasz przykład używa wartości <code class="language-plaintext highlighter-rouge">center</code>, jednak dostępnych wariantów jest więcej i wszystko zależy od tego jaki efekt chcesz uzyskać.</p>
+
+<ul>
+  <li><strong>center</strong> - wymusza rozkład w centralnej części wiersza. Elementy znajdują się na środku ekranu, tak jak po użyciu widgetu <code class="language-plaintext highlighter-rouge">Center</code>.</li>
+  <li><strong>start</strong> - elementy umieszczone są na samej górze kontenera.</li>
+  <li><strong>end</strong> - przeciwieństwo <strong>start</strong>, elementy widoczne są na dole.</li>
+  <li><strong>stretch</strong> - służy do rozciągnięcia elementów w taki sposób, aby zapełniły całą dostępną wysokość.</li>
+  <li><strong>baseline</strong> - opcja przydatna jedynie gdy elementami składowymi wiersza jest bezpośrednio tekst, który chcemy wyrównać względem siebie. Parametr do poprawnego działania wymaga ustawienia dodatkowego parametru <code class="language-plaintext highlighter-rouge">textBaseline</code> na rodzicu <code class="language-plaintext highlighter-rouge">Row</code>.</li>
+</ul>
+
+<p><img src="/assets/img/blog/flutter_row_axis_cross_table.png" alt="flutter_row_axis_cross_table.png" /></p>
+
+<h3 id="column">Column</h3>
+
+<p>Wiemy już jak rozmieszczać elementy w poziomie, czas przyjrzeć się jak zrobić to samo dla pionu (jeden pod drugim). Zadanie to powierzamy widgetowi <code class="language-plaintext highlighter-rouge">Column</code>, który działa w sposób analogiczny jak <code class="language-plaintext highlighter-rouge">Row</code>. Najważniejsze różnice to:</p>
+
+<ol>
+  <li>Elementy rozmieszczone są pionowo, nie poziomo.</li>
+  <li><code class="language-plaintext highlighter-rouge">Column</code> okupuje maksymalną dostępną wysokość rodzica, a szerokość tylko taką jakiej potrzebuje do narysowania najszerszego ze swoich dzieci (<code class="language-plaintext highlighter-rouge">Row</code> zajmuje maksymalną szerokość, a wysokość najwyższego z dzieci).</li>
+</ol>
+
+<p>Nanieśmy odpowiednie modyfikacje do poprzedniego kodu. Jedynymi zmianami, które wprowadzimy jest ustalanie szerokości zamiast wysokości (<code class="language-plaintext highlighter-rouge">height</code> na <code class="language-plaintext highlighter-rouge">width</code>) i podmiana widgetu <code class="language-plaintext highlighter-rouge">Row</code> na <code class="language-plaintext highlighter-rouge">Column</code>. Cała reszta pozostaje bez zmian.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">App</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="n">Widget</span> <span class="n">buildItem</span><span class="o">(</span><span class="kt">String</span> <span class="n">letter</span><span class="o">,</span> <span class="n">Color</span> <span class="n">color</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Container</span><span class="o">(</span>
+        <span class="nl">padding:</span> <span class="n">EdgeInsets</span><span class="o">.</span><span class="na">all</span><span class="o">(</span><span class="mi">16</span><span class="o">),</span>
+        <span class="nl">decoration:</span> <span class="n">BoxDecoration</span><span class="o">(</span><span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">blue</span><span class="o">),</span>
+        <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span>
+          <span class="n">letter</span><span class="o">,</span>
+          <span class="nl">style:</span> <span class="n">TextStyle</span><span class="o">(</span>
+            <span class="nl">fontSize:</span> <span class="mi">32</span><span class="o">,</span>
+            <span class="nl">color:</span> <span class="n">color</span><span class="o">,</span>
+          <span class="o">),</span>
+        <span class="o">)</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">MaterialApp</span><span class="o">(</span>
+      <span class="nl">home:</span> <span class="n">Scaffold</span><span class="o">(</span>
+        <span class="nl">backgroundColor:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">,</span>
+        <span class="nl">body:</span> <span class="n">Container</span><span class="o">(</span>
+          <span class="c1">// height replaced with width</span>
+          <span class="nl">width:</span> <span class="mi">300</span><span class="o">,</span>
+          <span class="nl">decoration:</span> <span class="n">BoxDecoration</span><span class="o">(</span><span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">green</span><span class="o">),</span>
+          <span class="c1">// Row changed to Column</span>
+          <span class="nl">child:</span> <span class="n">Column</span><span class="o">(</span>
+            <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceAround</span><span class="o">,</span>
+            <span class="nl">crossAxisAlignment:</span> <span class="n">CrossAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+            <span class="nl">children:</span> <span class="o">[</span>
+              <span class="n">buildItem</span><span class="o">(</span><span class="s">"W"</span><span class="o">,</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">),</span>
+              <span class="n">buildItem</span><span class="o">(</span><span class="s">"I"</span><span class="o">,</span> <span class="n">Colors</span><span class="o">.</span><span class="na">white</span><span class="o">),</span>
+              <span class="n">buildItem</span><span class="o">(</span><span class="s">"T"</span><span class="o">,</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">),</span>
+              <span class="n">buildItem</span><span class="o">(</span><span class="s">"A"</span><span class="o">,</span> <span class="n">Colors</span><span class="o">.</span><span class="na">white</span><span class="o">),</span>
+              <span class="n">buildItem</span><span class="o">(</span><span class="s">"J"</span><span class="o">,</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">),</span>
+            <span class="o">],</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Uruchomienie aplikacji spowoduje wyświetlenie poniższego ekranu:</p>
+
+<p><img src="/assets/img/blog/layout_column.png" alt="layout_column.png" /></p>
+
+<p>Ponownie uzyskujemy spodziewany wynik! Elementy narysowane są jeden pod drugim, a czarny pas po prawej stronie to nic innego jak <code class="language-plaintext highlighter-rouge">Scaffold</code> umieszczony pod spodem naszego layoutu. Na koniec przyjrzyjmy się opcjom konfiguracyjnym - jest to czysta formalność, gdyż ustawienia przekładają się 1:1 z tym co widzieliśmy w <code class="language-plaintext highlighter-rouge">Row</code>.</p>
+
+<h4 id="mainaxisalignment-1">mainAxisAlignment</h4>
+
+<p><img src="/assets/img/blog/flutter_column_axis_main.png" alt="flutter_column_axis_main.png" /></p>
+
+<p>Jako, że widget służy do układania komponentów w pionie to jego główną osią nie jest <strong>X</strong>, lecz <strong>Y</strong>. Trzeba o tym pamiętać - mi do tej pory zdarza się sporadycznie ustawić parametry nie tak jak powinienem. Konfiguracja jest identyczna jak w <code class="language-plaintext highlighter-rouge">Row</code>, pozwól, więc że nie będę jej tutaj ponownie wklejał.</p>
+
+<p><img src="/assets/img/blog/flutter_column_axis_main_table.png" alt="flutter_column_axis_main_table.png" /></p>
+
+<h4 id="crossaxisalignment-1">crossAxisAlignment</h4>
+
+<p><img src="/assets/img/blog/flutter_column_axis_cross.png" alt="flutter_column_axis_cross.png" /></p>
+
+<p>Druga z osi, która rozmieszcza elementy w poziomie <strong>X</strong>. Ponownie opcje konfiguracyjne możesz podejrzeć w sekcji w której omawialiśmy widget <code class="language-plaintext highlighter-rouge">Row</code>.</p>
+
+<p><img src="/assets/img/blog/flutter_column_axis_cross_table.png" alt="flutter_column_axis_cross_table.png" /></p>
+
+<h2 id="synteza">Synteza</h2>
+
+<p>Przeszliśmy przez pozycjonowanie poziome i pionowe - jest to mocny fundament przy projektowaniu layoutu naszej aplikacji. Możesz (a nawet powinieneś) osadzać kolumny w wierszach, a wiersze w kolumnach. W końcu <code class="language-plaintext highlighter-rouge">Column</code> i <code class="language-plaintext highlighter-rouge">Row</code> to widgety, nic więc nie stoi na przeszkodzie aby w drzewie komponentów zawierały się wzajemnie.</p>
+
+<p>Na zakończenie spójrz jeszcze na bardziej złożony (ale nieskomplikowany!) ekran, który posiada wiele różnych elementów i demonstruje w jaki sposób uzyskać pożądany efekt:</p>
+
+<p><img src="/assets/img/blog/flutter_layout_complex.png" alt="flutter_layout_complex.png" /></p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">runApp</span><span class="o">(</span><span class="n">App</span><span class="o">());</span>
+
+<span class="kd">class</span> <span class="nc">App</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="n">Widget</span> <span class="n">buildInfo</span><span class="o">(</span><span class="n">Icon</span> <span class="n">icon</span><span class="o">,</span> <span class="kt">String</span> <span class="n">text</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Column</span><span class="o">(</span>
+      <span class="nl">children:</span> <span class="o">[</span>
+        <span class="n">icon</span><span class="o">,</span>
+        <span class="n">Padding</span><span class="o">(</span>
+          <span class="nl">padding:</span> <span class="kd">const</span> <span class="n">EdgeInsets</span><span class="o">.</span><span class="na">only</span><span class="o">(</span><span class="nl">top:</span> <span class="mf">8.0</span><span class="o">),</span>
+          <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="n">text</span><span class="o">,</span> <span class="nl">style:</span> <span class="n">TextStyle</span><span class="o">(</span><span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">white</span><span class="o">)),</span>
+        <span class="o">),</span>
+      <span class="o">],</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">MaterialApp</span><span class="o">(</span>
+      <span class="nl">home:</span> <span class="n">Scaffold</span><span class="o">(</span>
+        <span class="nl">backgroundColor:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">amber</span><span class="o">,</span>
+        <span class="nl">body:</span> <span class="n">Column</span><span class="o">(</span>
+          <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceAround</span><span class="o">,</span>
+          <span class="nl">children:</span> <span class="o">[</span>
+            <span class="n">Column</span><span class="o">(</span>
+              <span class="nl">children:</span> <span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;[</span>
+                <span class="n">Text</span><span class="o">(</span>
+                  <span class="s">"Pikachu"</span><span class="o">,</span>
+                  <span class="nl">style:</span> <span class="n">TextStyle</span><span class="o">(</span>
+                    <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">,</span>
+                    <span class="nl">fontSize:</span> <span class="mi">48</span><span class="o">,</span>
+                    <span class="nl">fontWeight:</span> <span class="n">FontWeight</span><span class="o">.</span><span class="na">bold</span><span class="o">,</span>
+                  <span class="o">),</span>
+                <span class="o">),</span>
+                <span class="n">Image</span><span class="o">.</span><span class="na">network</span><span class="o">(</span>
+                  <span class="s">"http://pluspng.com/img-png/pikachu-face-png-png-svg-512.png"</span><span class="o">,</span>
+                  <span class="nl">width:</span> <span class="mi">160</span><span class="o">,</span>
+                  <span class="nl">height:</span> <span class="mi">160</span><span class="o">,</span>
+                <span class="o">),</span>
+              <span class="o">],</span>
+            <span class="o">),</span>
+            <span class="n">Text</span><span class="o">(</span>
+              <span class="s">"Pikachu jest jednym z najbardziej rozpoznawalnych Pokémonów, "</span>
+              <span class="s">"głównie ze względu na fakt, że jest on centralną postacią w serii anime. "</span>
+              <span class="s">"Pikachu jest powszechnie uważany za najbardziej popularnego Pokémona."</span><span class="o">,</span>
+              <span class="nl">textAlign:</span> <span class="n">TextAlign</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+              <span class="nl">style:</span> <span class="n">TextStyle</span><span class="o">(</span><span class="nl">height:</span> <span class="mf">1.4</span><span class="o">,</span> <span class="nl">fontSize:</span> <span class="mi">16</span><span class="o">),</span>
+            <span class="o">),</span>
+            <span class="n">Container</span><span class="o">(</span>
+              <span class="nl">padding:</span> <span class="n">EdgeInsets</span><span class="o">.</span><span class="na">all</span><span class="o">(</span><span class="mi">16</span><span class="o">),</span>
+              <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">black</span><span class="o">,</span>
+              <span class="nl">child:</span> <span class="n">Row</span><span class="o">(</span>
+                <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceEvenly</span><span class="o">,</span>
+                <span class="nl">children:</span> <span class="o">[</span>
+                  <span class="n">buildInfo</span><span class="o">(</span>
+                    <span class="n">Icon</span><span class="o">(</span><span class="n">Icons</span><span class="o">.</span><span class="na">flash_on</span><span class="o">,</span> <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">yellowAccent</span><span class="o">),</span>
+                    <span class="s">"Type"</span><span class="o">,</span>
+                  <span class="o">),</span>
+                  <span class="n">buildInfo</span><span class="o">(</span>
+                    <span class="n">Icon</span><span class="o">(</span><span class="n">Icons</span><span class="o">.</span><span class="na">insert_emoticon</span><span class="o">,</span> <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">greenAccent</span><span class="o">),</span>
+                    <span class="s">"Mood"</span><span class="o">,</span>
+                  <span class="o">),</span>
+                  <span class="n">buildInfo</span><span class="o">(</span>
+                    <span class="n">Icon</span><span class="o">(</span><span class="n">Icons</span><span class="o">.</span><span class="na">do_not_disturb_alt</span><span class="o">,</span> <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">redAccent</span><span class="o">),</span>
+                    <span class="s">"Full HP"</span><span class="o">,</span>
+                  <span class="o">),</span>
+                <span class="o">],</span>
+              <span class="o">),</span>
+            <span class="o">),</span>
+          <span class="o">],</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-layout-grid%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Pozycjonowanie+element%C3%B3w+w+gridzie+-+Row+i+Column%20https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-layout-grid%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/flutter-layout-grid/&title=Pozycjonowanie+element%C3%B3w+w+gridzie+-+Row+i+Column%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Pozycjonowanie+element%C3%B3w+w+gridzie+-+Row+i+Column%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/flutter-layout-grid/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="Zarządzanie stanem aplikacji - StatefulWidget" href="/blog/flutter-state-management-stateful/">
+            <p>Poprzedni wpis</p>
+            Zarządzanie stanem aplikacji - StatefulWidget
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="Flutter - konfiguracja i rozpoczęcie przygody" href="/blog/flutter-getting-started/">
+            <p>Następny wpis</p>
+            Flutter - konfiguracja i rozpoczęcie przygody
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>

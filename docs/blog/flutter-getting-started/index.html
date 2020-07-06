@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/flutter-getting-started/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Flutter - konfiguracja i rozpoczęcie przygody | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Flutter - konfiguracja i rozpoczęcie przygody" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Postawienie lokalnego środowiska developerskiego do pisania aplikacji we Flutterze. Instalacja niezbędnych paczek, edytora, aż do zbudowania Swojej pierwszej prostej apki." />
+<meta property="og:description" content="Postawienie lokalnego środowiska developerskiego do pisania aplikacji we Flutterze. Instalacja niezbędnych paczek, edytora, aż do zbudowania Swojej pierwszej prostej apki." />
+<link rel="canonical" href="https://rykowski.dev/blog/flutter-getting-started/" />
+<meta property="og:url" content="https://rykowski.dev/blog/flutter-getting-started/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-12T00:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/flutter-getting-started/","headline":"Flutter - konfiguracja i rozpoczęcie przygody","dateModified":"2019-06-12T00:00:00+02:00","datePublished":"2019-06-12T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-getting-started/"},"description":"Postawienie lokalnego środowiska developerskiego do pisania aplikacji we Flutterze. Instalacja niezbędnych paczek, edytora, aż do zbudowania Swojej pierwszej prostej apki.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/triangular.jpeg " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Flutter+-+konfiguracja+i+rozpocz%C4%99cie+przygody" class="title">Flutter - konfiguracja i rozpoczęcie przygody</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Czerwiec
+        
+      2019
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>Czym jest Flutter możesz dowiedzieć się z <a href="/blog/flutter-intro/">poprzedniego wpisu</a>, pora na praktykę. Konfiguracja środowiska,
+instalacja niezbędnych zależności, podrasowanie edytora i ostatecznie zbudowanie pierwszej apki pod Androida lub iOSa (exclusive dla posiadaczy macOS). Zacznijmy kodzić!</p>
+
+<p><img src="/assets/img/blog/meme_lets_do_this.gif" alt="meme_lets_do_this.gif" /></p>
+
+<h2 id="flutter-sdk">Flutter SDK</h2>
+
+<p>Do rozpoczęcia naszej przygody z Flutterem potrzebujemy … Fluttera. Da się zrobić! SDK dostępne jest do pobrania bezpośrednio z serwerów Google:</p>
+
+<ul>
+  <li><a href="https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_1.17.5-stable.tar.xz">Wersja Linux</a></li>
+  <li><a href="https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.17.5-stable.zip">Wersja macOS</a></li>
+</ul>
+
+<p>Po ściągnięciu paczki należy ją rozpakować, a następnie przenieść katalog w sensowne miejsce. Jak odróżnić sensowne, od bezsensownego? Nie wiem, ale rzeczy tego typu osobiście trzymam w <code class="language-plaintext highlighter-rouge">/usr/local/opt/</code> dlatego Tobie też to polecam (chyba, że masz wyrobione własne preferencje, wtedy śmiało zrób tak, abyś czuł że masz nad tym kontrolę). Otwórz konsolę i przenieś świeżo rozpakowane archiwum do miejsca docelowego:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;KATALOG_GDZIE_ROZPAKOWAŁEŚ_ARCHIWUM&gt;
+<span class="nb">mv </span>flutter /usr/local/opt/
+</code></pre></div></div>
+
+<p>Gotowe. Pozostaje nam tylko powiadomić system, że w <code class="language-plaintext highlighter-rouge">/usr/local/opt/flutter/bin/</code> znajdują się pliki wykonywalne, które będziemy uruchamiać z poziomu konsoli. Chcemy w terminalu wpisać <code class="language-plaintext highlighter-rouge">flutter</code> i zobaczyć inny output niż “<strong>Command not found</strong>”. Do osiągnięcia celu zaktualizujemy zmienną środowiskową <code class="language-plaintext highlighter-rouge">$PATH</code>:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo export </span><span class="nv">PATH</span><span class="o">=</span><span class="s1">'$PATH:/usr/local/opt/flutter/bin'</span> <span class="o">&gt;&gt;</span> ~/.bash_profile
+</code></pre></div></div>
+
+<p>Zrestartuj konsolę i voilà - po wpisaniu <code class="language-plaintext highlighter-rouge">flutter --version</code> otrzymasz informację o aktualnie zainstalowanej wersji Fluttera. <strong>Yay!</strong></p>
+
+<h2 id="środowisko-android">Środowisko Android</h2>
+
+<p>Budowanie aplikacji na urządzenia z Androidem wymaga pobrania i zainstalowania <a href="https://developer.android.com/studio">Android Studio</a>. Gdy zainstalujesz już program, uruchom go i przejdź przez sugerowany proces pobierający Android SDK wraz z platform-tools i build-tools (narzędzia wykorzystywane m.in. do budowania plików <strong>*.apk</strong>).</p>
+
+<p>Jako że główne narzędzie masz już zainstalowane, pozostało przygotować urządzenie na którym będziesz testował aplikację. Generalnie opcje są dwie - telefon, albo emulator. Oba rozwiązania są dobre, jednak czasem konieczne jest przetestowanie na fizycznym urządzeniu - bo jak sprawdzisz, że emulator wibruje? Ograniczenia technologiczne :)</p>
+
+<h3 id="konfiguracja-urządzenia">Konfiguracja urządzenia</h3>
+
+<ol>
+  <li>Weź telefon do ręki.</li>
+  <li>Przejdź do ustawień i aktywuj opcje programistyczne <strong>Ustawienia &gt; Informacje o telefonie &gt; Numer kompilacji/wersji</strong>.  Uderz kilkanaście razy w tą opcję póki nie dostaniesz informacji o tym, że zostałeś programistą. Jeśli monit o byciu programistą się nie pojawi - spróbuj uderzać palcem w inną opcję, lub sprawdź w internecie jak dokładnie wygląda to na Twoim urządzeniu.</li>
+  <li>W ustawieniach odblokowana została nowa sekcja <strong>Opcje programistyczne</strong>. Przejdź do niej i włącz opcję <strong>Debugowanie USB</strong> oraz <strong>Zezwalaj na instalację USB</strong> (nie we wszystkich telefonach jest dostępna).</li>
+  <li>Podłącz kablem telefon do komputera.</li>
+  <li>Na telefonie potwierdź, że ufasz komputerowi do którego się właśnie podłączyłeś (bo ufasz prawda?).</li>
+</ol>
+
+<h3 id="konfiguracja-emulatora">Konfiguracja emulatora</h3>
+
+<ol>
+  <li>Uruchom <strong>Android Studio</strong> i z menu wybierz <strong>Tools &gt; AVD Manager</strong>.</li>
+  <li>Kliknij w przycisk na dole ekranu <strong>Create virtual device</strong>.</li>
+  <li>W <strong>Category</strong> zaznacz <strong>Phone</strong>, wybierz dowolne urządzenie i kliknij w <strong>Next</strong>.</li>
+  <li>Wybierz wersję Androida do zainstalowana na emulatorze (polecam jedną z nowszych). Jeśli nie ściągałeś jeszcze żadnej to przy obrazach dostępny jest przycisk <strong>Download</strong>, który pobierze potrzebne pliki.</li>
+  <li>Kliknij w <strong>Next</strong>, a następnie <strong>Finish</strong>.</li>
+  <li>Wróć do <strong>Tools &gt; AVD Manager</strong> i kliknij w ikonę <strong>▶️</strong> przy nowo utworzonym emulatorze.</li>
+</ol>
+
+<p>Zwieńczeniem procesu - bez znaczenia czy konfigurujesz urządzenie czy emulator - jest wpisanie z poziomu konsoli <code class="language-plaintext highlighter-rouge">flutter devices</code> i upewnienie się że zwrócona lista nie jest pusta. Powinieneś otrzymać wynik zbliżony do:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>flutter devices
+1 connected device:
+
+Android SDK built <span class="k">for </span>x86 • emulator-5554 • android-x86 • Android 9 <span class="o">(</span>API 28<span class="o">)</span> <span class="o">(</span>emulator<span class="o">)</span>
+</code></pre></div></div>
+
+<h2 id="środowisko-ios">Środowisko iOS*</h2>
+
+<p><em>Wyłącznie dla posiadaczy macOS - nie jest możliwe budowanie aplikacji iOS na innym systemie operacyjnym niż ten od Apple.</em></p>
+
+<p>Jeśli jesteś zainteresowany budowaniem aplikacji pod iOS, potrzebujesz narzędzia <a href="https://itunes.apple.com/us/app/xcode/id497799835">Xcode</a>. Po poprawnej instalacji (może chwilę zająć) wykonaj dodatkowo poniższe polecenia:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>xcode-select <span class="nt">--switch</span> /Applications/Xcode.app/Contents/Developer
+<span class="nb">sudo </span>xcodebuild <span class="nt">-license</span>
+</code></pre></div></div>
+
+<p>Odpowiadają one za konfigurację <em>CLI</em> oraz akceptację umowy licencyjnej (bez jej czytania, <strong>Wow</strong>!).</p>
+
+<h3 id="konfiguracja-emulatora-1">Konfiguracja emulatora</h3>
+
+<ol>
+  <li>Z konsoli wpisz <code class="language-plaintext highlighter-rouge">open -a Simulator</code></li>
+</ol>
+
+<p>W przypadku gdy chcesz sprecyzować jakie urządzenie ma zostać uruchomione (np. wolisz iPhone SE niż iPhone X):</p>
+
+<ol>
+  <li>Uruchom <strong>Xcode</strong>.</li>
+  <li>Utwórz nowy projekt przez <strong>File &gt; New &gt; Project</strong> (<em>⇧⌘N</em>).</li>
+  <li>Jako szablonu użyj <strong>Single View App</strong>.</li>
+  <li>Patrz obrazek: <img src="/assets/img/blog/xcode_start_simulator.png" alt="xcode_start_simulator.png" /></li>
+</ol>
+
+<p><em>Upewnij się, że opcja</em> <strong>Debug &gt; Slow animations</strong> <em>jest wyłączona. Lubi czasem spłatać figla i się włączyć po cichu.</em></p>
+
+<h2 id="punkt-kontrolny">Punkt kontrolny</h2>
+
+<p>Czas się zatrzymać i zweryfikować, że wszystko zostało poprawnie zainstalowane i skonfigurowane. Flutter posiada do tego wbudowane polecenie, które upewni się że wszystko jest w jak najlepszym porządku.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>flutter doctor
+
+Doctor summary <span class="o">(</span>to see all details, run flutter doctor <span class="nt">-v</span><span class="o">)</span>:
+<span class="o">[</span>✓] Flutter <span class="o">(</span>Channel stable, v1.5.4-hotfix.2, on Mac OS X 10.14.5 18F132, locale pl-PL<span class="o">)</span>
+<span class="o">[</span>✓] Android toolchain - develop <span class="k">for </span>Android devices <span class="o">(</span>Android SDK version 28.0.3<span class="o">)</span>
+<span class="o">[</span>✓] iOS toolchain - develop <span class="k">for </span>iOS devices <span class="o">(</span>Xcode 10.2.1<span class="o">)</span>
+<span class="o">[</span>✓] Android Studio <span class="o">(</span>version 3.4<span class="o">)</span>
+<span class="o">[</span>✓] VS Code <span class="o">(</span>version 1.35.0<span class="o">)</span>
+<span class="o">[</span>✓] Connected device <span class="o">(</span>1 available<span class="o">)</span>
+
+• No issues found!
+</code></pre></div></div>
+
+<p>Wypis zawiera informację o:</p>
+<ul>
+  <li>Flutter - w jakiej wersji zainstalowany jest sam framework</li>
+  <li>Android toolchain - narzędzia do budowania aplikacji pod Androida</li>
+  <li>iOS toolchain - narzędzia do budowania aplikacji pod iOSa (dostępne wyłącznie na macOS)</li>
+  <li>Android Studio - IDE do tworzenia aplikacji</li>
+  <li>VS Code - nie-IDE (edytor tekstu) do tworzenia aplikacji</li>
+  <li>Connected devices - suma podłączonych urządzeń+uruchomionych emulatorów</li>
+</ul>
+
+<p>Nie przejmuj się jeśli przy części opcji masz krzyżyk (chyba, że przy wszystkich) - możesz przykładowo nie chcieć instalować <strong>VS Code</strong>, czy też na początku chcesz pisać aplikację wyłącznie pod Androida.</p>
+
+<h2 id="uruchomienie-aplikacji">Uruchomienie aplikacji</h2>
+
+<p>Najłatwiejszym sposobem na uruchomienie czystej aplikacji we Flutterze jest utworzenie nowego projektu i jego odpalenie.</p>
+
+<p><img src="/assets/img/blog/meme_dont_say.jpg" alt="meme_dont_say.jpg" /></p>
+
+<p>Także to też zrobimy. Wsiadaj do konsoli i wpisuj razem ze mną:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flutter create my_app
+<span class="nb">cd </span>my_app
+flutter run
+</code></pre></div></div>
+
+<p>Twoim oczom powinna ukazać się następująca aplikacja startowa:</p>
+
+<p><img src="/assets/img/blog/flutter_first_app.png" alt="flutter_first_app.png" /></p>
+
+<p>Jest to typowy <em>counter</em> w którym po kliknięciu przycisku, licznik się zwiększa i tak bez końca. Teraz masz już 100% pewność, że Flutter gra i buczy i pozostaje Ci jedynie <em>pure development</em>, czyli to czym chcesz się zająć na poważnie. Ze swojej strony polecam oficjalny tutorial na <a href="https://flutter.dev/docs/reference/tutorials">flutter.dev</a>, który krok po kroku przedstawia najważniejsze składowe frameworka.</p>
+
+<p><img src="/assets/img/blog/meme_gratz.gif" alt="meme_gratz.gif" /></p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-getting-started%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Flutter+-+konfiguracja+i+rozpocz%C4%99cie+przygody%20https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-getting-started%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/flutter-getting-started/&title=Flutter+-+konfiguracja+i+rozpocz%C4%99cie+przygody%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Flutter+-+konfiguracja+i+rozpocz%C4%99cie+przygody%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/flutter-getting-started/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="Pozycjonowanie elementów w gridzie - Row i Column" href="/blog/flutter-layout-grid/">
+            <p>Poprzedni wpis</p>
+            Pozycjonowanie elementów w gridzie - Row i Column
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="Nowy gracz aplikacji mobilnych - Flutter" href="/blog/flutter-intro/">
+            <p>Następny wpis</p>
+            Nowy gracz aplikacji mobilnych - Flutter
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>
