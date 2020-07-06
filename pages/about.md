@@ -1,14 +1,16 @@
 ---
 layout: page
-title: About
+title: O mnie
 permalink: /about/
-feature-img: "assets/img/pexels/circuit.jpeg"
-tags: [About, Archive]
+#feature-img: "assets/img/about.jpeg"
 ---
 
-Type on Strap is based on Type Theme, a free and open-source theme for [Jekyll](http://jekyllrb.com/), licensed under the MIT License.
+Cześć, nazywam się **Kamil Rykowski**. Jestem Software Developerem, **programistą** - zajmuję się pracą z kodem i oprogramowaniem.
 
-Head over to the [theme's documentation](https://github.io/sylhare/Type-on-Strap) for much more information about Type on Strap or to install this theme on your own Jekyll site.
+Aktualnie pracuję jako **Flutter Developer** w startupie [Vika](https://vika.life). Z samym Flutterem jestem związany od roku 2018, w którym to zbudowałem pierwszy projekt oparty o tą technologię [Party Flutter](https://github.com/vintage/party_flutter), a obecnie jestem w trakcie developmentu pierwszego RPG online w świecie post-apokaliptycznym [Vaultomb](https://vaultomb.com/).
 
-This file is an example of a page in Jekyll, that automatically shows up in the header navigation, you can delete or modify this file freely.
- 
+Nieprzerwanie od **10+ lat** rozwijam się w branży, nie ograniczając się nigdy do pojedynczej technologii. Stąd większość doświadczenia zdobyłem tworząc systemy webowe w oparciu o *Django, React, AWS* oraz cross-platformowe aplikacje mobilne w *React Native i Ionic*.
+
+Dużą uwagę przykładam do jakości oprogramowania - czytelność kodu, code review, testy (nie tylko jednostkowe!) oraz obecność *Continous Integration* wspomagającego proces wytwarzania. Mam uczulenie na **over-engineering** i bezproduktywną refaktoryzację kodu.
+
+Najbardziej aktywny jestem na [Twitterze](https://twitter.com/KamilRykowski).
