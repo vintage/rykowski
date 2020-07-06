@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/async-dart-isolates/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Asynchroniczny Dart - Isolates | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Asynchroniczny Dart - Isolates" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Równoległe przetwarzania w Darcie? Jak najbardziej możliwe! Rozbijmy skorupę jednowątkowości dzięki dodatkowej mocy dostarczanej przez izolaty. Jednowątkowość z wieloma wątkami." />
+<meta property="og:description" content="Równoległe przetwarzania w Darcie? Jak najbardziej możliwe! Rozbijmy skorupę jednowątkowości dzięki dodatkowej mocy dostarczanej przez izolaty. Jednowątkowość z wieloma wątkami." />
+<link rel="canonical" href="https://rykowski.dev/blog/async-dart-isolates/" />
+<meta property="og:url" content="https://rykowski.dev/blog/async-dart-isolates/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-05T00:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/async-dart-isolates/","headline":"Asynchroniczny Dart - Isolates","dateModified":"2020-07-05T00:00:00+02:00","datePublished":"2020-07-05T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/async-dart-isolates/"},"description":"Równoległe przetwarzania w Darcie? Jak najbardziej możliwe! Rozbijmy skorupę jednowątkowości dzięki dodatkowej mocy dostarczanej przez izolaty. Jednowątkowość z wieloma wątkami.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/triangular.jpeg " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Asynchroniczny+Dart+-+Isolates" class="title">Asynchroniczny Dart - Isolates</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Lipiec
+        
+      2020
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <blockquote>
+  <p>Jest to drugi wpis z serii o modelu wykonawczym w Darcie i powiązanej z nim asynchroniczności. Aby wyciągnąć maksimum wiedzy z tego wpisu, niezbędna jest wiedza z poprzedniego, który tłumaczy działanie Event Loop, Futures i programowania z użyciem async/await. Znajdziesz go <a href="/blog/async-dart-event-loop-futures/">tutaj</a>.</p>
+</blockquote>
+
+<p>W poprzednim wpisie do skutku wałkowany był temat tego, że Dart jest językiem jednowątkowym. Na poziomie procesora jest w stanie wykonywać tylko jedną operację w danym czasie. Nie rozdwoi się. Tylko co w takim razie zrobić, gdy mamy do wykonania bardzo ciężką operację, a nie chcemy zawiesić na czas obliczeń całej aplikacji?</p>
+
+<p>Jest na to sposób! Nie jest to co prawda pełna wielowątkowość, ale dostarczony mechanizm umożliwia równoległe wykonywanie wielu operacji na raz. Daje nam to szansę na zapewnienie responsywności UI, a przy tym prowadzenia ciężkich obliczeń na tyłach.</p>
+
+<p><img src="/assets/img/blog/async-2/logo.png" alt="logo.png" /></p>
+
+<h1 id="isolate">Isolate</h1>
+
+<p>Uruchomiona aplikacja w Darcie operuje w obrębie pojedynczego wątku, a raczej jak to się przyjęło w nomenklaturze tego języka - izolatu (<strong>Isolate</strong>). Sama nazwa nie jest jednak siłą przypadku, gdyż niesie za sobą ważną informację.  <strong>Izolaty są od siebie odizolowane i nie współdzielą pamięci.</strong></p>
+
+<p>Mamy możliwość tworzenia i startowania niezależnych izolatów, ale nie mogą one w żaden sposób współdzielić ze sobą nawet części wydzielonej pamięci. Ograniczenie technologiczne. Nie chodzi tutaj nawet o dwa niezależne izolaty. Rodzic, który wystartował nowego izolata również nie jest w stanie operować na jego pamięci. Absolutna izolacja.</p>
+
+<p>Każdy jeden izolat ma własną pamięć, własnego <em>Event Loopa</em> z kolejkami itd. Powinny być postrzegane jako mini osobne aplikacje, gdzie każda sobie rzepkę skrobie.</p>
+
+<p>W porządku, tylko jak w takim razie sterować takim nowo utworzonym izolatem? Jeśli mogę go tylko wystartować i nic więcej to po co mi on? Nawet jeśli wykona swoją ciężką pracę, to jak powie o tym głównemu wątkowi? Poprzez zadeklarowane <strong>porty</strong>, którymi wysyłane są wiadomości (<strong>messages</strong>) w obie strony.</p>
+
+<h2 id="tworzenie-izolata">Tworzenie izolata</h2>
+
+<p>Przejdźmy od razu do praktyki i stwórzmy program z dodatkowym izolatem.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">"dart:isolate"</span><span class="o">;</span>
+
+<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
+
+  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="n">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
+    <span class="n">isolateEntry</span><span class="o">,</span>
+    <span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">,</span>
+  <span class="o">);</span>
+
+  <span class="n">receivePort</span><span class="o">.</span><span class="na">listen</span><span class="o">((</span><span class="kd">dynamic</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">'Isolate says: </span><span class="si">$message</span><span class="s">'</span><span class="o">);</span>
+  <span class="o">});</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">isolateEntry</span><span class="p">(</span><span class="n">SendPort</span> <span class="n">sendPort</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">Timer</span><span class="o">.</span><span class="na">periodic</span><span class="o">(</span>
+    <span class="n">Duration</span><span class="o">(</span><span class="nl">seconds:</span> <span class="mi">1</span><span class="o">),</span> 
+    <span class="o">(</span><span class="n">_</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">sendPort</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="s">"Hi"</span><span class="o">),</span>
+  <span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Na samym początku tworzony jest obiekt typu <strong>ReceivePort</strong>. Umożliwi nam to komunikację między izolatami. Następnie tworzony jest nowy izolat poprzez asynchroniczny konstruktor <code class="language-plaintext highlighter-rouge">Isolate.spawn</code> do którego podajemy dwa argumenty.</p>
+
+<ol>
+  <li><strong>isolateEntry</strong> - funkcja startowa. Mówimy izolatowi jaka funkcja ma być jego “mainem”. Uruchamiając aplikację w Darcie, gdy wstaje pierwszy izolat, szuka on właśnie funkcji o nazwie <em>main</em>. Tutaj mamy już dowolność jak ją nazwiemy, ale funkcja ta musi być albo statyczna, albo tzw. top-level. Nie możesz przekazać tutaj ani metody obiektu, ani żadnej funkcji, która jest zdefiniowana wewnątrz innego bloku kodu jak np. funkcja zadeklarowana w funkcji.</li>
+  <li><strong>receivePort.sendPort</strong> - obiekt typu <em>SendPort</em>, który otrzymujemy po utworzeniu nowego <em>ReceivePort</em>. Jest to port przez który wysyłane są wiadomości od dziecka do rodzica. Wysłana wiadomość trafia bezpośrednio do powiązanego z nią <em>ReceivePort</em>.</li>
+</ol>
+
+<p>Ostatnią rzeczą jaką robi <em>main</em> jest rozpoczęcie nasłuchiwania na wszystkie przychodzące wiadomości i ich printowanie na konsolę.</p>
+
+<p>Co robi natomiast sam izolat? Uruchamia <em>timer</em>, który co sekundę wysyła wiadomość <em>Hi</em> na otrzymany port. Na początek wystarczy. Uruchomienie aplikacji powoduje niekończący się spam ze strony izolatu.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Isolate says: Hi
+Isolate says: Hi
+Isolate says: Hi
+Isolate says: Hi
+...
+</code></pre></div></div>
+
+<p>Poniżej zamieszczony jest przykład izolata, który jako punkt wejściowy otrzymuje funkcję zdefiniowaną w obrębie innej funkcji. Uruchomienie takiego programu zakończy się błędem, gdyż jedyny poprawny punkt wejścia to funkcja statyczna, lub top-level. Pamiętaj o tym!</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
+
+  <span class="kt">void</span> <span class="n">isolateEntry</span><span class="o">(</span><span class="n">SendPort</span> <span class="n">port</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"Hi"</span><span class="o">);</span>
+
+  <span class="c1">// Error!</span>
+  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="n">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
+    <span class="n">isolateEntry</span><span class="o">,</span>
+    <span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">,</span>
+  <span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="niezależna-pamięć">Niezależna pamięć</h2>
+
+<p>Zróbmy szybki test dla upewnienia się, że izolaty są od siebie rzeczywiście w pełni odizolowane. Zdefiniujemy globalną flagę i zmienimy jej wartość wewnątrz izolata. Zmiana ta nie powinna wpłynąć w żaden sposób na to, co dzieje się w głównym wątku. Oba izolaty mają przecież osobną pamięć, więc flaga mimo swojej globalności będzie miała inny adres w pamięci w każdym z izolatów.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">"dart:isolate"</span><span class="o">;</span>
+
+<span class="c1">// Define dummy flag</span>
+<span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
+
+  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="n">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
+    <span class="n">isolateEntry</span><span class="o">,</span>
+    <span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">,</span>
+  <span class="o">);</span>
+
+  <span class="n">receivePort</span><span class="o">.</span><span class="na">listen</span><span class="o">((</span><span class="kd">dynamic</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Print flag value within main isolate</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">'main flag: </span><span class="si">$flag</span><span class="s">'</span><span class="o">);</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">'Isolate says: </span><span class="si">$message</span><span class="s">'</span><span class="o">);</span>
+  <span class="o">});</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">isolateEntry</span><span class="p">(</span><span class="n">SendPort</span> <span class="n">sendPort</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// Change the flag value within isolate</span>
+  <span class="n">flag</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+  <span class="n">Timer</span><span class="o">.</span><span class="na">periodic</span><span class="o">(</span>
+    <span class="n">Duration</span><span class="o">(</span><span class="nl">seconds:</span> <span class="mi">1</span><span class="o">),</span>
+    <span class="o">(</span><span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// Print flag value within new isolate</span>
+      <span class="n">print</span><span class="o">(</span><span class="s">'isolate flag: </span><span class="si">$flag</span><span class="s">'</span><span class="o">);</span>
+      <span class="n">sendPort</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="s">"Hi"</span><span class="o">);</span>
+    <span class="o">},</span>
+  <span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>isolate flag: false
+main flag: true
+Isolate says: Hi
+
+isolate flag: false
+main flag: true
+Isolate says: Hi
+
+...
+</code></pre></div></div>
+
+<p>Sukces! Główny wątek widzi inną wartość flagi niż izolat którego stworzył. Dowód naukowy przedstawiony, można <del>się rozejść</del> kontynuować.</p>
+
+<h2 id="obustronna-komunikacja">Obustronna komunikacja</h2>
+
+<p>Komunikacja od dziecka do rodzica okazała się prosta, wystarczyło jedynie użyć <em>ReceivePort</em>. A jak to ma się w drugą stronę? Jak od rodzica wysłać wiadomość do dziecka? Na przykład w odpowiedzi na otrzymaną wiadomość? Kolejnym <em>ReceivePortem</em>!</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">"dart:isolate"</span><span class="o">;</span>
+
+<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
+
+  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="n">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
+    <span class="n">isolateEntry</span><span class="o">,</span>
+    <span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">,</span>
+  <span class="o">);</span>
+
+  <span class="c1">// Define send port of child isolate</span>
+  <span class="n">SendPort</span> <span class="n">isolatePort</span><span class="o">;</span>
+  <span class="n">receivePort</span><span class="o">.</span><span class="na">listen</span><span class="o">((</span><span class="kd">dynamic</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">message</span> <span class="k">is</span> <span class="n">SendPort</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">isolatePort</span> <span class="o">=</span> <span class="n">message</span><span class="o">;</span>
+      <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">print</span><span class="o">(</span><span class="s">'Isolate says: </span><span class="si">$message</span><span class="s">'</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">isolatePort</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// Reply with message after small delay</span>
+      <span class="n">Future</span><span class="o">.</span><span class="na">delayed</span><span class="o">(</span>
+        <span class="n">Duration</span><span class="o">(</span><span class="nl">milliseconds:</span> <span class="mi">500</span><span class="o">),</span>
+        <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">isolatePort</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">),</span>
+      <span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">});</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">isolateEntry</span><span class="p">(</span><span class="n">SendPort</span> <span class="n">sendPort</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// Create own ReceivePort and send it to the parent immediately</span>
+  <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
+  <span class="n">receivePort</span><span class="o">.</span><span class="na">listen</span><span class="o">((</span><span class="kd">dynamic</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">'Parent says: </span><span class="si">$message</span><span class="s">'</span><span class="o">);</span>
+  <span class="o">});</span>
+
+  <span class="n">sendPort</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">);</span>
+
+  <span class="n">Timer</span><span class="o">.</span><span class="na">periodic</span><span class="o">(</span>
+    <span class="n">Duration</span><span class="o">(</span><span class="nl">seconds:</span> <span class="mi">1</span><span class="o">),</span>
+    <span class="o">(</span><span class="n">_</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">sendPort</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="s">"Hi"</span><span class="o">),</span>
+  <span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Na poziomie funkcji <em>main</em> zdefiniowaliśmy nową zmienną <em>isolatePort</em> typu <em>SendPort</em> do której przypiszemy port z izolata jak tylko nam go wyśle. Wysyłka jest realizowana przez ten sam port komunikacyjny którym przychodzą wiadomości tekstowe. W momencie otrzymania obiektu sprawdzamy jego typ, aby ustalić co dokładnie wysłał nam izolat. Ustawiamy wartość portu, lub printujemy wiadomość i wysyłamy z małym opóźnieniem odpowiedź zwrotną.</p>
+
+<p>Z kolei <em>isolateEntry</em> tworzy własny <em>ReceivePort</em>, nasłuchuje na nim, a następnie wysyła go od razu do swojego rodzica. Ma to miejsce jeszcze przed pierwszym wysłaniem napisu <em>Hi</em>.</p>
+
+<p>Wyszło całkiem sporo kodu jak na tak prosty program, który jedyne co robi to ping-ponga z wiadomościami. Pokazuje jednak najważniejsze aspekty pracy z izolatami, czyli jak wymieniać się informacjami i wzajemnie wpływać na siebie. Czy pozostało coś jeszcze? O tak! Samoistne zakończenie programu i posprzątanie śmieci.</p>
+
+<h2 id="zamykanie-izolata">Zamykanie izolata</h2>
+
+<p>Gdy zaczniesz już korzystać z izolatów we własnej aplikacji, proszę pamiętaj żeby je zabić gdy nie są już potrzebne. Szkoda zasobów maszyny żeby wisiały bez końca, a przy odpowiednich okolicznościach mocno wpłyną na wydajność głównego wątku.</p>
+
+<p>Izolat udostępnia sugestywną metodę <code class="language-plaintext highlighter-rouge">kill()</code>, która go uśmierci na zawołanie. Kiedy ją zawołać? W momencie gdy izolat wykonał swoją pracę i nie będziesz go więcej potrzebował. Brutalne, ale tak działa ich świat. W przykładzie poniżej niszczę wszystko i zamykam strumień danych po dokładnie trzech wiadomościach. Zamykanie strumienia <em>receivePort</em> jest opcjonalne, ale bez tego aplikacja zatrzyma się w limbo i trzeba ją będzie nadal ubijać ręcznie.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">"dart:isolate"</span><span class="o">;</span>
+
+<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
+
+  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="n">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
+    <span class="n">isolateEntry</span><span class="o">,</span>
+    <span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">,</span>
+  <span class="o">);</span>
+
+  <span class="n">SendPort</span> <span class="n">isolatePort</span><span class="o">;</span>
+  <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="n">receivePort</span><span class="o">.</span><span class="na">listen</span><span class="o">((</span><span class="kd">dynamic</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">message</span> <span class="k">is</span> <span class="n">SendPort</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">isolatePort</span> <span class="o">=</span> <span class="n">message</span><span class="o">;</span>
+      <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">print</span><span class="o">(</span><span class="s">'Isolate says: </span><span class="si">$message</span><span class="s">'</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">isolatePort</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">Future</span><span class="o">.</span><span class="na">delayed</span><span class="o">(</span>
+        <span class="n">Duration</span><span class="o">(</span><span class="nl">milliseconds:</span> <span class="mi">500</span><span class="o">),</span>
+        <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">isolatePort</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">),</span>
+      <span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Kill isolate with fire!</span>
+    <span class="k">if</span> <span class="o">(++</span><span class="n">count</span> <span class="o">==</span> <span class="mi">3</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">isolate</span><span class="o">.</span><span class="na">kill</span><span class="o">(</span><span class="nl">priority:</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">immediate</span><span class="o">);</span>
+      <span class="n">isolate</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+      <span class="n">receivePort</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">});</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">isolateEntry</span><span class="p">(</span><span class="n">SendPort</span> <span class="n">sendPort</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
+  <span class="n">receivePort</span><span class="o">.</span><span class="na">listen</span><span class="o">((</span><span class="kd">dynamic</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">'Parent says: </span><span class="si">$message</span><span class="s">'</span><span class="o">);</span>
+  <span class="o">});</span>
+
+  <span class="n">sendPort</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">);</span>
+
+  <span class="n">Timer</span><span class="o">.</span><span class="na">periodic</span><span class="o">(</span>
+    <span class="n">Duration</span><span class="o">(</span><span class="nl">seconds:</span> <span class="mi">1</span><span class="o">),</span>
+    <span class="o">(</span><span class="n">_</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">sendPort</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="s">"Hi"</span><span class="o">),</span>
+  <span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h1 id="flutter-vs-isolate">Flutter vs Isolate</h1>
+
+<p>Praca z izolatami nie należy do najprzyjemniejszych i wymaga od programisty dużej ilości kodu. Tworzenie izolata, portów, nasłuchiwanie, sprzątanie. Kawał roboty, zwłaszcza gdy najczęściej chcemy po prostu wykonać pewien fragment kodu w taki sposób, żeby nie zawiesił naszego UI i zwrócił wynik jak skończy.</p>
+
+<p>Flutter jak to często bywa dostarcza gotowe rozwiązanie w postaci funkcji <strong>compute</strong>, która:</p>
+
+<ol>
+  <li>Startuje nowego izolata</li>
+  <li>Uruchamia w jego obrębie wskazaną funkcję z zadanymi parametrami</li>
+  <li>Gdy przetwarzanie dobiegnie końca zwracany jest wynik (asynchronicznie)</li>
+  <li>Izolat ulega zniszczeniu, wszystko jest posprzątane</li>
+</ol>
+
+<p>Jak wygląda jej użycie? Stwórzmy do tego prostą aplikację Flutterową, żeby zademonstrować jaka jest różnica między aplikacją nieresponsywną (bez izolata), a responsywną (z izolatem).</p>
+
+<h2 id="sortownik">Sortownik</h2>
+
+<p>Sortownik to banalna aplikacja do sortowania liczb. Nie wykorzysta ona jednak żadnego znanego i wydajnego algorytmu sortowania, a zamiast tego stworzymy najmniej wydajne rozwiązanie jakie widział świat. Wszystko po to, aby zasymulować sytuację w której mamy do wykonania zadanie mocno obciążające moc obliczeniową urządzenia.</p>
+
+<h3 id="ui">UI</h3>
+
+<p>Interfejs jest toporny do granic możliwości. Żadnych styli, kolorów, nic. Wyświetlamy zaledwie dwie listy: wejściową i posortowaną oraz dwa przyciski, gdzie jeden odpowiedzialny jest za przesortowanie, a drugi aktualizuje po stuknięciu licznik o 1.</p>
+
+<p><img src="/assets/img/blog/async-2/sortownik.png" alt="sortownik.png" /></p>
+
+<p>Aktualny algorytm sortowania jest optymalny - robi robotę, szybciej się nie da. W następnym kroku wymienimy go na autorskie rozwiązanie typu <em>“w końcu się musi udać”</em>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/foundation.dart'</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">runApp</span><span class="o">(</span><span class="n">MyApp</span><span class="o">());</span>
+
+<span class="kd">class</span> <span class="nc">MyApp</span> <span class="kd">extends</span> <span class="n">StatefulWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">_MyAppState</span> <span class="n">createState</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="n">_MyAppState</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">_MyAppState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">MyApp</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">unsortedList</span> <span class="o">=</span> <span class="o">[</span>
+    <span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span>
+  <span class="o">];</span>
+  <span class="kt">bool</span> <span class="n">sorting</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="kt">int</span> <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sortedList</span><span class="o">;</span>
+
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">MaterialApp</span><span class="o">(</span>
+      <span class="nl">home:</span> <span class="n">Scaffold</span><span class="o">(</span>
+        <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+          <span class="nl">child:</span> <span class="n">Column</span><span class="o">(</span>
+            <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+            <span class="nl">children:</span> <span class="o">[</span>
+              <span class="n">Text</span><span class="o">(</span><span class="s">'</span><span class="si">$unsortedList</span><span class="s">'</span><span class="o">),</span>
+              <span class="n">SizedBox</span><span class="o">(</span><span class="nl">height:</span> <span class="mi">24</span><span class="o">),</span>
+              <span class="k">if</span> <span class="o">(</span><span class="n">sorting</span><span class="o">)</span>
+                <span class="n">Text</span><span class="o">(</span><span class="s">'Sorting ...'</span><span class="o">)</span>
+              <span class="k">else</span>
+                <span class="n">Text</span><span class="o">(</span><span class="s">'Sorted: </span><span class="si">$sortedList</span><span class="s">'</span><span class="o">),</span>
+              <span class="n">SizedBox</span><span class="o">(</span><span class="nl">height:</span> <span class="mi">24</span><span class="o">),</span>
+              <span class="n">RaisedButton</span><span class="o">(</span>
+                <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">sortList</span><span class="o">(),</span>
+                <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">'Sort'</span><span class="o">),</span>
+              <span class="o">),</span>
+              <span class="n">RaisedButton</span><span class="o">(</span>
+                <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">increaseCounter</span><span class="o">(),</span>
+                <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">'Counter: </span><span class="si">$counter</span><span class="s">'</span><span class="o">),</span>
+              <span class="o">),</span>
+            <span class="o">],</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="kt">void</span> <span class="n">increaseCounter</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+      <span class="n">counter</span><span class="o">++;</span>
+    <span class="o">});</span>
+  <span class="o">}</span>
+
+  <span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">sortList</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+    <span class="c1">// Update UI to reflect the sort has started</span>
+    <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+      <span class="n">sorting</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">});</span>
+
+    <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+      <span class="n">sortedList</span> <span class="o">=</span> <span class="n">sortNumbers</span><span class="o">(</span><span class="n">unsortedList</span><span class="o">);</span>
+    <span class="o">});</span>
+
+    <span class="c1">// Update UI to reflect the sort has finished</span>
+    <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+      <span class="n">sorting</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">});</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sortNumbers</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">sort</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="algorytm-sortujący">Algorytm sortujący</h3>
+
+<p>W obecnym stanie aplikacja jest w 100% responsywna i zapewnia 60 klatek na sekundę. Nie jest to specjalne osiągnięcie patrząc na jej możliwości, ale za chwilę będzie już tylko gorzej.</p>
+
+<p>Pora wymienić domyślne sortowanie na własny mechanizm:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sortNumbers</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">easy</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">sort</span><span class="o">();</span>
+  <span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">shuffle</span><span class="o">();</span>
+
+  <span class="k">while</span> <span class="o">(!</span><span class="n">listEquals</span><span class="o">(</span><span class="n">easy</span><span class="o">,</span> <span class="n">sorted</span><span class="o">))</span> <span class="o">{</span>
+    <span class="n">sorted</span><span class="o">.</span><span class="na">shuffle</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="k">return</span> <span class="n">sorted</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Algorytm jest fantastyczny w swojej prostocie. Na początku sortuje otrzymaną listę i zapisuje ją w zmiennej <em>easy</em>. Następnie tasuje oryginalną listę poprzez losowe ustawienie elementów. Ostatni krok to powtarzanie losowego tasowania, aż trafi na wariant posortowany. Genialne. Czasochłonne, ale genialne.</p>
+
+<p>Po uruchomieniu zaktualizowanej aplikacji i stuknięciu w przycisk <em>Sort</em> następuje całkowite zamrożenie UI do czasu uzyskania wyniku. Stukanie w przycisk <em>Counter</em> nie reaguje, a dla użytkownika wygląda to tak, jakby aplikacja się kompletnie zawiesiła. A przecież tak nie jest! Robimy ważne obliczenia i jak tylko skończymy to UI wróci do normy.</p>
+
+<p>Jeśli interfejs zawiesił się na dobre - skróc listę <em>unsortedList</em> o element, albo dwa i zrestartuj aplikację. U mnie taka długość jest optymalna żeby czekać średnio kilka sekund na posortowanie, ale co konfiguracja to inne opóźnienie.</p>
+
+<blockquote>
+  <p>Zła wiadomość jest taka, że istnieje duże prawdopodobieństwo na to, że UI nigdy nie wróci do normy. Użytkownik może nie wytrzymać i usunie w między czasie aplikację.</p>
+</blockquote>
+
+<h3 id="event-loop">Event Loop</h3>
+
+<p>Spróbujmy uruchomić funkcję asynchronicznie, na <em>Event Loopie</em>!</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Future</span><span class="o">(()</span> <span class="o">{</span>
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">sortedList</span> <span class="o">=</span> <span class="n">sortNumbers</span><span class="o">(</span><span class="n">unsortedList</span><span class="o">);</span>
+  <span class="o">});</span>
+<span class="o">});</span>
+</code></pre></div></div>
+
+<p>Zła wiadomość #2. Pamiętasz, że jeden wątek to jedna instrukcja w danym czasie? To, że uruchomimy ten kod przez <em>Event Loop</em> nic nam nie da, bo to wciąż ten sam wątek, a zadanie jest związane ściśle z mocą procesorą.</p>
+
+<h3 id="compute">compute</h3>
+
+<p>Skoro jeden wątek to jedna instrukcja, pora uruchomić pomocnika w postaci izolata. Nie będziemy go jednak tworzyć ręcznie, bo opisany <strong>compute</strong> sprawdzi się tutaj doskonale. Nie potrzebujemy przecież stałej komunikacji w obie strony. Wystarczy, że funkcja uruchomi się z zadanymi parametrami i dostarczy wynik gdy będzie już gotowy.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="n">await</span> <span class="n">compute</span><span class="o">(</span>
+  <span class="n">sortNumbers</span><span class="o">,</span> <span class="n">unsortedList</span><span class="o">,</span>
+<span class="o">);</span>
+<span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+  <span class="n">sortedList</span> <span class="o">=</span> <span class="n">sorted</span><span class="o">;</span>
+<span class="o">});</span>
+</code></pre></div></div>
+
+<p>Pełny kod funkcji <em>sortList</em>:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">sortList</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="c1">// Update UI to reflect the sort has started</span>
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">sorting</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+  <span class="o">});</span>
+
+  <span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="n">await</span> <span class="n">compute</span><span class="o">(</span>
+    <span class="n">sortNumbers</span><span class="o">,</span> <span class="n">unsortedList</span><span class="o">,</span>
+  <span class="o">);</span>
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">sortedList</span> <span class="o">=</span> <span class="n">sorted</span><span class="o">;</span>
+  <span class="o">});</span>
+
+  <span class="c1">// Update UI to reflect the sort has finished</span>
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">sorting</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="o">});</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Uruchamiana jest tutaj funkcja <em>sortNumbers</em> z argumentem <em>unsortedList</em>, która będzie działać na osobnym izolacie. Zwracany jest obiekt typu <em>Future&lt;List&lt;int»</em>, więc czekamy na jego wynik na <em>Event Loopie</em> głównego wątku. Różnica między poprzednim rozwiązaniem, a obecnym, polega na przeprowedzaniu sortowania w osobnym izolacie. Dzięki temu główny wątek odpowiedzialny m.in. za renderowanie UI pozostaje w pełni responsywny i użytkownik może w dowolnym momencie zwiększyć licznik stukając w przycisk.</p>
+
+<h1 id="podsumowanie">Podsumowanie</h1>
+
+<p>Dart pomimo jednowątkowości udostępnia mechanizm do tworzenia dodatkowych wątków w postaci izolatów. Nie dzielą one co prawda między sobą pamięci, ale jest to świetny sposób na wykonywanie ciężkich operacji, które w przeciwnym wypadku mogłyby wpłynąć na wydajność całej aplikacji.</p>
+
+<p>Kiedy warto skorzystać z izolata zamiast kodu asynchronicznego i <em>Event Loopa</em>? Zawsze, gdy wykonywana jest mocno obciążająca operacja taka jak skomplikowane wyliczenia, czy wykonywanie manipulacji na zdjęciach lub video. Każda aplikacja jest inna i ma własne scenariusze, dlatego trudno jednoznacznie powiedzieć którego rozwiązania użyć i kiedy.</p>
+
+<p>Korzystaj ze standardowego kodu asynchronicznego tak długo jak nie odczuwasz spowolnionego działania aplikacji. Póki jest szybka i responsywna nie ma potrzeby aby urchamiać dodatkowy izolat. Zwłaszcza, że ewentualne przerobienie kodu na <code class="language-plaintext highlighter-rouge">compute()</code> nie jest pracochłonne.</p>
+
+<p>Jest to drugi wpis z serii dotyczącej przetwarzanie instrukcji w aplikacjach Flutterowych. W planach jest jeszcze jeden, traktujący o strumieniach i jemu pochodnych. Do następnego!</p>
+
+<p>Kod pełnej aplikacji Sortownik znajdziesz na <a href="https://github.com/vintage/flutter_demo_isolates">GitHubie</a>.</p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fasync-dart-isolates%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Asynchroniczny+Dart+-+Isolates%20https%3A%2F%2Frykowski.dev%2Fblog%2Fasync-dart-isolates%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/async-dart-isolates/&title=Asynchroniczny+Dart+-+Isolates%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Asynchroniczny+Dart+-+Isolates%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/async-dart-isolates/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+
+    
+    <div id="next-post">
+        <a alt="Asynchroniczny Dart - Event Loop, Futures, async/await" href="/blog/async-dart-event-loop-futures/">
+            <p>Następny wpis</p>
+            Asynchroniczny Dart - Event Loop, Futures, async/await
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>

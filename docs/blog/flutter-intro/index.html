@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/flutter-intro/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Nowy gracz aplikacji mobilnych - Flutter | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Nowy gracz aplikacji mobilnych - Flutter" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Każda korporacja chce ukroić kawałek z tortu aplikacji x-platform. Microsoft kupił Xamarina, Facebook stworzył React Native, a teraz Google dołącza do wyścigu z Flutterem - nowoczesnym frameworkiem do pisania aplikacji Android oraz iOS." />
+<meta property="og:description" content="Każda korporacja chce ukroić kawałek z tortu aplikacji x-platform. Microsoft kupił Xamarina, Facebook stworzył React Native, a teraz Google dołącza do wyścigu z Flutterem - nowoczesnym frameworkiem do pisania aplikacji Android oraz iOS." />
+<link rel="canonical" href="https://rykowski.dev/blog/flutter-intro/" />
+<meta property="og:url" content="https://rykowski.dev/blog/flutter-intro/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-09T00:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/flutter-intro/","headline":"Nowy gracz aplikacji mobilnych - Flutter","dateModified":"2019-06-09T00:00:00+02:00","datePublished":"2019-06-09T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-intro/"},"description":"Każda korporacja chce ukroić kawałek z tortu aplikacji x-platform. Microsoft kupił Xamarina, Facebook stworzył React Native, a teraz Google dołącza do wyścigu z Flutterem - nowoczesnym frameworkiem do pisania aplikacji Android oraz iOS.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/triangular.jpeg " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Nowy+gracz+aplikacji+mobilnych+-+Flutter" class="title">Nowy gracz aplikacji mobilnych - Flutter</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Czerwiec
+        
+      2019
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p><strong>Flutter</strong> to nowa technologia od Google służąca do tworzenia aplikacji mobilnych. Nie ma tutaj jednak mowy o stricte natywnym podejściu (od tego jest Kotlin, czy Swift), lecz o cross-platformowym frameworku, w którym kod piszemy raz i robimy release na oba systemy - Android oraz iOS. Brzmi świetnie, prawda? I tak jest w rzeczywistości. Nie utrzymujemy dwóch całkowicie niezależnych bytów natywnych, nie uczymy się dwóch odmiennych od siebie języków programowania, nie poznajemy tak dogłębnie dwóch różnych systemów, czy też środowisk. W naszej kwestii jako programisty pozostaje wytworzenie aplikacji mobilnej, a Flutter zajmie się tym, aby poprawnie działała na obu platformach.</p>
+
+<p><img src="/assets/img/blog/meme_follow.gif" alt="meme_follow.gif" /></p>
+
+<h2 id="deja-vu">Deja-vu</h2>
+
+<p>Czy Flutter to rewolucja na miarę naszych czasów? Całkowity zwrot świata mobilno-developerskiego w stronę aplikacji którą piszemy raz i uruchamiamy gdziekolwiek chcemy? Bez przesady - rozwiązania tego typu istnieją już od jakiegoś czasu, a mimo to development natywny ma się bardzo dobrze i nigdzie się nie wybiera. Fluttera należy traktować zdecydowanie bardziej jako ewolucję w sposobie w jakim piszemy aplikacje tego typu.</p>
+
+<p>Na rynku mamy co najmniej kilkanaście innych rozwiązań, które celują w ten sam problem - jak <del>zarobić</del> zbudować aplikację mobilną która pokryje oba systemy i się nie narobić. Każda technologia rozwiązuje problem na inny sposób, z lepszym bądź gorszym skutkiem, który ostatecznie definiuje jak bardzo przyjmie się na rynku i jak dużą świadomość wywrze na developerach. Oto lista narzędzi z którymi miałem przyjemność mniej-lub-bardziej pracować:</p>
+
+<h3 id="ionic">Ionic</h3>
+
+<p>Najstarsze z wymienianych tutaj rozwiązań i w moim odczuciu najsłabsze. Pomimo tego że projekt jest aktywnie rozwijany i dostarcza naprawdę fajny ekosystem, to czasy swojej świetności ma już dawno za sobą. Aplikacje pisane są w <em>JavaScript</em>, <em>HTML</em> i <em>CSS</em>. Tak, jest to bardzo znajomy stack technologiczny dla web-developerów, ale nie bez powodu. Aplikacje napisane w Ionicu nie są kompilowane do niczego co choćby przypominałoby kod natywny. Sztuczka budowania polega na tym, że tworzymy naszą aplikację (zupełnie jak stronę internetową), a następnie jest ona pakowana w taki sposób, aby jej uruchomienie na fizycznym urządzeniu odpaliło w tle przeglądarkę, która obsłuży w trybie pełnoekranowym naszą aplikację. Rozwiązanie jest mało wydajne, zwłaszcza gdy operujemy na dużej ilości danych, lub gdy chcemy wprowadzić zaawansowane animacje do projektu. Nie jest jednak tak, że Ionic jest złą opcja gdy wybieramy główne narzędzia do stworzenia aplikacji mobilnej. W przypadku, gdy zależy nam na:</p>
+
+<ul>
+  <li>stworzeniu produktu który będzie działał z pudełka na Android, iOS oraz przeglądarce</li>
+  <li>szybkim prototypie aby zwalidować pomysł biznesowy</li>
+  <li>błyskawicznym wykorzystaniu znanych technologii (JS, HTML, CSS)</li>
+</ul>
+
+<p>Warto poważnie rozważyć tę technologię jako dobrego kandydata. Możemy szybko przygotować prototyp, który będzie dostępny dla użytkowników mobilnych (aplikacja pobierana ze sklepu), jak również przez przeglądarkę dla użytkowników desktopowych, czy tych którzy korzystają z innego systemu mobilnego (m.in. Windows Phone).</p>
+
+<h3 id="xamarin">Xamarin</h3>
+
+<p>Prawdziwka gratka dla programistów platformy .NET i języka C#, którzy chcą stworzyć aplikację mobilną. Właścicielem frameworka jest Microsoft, który w 2016 roku przejął startup i od tego momentu kieruje jego dalszym rozwojem. Jest to jedyna technologia z którą nie mam prawdziwego komercyjnego doświadczenia - jedynie projekty hobbystyczne - głównie za sprawą faktu, że nie pojawiła się między nami chemia (przez “nas” mam na myśli C# i mnie). Po prostu, tak bywa. Warto zaznaczyć, że w przeciwieństwie do Ionica mamy tutaj do czynienia z aplikacją, która kompiluje się do natywnego (w uproszczeniu) kodu. Daje nam to spory skok wydajnościowy, dzięki któremu użytkownicy aplikacji nie są w stanie stwierdzić na podstawie płynności działania, czy korzystają z aplikacją natywnej, czy też nie. A do tego przede wszystkim sprowadza się pisanie oprogramowania typu cross-platform.</p>
+
+<h3 id="react-native">React Native</h3>
+
+<p>Z jednej strony mój ex-ulubieniec, z drugiej koszmarek który śni się po nocach. Głównym motorem napędowym jest jak w przypadku Ionica - JavaScript. Można ten język kochać, można nienawidzić, a można (to ja!) po prostu traktować go jako kolejne narzędzie wykorzystywane w pracy, które jak wszystko - ma swoje wady i zalety - wystarczy je poznać i zaakceptować. Nie chcę się jednak rozwodzić nad językiem, a nad frameworkiem. Jest to na dzień dzisiejszy czarny koń wyścigu <del>zbrojeń</del> cross-platformowego. Najpopularniejsze dłuto do rzeźbienia naszych cross-platformowych aplikacji. Posiada ogromny ekosystem (paczki które zrobią za nas 50% projektu) oraz community (stackoverflow, eventy, grupy dyskusyjne). Jeśli mowa o paczkach - te są naprawdę w dużej części dobre. Co to są dobre paczki? A no takie, które są dojrzałe, utrzymywane, aby działały na kolejnych wersjach Androida, czy iOSa, a także wystawiają bogaty interfejs do operowania. Prawdziwa machina open-source. Dodatkowo bardzo często klienci, którzy potrzebują aplikacji mobilnej chcą aby została napisana właśnie w React Native. Skąd klient stricte biznesowy wie o technologii? Dlaczego akurat ta, a nie inna? To proste - marketing, rozpoznawalność, dojrzałość na rynku sprawiły, że gdy myślisz o aplikacji mobilnej ze współdzielonym kodem to mózg automagicznie rysuje wizerunek <em>React Native</em>.</p>
+
+<p>Czy mamy więc rozwiązanie idealne? Oczywiście, że nie - nie ma rozwiązań idealnych, a każde kłuje na swój własny specyficzny sposób. Z projektów nad którymi pracowałem w tej technologii wyłania się zawsze podobny zestaw problemów:</p>
+
+<ul>
+  <li>trudność w aktualizacji w istniejącym projekcie - podbicie wersji React Native niemal zawsze prowadzi do traumy i rozwiązywania mistycznych błędów, które nie powinny mieć miejsca. W skrajnych przypadkach najlepszym wyjściem z sytuacji jest utworzenie czystego projektu z nową wersją React Native i przenoszenie tam naszego kodu projektowego - brzmi źle, ale skoro działa to warto się pochylić</li>
+  <li>niedeterministyczne działanie aplikacji - nie zliczę sytuacji w których aplikacja budowała się poprawnie w piątek, a w poniedziałek po południu coś było nie tak. A to przestał działać live reload, a to hot reload dostaje czkawki. Aplikacja przestała się budować, lub urządzenie nie widzi bundla developerskiego? Standard. W pewnym momencie po prostu się przyzwyczajasz i masz swój własny zestaw komend defibrylacyjnych, którymi się dzielisz z zespołem projektowym.</li>
+  <li>jakość zgłaszanych błędów - czerwony ekran który jako developerzy dostajemy co jakiś czas, gdy zepsujemy nasz kod. O ile doskonale rozumiem, że błędy się zdarzają i nikt nie pisze kodu w taki sposób, aby nie był mu potrzebny backspace, to komunikaty które dostajemy wołają o pomstę do debuggera. Tak jak w punkcie wyżej - po jakimś czasie mózg buduje mapę co znaczy dany komunikat i w jakich przypadkach się pojawia (jak choćby błędny import) i z automatu wiemy co nabroiliśmy</li>
+</ul>
+
+<p>Są również inne mniejsze, bądź większe problemy, jednak bardziej specyficzne dla konkretnego projektu. Mimo wad, szczerze uważam, że React Native jest technologią w którą warto inwestować swój czas - m.in. za sprawą mnogości ofert pracy, niższym progiem wejścia jeśli znasz już JavaScript, a także bogatego ekosystemu.</p>
+
+<p><img src="/assets/img/blog/meme_cool.gif" alt="meme_cool.gif" /></p>
+
+<h3 id="inne">Inne</h3>
+
+<p>Temat alternatywnych technologii nie jest wyczerpany. Istnieje wiele innych bibliotek, czy frameworków które rozwiązują podobny problem co Flutter, jednak jest to już “drobnica” dla zapaleńców, czy programistów hobbystycznych (bez obrazy). Jeżeli zależy Ci na technologii która będzie rozwijana i wspierana przez najbliższe lata - doświadczenie jasno mi podpowiada, że należy postawić na rozwiązanie za którym stoi dedykowany sztab techniczny dużej firmy (bo tylko taka może sobie na to pozwolić), a nie za frameworkiem krzakiem, który może się pochwalić jedynie ładnym landing-page, a możliwości i jakiekolwiek wsparcie kończy się tuż po zainstalowaniu paczki na naszym lokalnym środowisku. Stwierdzenie brutalne, lecz prawdziwe.</p>
+
+<h2 id="flutter">Flutter</h2>
+
+<p>Skoro wiemy już czym są aplikacje cross-platformowe i wiemy, że problem został już dawno rozwiązany - to co robi tu Flutter? Jakie karty wnosi do gry i do kogo dokładnie jest skierowany? Mamy już przecież młotek do szybkiego pisania wolnych aplikacji (Ionic), do pisania w ekosystemie typu enterprise (Xamarin), czy do tworzenia niemal natywnych tworów z użyciem języka skryptowego (React Native). Co jeszcze można tutaj ugrać i jakim asem zagrać? Zaczynajmy.</p>
+
+<h3 id="język">Język</h3>
+
+<ul>
+  <li><em>Co napędza Fluttera?</em></li>
+  <li><strong>Dart</strong></li>
+  <li><em>W sensie to taki język programowania?</em></li>
+  <li><strong>Tak</strong></li>
+  <li>…</li>
+</ul>
+
+<p>Mogłeś nie słyszeć o tym języku, nawet jeśli nie spędziłeś ostatnich miesięcy pod kamieniem. Nie należy do najpopularniejszych narzędzi, zwłaszcza że przed Flutterem nie miał realnego i mainstreamowego zastosowania. Według rankingu TIOBE, który śledzi popularność dostępnych języków, popularniejsze są m.in. Fortran, Scratch, czy nawet COBOL. Zaryzykuję wręcz stwierdzenie że Dart to taki trochę eksperyment developerski, który dojrzewał w piwnicy na swój moment chwały.</p>
+
+<p><img src="/assets/img/blog/dart_rank_2019.png" alt="dart_rank_2019.png" /></p>
+
+<p>Składnia języka jest nowoczesna, prawdopodobnie za sprawą tego, że debiutował w 2011 roku - nie miał czasu się zestarzeć. Mógłbym napisać, że to mieszanka Javy i JavaScriptu, ale zdaję sobie sprawę jaka będzie Twoja reakcja na takie porównanie.</p>
+
+<p><img src="/assets/img/blog/meme_moron.gif" alt="meme_moron.gif" /></p>
+
+<p>Ujmę to więc inaczej:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">List</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="n">keywords</span> <span class="o">=</span> <span class="o">[</span><span class="s">"Rykowski"</span><span class="o">,</span> <span class="s">"ma"</span><span class="o">];</span>
+  <span class="n">keywords</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"psa"</span><span class="o">);</span>
+  <span class="n">keywords</span><span class="o">.</span><span class="na">forEach</span><span class="o">((</span><span class="n">keyword</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="n">keyword</span><span class="o">));</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"Lista ma </span><span class="si">${keywords.length}</span><span class="s"> elementów"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Wygląda jak zwykły język programowania? Otóż to. Im lepiej poznasz język, tym bardziej docenisz jego prostotę i brak niespójności, a zarazem to że działa w sposób oczekiwany i intuicyjny. Zdaję sobie  sprawę, że trudno oceniać język po kilku linijkach kodu - obiecuję opracować dedykowany wpis samemu językowi.</p>
+
+<p>Warto wspomnieć, że Dart został zaprojektowany przez tą samą firmę która odpowiada za Fluttera, czyli Google. Co to oznacza, poza tym że mamy tutaj interesujący zbieg okoliczności? Z reguły języki programowania rozwijają się swoim rytmem i planem, wprowadzają zmiany i udogodnienia dla programistów, jednak każda taka zmiana jest mocno ważona i jej wprowadzenie zawsze zajmuje sporo czasu. W naszym przypadku jedna firma steruje zarówno językiem jak i biblioteką która go wykorzystuje - stąd część zmian jest mocno sterowana potrzebami frameworka. Zamknięty ekosystem wzajemnie się napędza i dostarcza wysokiej jakości narzędzie do wykorzystania przez programistów aplikacji.</p>
+
+<h3 id="interfejs-użytkownika-ui">Interfejs użytkownika (UI)</h3>
+
+<p>Interfejs użytkownika, czyli to co widzi użytkownik naszej aplikacji. Przyciski, przełączniki, formularze, a nawet wyświetlany tekst zawierają się w interfejsie. Flutter wprowadza sporo zamieszania i nowości w tym konkretnym temacie. Wszystko za sprawą własnego silnika renderującego Skia, który w całości odpowiada za to co w danym momencie jest wyświetlane na ekranie. Piksel po pikselu Flutter steruje widocznymi elementami, a także animacją odpowiedzialną za płynne odpowiadanie na interakcje użytkownika.</p>
+
+<p>Co w praktyce oznacza, że Flutter sam rysuje wszystko co jest widoczne w aplikacji? Czy inne biblioteki nie robią tego samego? <strong>Nie</strong>. Komponenty w Ionicu rysowane są przez przeglądarkę systemu - co oznacza, że będą wyglądały inaczej w zależności od tego jaka przeglądarka, a nawet wersja jest aktualnie zainstalowana na telefonie. React Native oraz Xamarin rysują natywne komponenty systemowe - z jednej strony dają nam one poczucie korzystania z aplikacji natywnej, z drugiej - trudno jest sprawić aby aplikacja wyglądała identycznie na obu platformach. Flutter sprawia, że każdy komponent będzie wyglądał identycznie na każdym urządzeniu - niezależnie od tego czy pracujemy na Androidzie, iOS-ie, a nawet przeglądarce webowej.</p>
+
+<p>Kwestia wbudowanych komponentów graficznych które oddane są do naszej dyspozycji robi robotę. Nie będę ich tutaj opisywał, ograniczę się wyłącznie do faktu, że Flutter posiada pełne i oficjalne wsparcie dla Material Design (znowu Google). Wiesz co to znaczy, prawda? Setki prostych i stylowych elementów do wykorzystania, z czego każdy można ostylować do własnych potrzeb poprzez dedykowany obiekt styli. <strong>Wow!</strong></p>
+
+<p><img src="/assets/img/blog/flutter_ui.gif" alt="flutter_ui.gif" />
+<em>UI aplikacji The History of Everything</em></p>
+
+<h3 id="wydajność">Wydajność</h3>
+
+<p>Aplikacja podczas budowania jest kompilowana do kodu natywnego, więc nie ma się czym martwić jeśli chodzi o wydajność. Elementy renderowane są błyskawicznie, listy nie lagują podczas szybkiego scrollowania, a animacje są płynne i bez problemów osiągają mityczne 60fps. Nie zdarzyła mi się osobiście jeszcze sytuacja, w której miałbym problem natury “wydolnościowej”. Koniecznie muszę jednak zaznaczyć, że aplikacja działa w pełni płynnie dopiero gdy zbudujemy ją w trybie release - czyli takim w jakim dostanie ją użytkownik końcowy. W przypadku gdy pracujemy w trybie developerskim (hot-reloading), aplikacja działa poprawnie ale bez efektu wow - warto mieć to na uwadze, gdy rozpoczniemy swoją przygodę.</p>
+
+<h3 id="ekosystem-i-społeczność">Ekosystem i społeczność</h3>
+
+<p>Każda nowa technologia potrzebuje w skrócie dwóch rzeczy aby osiągnąć sukces:</p>
+
+<ul>
+  <li>Wysoka jakość</li>
+  <li>Rozbudowany ekosystem</li>
+</ul>
+
+<p>O ile kwestii wysokiej jakości nie ma potrzeby opisywać - słaba technologia się sama nie obroni i umrze śmiercią naturalną, to ekosystem jest rzeczą której warto się przyjrzeć. Jest to cecha nad którą Google nie ma pełnej kontroli - o ile jest w stanie dopieszczać Fluttera o nowe mechanizmy i rozwiązane błędy, to społeczność buduje się kilka kroków dalej - samodzielnie. Rozbudowany ekosystem wymaga czasu - konieczne jest zebranie odpowiedniej masy krytycznej developerów, którzy poświęcą część swojego czasu na ewangelizację technologii. Przyjmuje ona różne formy:</p>
+
+<ul>
+  <li>Gotowe biblioteki</li>
+  <li>Prezentacje i prelekcje</li>
+  <li>Pomoc w rozwiązywaniu problemów początkującym</li>
+</ul>
+
+<p>Ekosystem nie jest jeszcze ustabilizowany - technologia jest młoda i nie miała jeszcze czasu tego wypracować. Istnieje co prawda wiele gotowych rozwiązań od community, jednak duża część zdążyła zostać już porzucona przez właścicieli - na próżno więc liczyć na poprawki, a lista zgłaszanych błędów wciąż rośnie. Mimo tego, że nie jest idealnie (w porównaniu choćby z React Native), to z każdym miesiącem sytuacja się polepsza. Osobiście wierzę, że rok 2019 będzie przełomowym i jako programiści będziemy mogli się cieszyć z rozbudowanego ekosystemu.</p>
+
+<h3 id="dokumentacja">Dokumentacja</h3>
+
+<p>Oficjalne źródło wiedzy, które jest nieocenioną częścią samej technologii. Co z tego, że narzędzie jest świetne i najlepsze na świecie, skoro dokumentacja napisana została byle jak, a dodatkowo brakuje w niej wielu informacji i wytycznych w jaki sposób się nim posługiwać? Na nasze szczęście Google słynie z tego, że jego produkty posiadają świetną i obszerną dokumentację techniczną. Każdy niemal aspekt jest skrupulatnie i dokładnie rozpisany, a poza standardowym <em>API reference</em>, znajdziemy tutaj m.in:</p>
+
+<ul>
+  <li>Najlepsze praktyki dotyczące testowania i debugowania aplikacji</li>
+  <li>Ścieżki wdrożeniowe dla programistów innych technologii (w tym React Native, czy Web)</li>
+  <li>Wysokopoziomowe poradniki dotyczące layoutów, interakcji, czy sterowania animacjami</li>
+  <li>W jaki sposób zbudować aplikację produkcyjną wraz z Continuous Deployment</li>
+</ul>
+
+<p>Jestem mocno zaskoczony - pozytywnie - że tak młoda technologia jak Flutter posiada tak rozbudowaną i obszerną dokumentację na każdy istotny temat. Jeśli chcesz dogłębnie poznać dowolne zagadnienie z zakresu frameworka, znajdziesz je właśnie w oficjalnej dokumentacji, która dostępna jest pod adresem <a href="https://flutter.dev/docs">https://flutter.dev/docs</a></p>
+
+<h3 id="czy-warto">Czy warto?</h3>
+
+<p>Przy nowych technologiach pojawia się zawsze to samo pytanie - czy warto się nią zainteresować i czy w długiej perspektywie czas spędzony na nauce się zwróci (mówię rzecz jasna o $$$)? Nie mam jednoznacznej odpowiedzi na to pytanie, nie wezmę odpowiedzialności za to jak inwestujesz swój czas. Wszystko jednak wskazuje na to, że Flutter zostanie na rynku długo i warto wskoczyć już teraz do jego wagonika. <em>Early adopters would be rewarded</em>.</p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-intro%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Nowy+gracz+aplikacji+mobilnych+-+Flutter%20https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-intro%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/flutter-intro/&title=Nowy+gracz+aplikacji+mobilnych+-+Flutter%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Nowy+gracz+aplikacji+mobilnych+-+Flutter%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/flutter-intro/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="Flutter - konfiguracja i rozpoczęcie przygody" href="/blog/flutter-getting-started/">
+            <p>Poprzedni wpis</p>
+            Flutter - konfiguracja i rozpoczęcie przygody
+        </a>
+    </div>
+    
+
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>

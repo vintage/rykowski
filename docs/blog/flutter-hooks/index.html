@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/flutter-hooks/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>HookWidget, czyli Flutterowe hooki | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="HookWidget, czyli Flutterowe hooki" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Nie lubisz StatefulWidgetów za ich rozwarstwienie na dwie klasy, lub z jakiegokolwiek innego powodu, a mimo to musisz wykonać kod w sposób niemożliwy dla StatelessWidgeta? Daj szansę hookom i HookWidgetowi, który robi to samo ale lepiej." />
+<meta property="og:description" content="Nie lubisz StatefulWidgetów za ich rozwarstwienie na dwie klasy, lub z jakiegokolwiek innego powodu, a mimo to musisz wykonać kod w sposób niemożliwy dla StatelessWidgeta? Daj szansę hookom i HookWidgetowi, który robi to samo ale lepiej." />
+<link rel="canonical" href="https://rykowski.dev/blog/flutter-hooks/" />
+<meta property="og:url" content="https://rykowski.dev/blog/flutter-hooks/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-08T00:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/flutter-hooks/","headline":"HookWidget, czyli Flutterowe hooki","dateModified":"2020-05-08T00:00:00+02:00","datePublished":"2020-05-08T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-hooks/"},"description":"Nie lubisz StatefulWidgetów za ich rozwarstwienie na dwie klasy, lub z jakiegokolwiek innego powodu, a mimo to musisz wykonać kod w sposób niemożliwy dla StatelessWidgeta? Daj szansę hookom i HookWidgetowi, który robi to samo ale lepiej.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/triangular.jpeg " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="HookWidget%2C+czyli+Flutterowe+hooki" class="title">HookWidget, czyli Flutterowe hooki</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Maj
+        
+      2020
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>Czym właściwie są <strong>hooki</strong>? Jest to termin dobrze znany wszystkim programistom m.in. Reacta, gdzie hooki jakiś czas temu opanowały cały ekosystem i wybuchł na nie ogromny hype. Powstały przede wszystkim po to, aby ułatwić współdzielenie logiki między stanowymi <del>komponentami</del> widgetami (takimi jak <code class="language-plaintext highlighter-rouge">StatefulWidget</code>) oraz uprościć logikę, która stoi za tzw. <strong>life-cycle methods</strong>, czyli co powinno się wydarzyć przed pierwszym renderowaniem, przy kolejnych, jak reagować na zmiany parametrów renderowania itd. Generalnie wszystko sprowadza się do tego jak zebrać cały ten bałagan i zrobić go czytelniejszym.</p>
+
+<p>Czy się udało? W Reacie jak najbardziej! Większość developerów już przeszła na nowe rozwiązanie, które z własnego doświadczenia również szczerze polecam. A co z Flutterem? No bo przecież dobrze wiemy, że styl pisania aplikacji jest mocno podobny (deklaratywny), więc może hooki są też dla nas? Przyznaj szczerze, że w głębi serca to jednak nie przepadasz za wbudowanym <code class="language-plaintext highlighter-rouge">StatefulWidgetem</code> i chętnie byś go wymienił na inne rozwiązanie, tylko jakie?</p>
+
+<blockquote>
+  <p>Flutterowcy żądają hooków!</p>
+</blockquote>
+
+<p><img src="/assets/img/blog/hooks/logo.png" alt="logo.png" /></p>
+
+<h1 id="flutter-hooks">Flutter Hooks</h1>
+
+<p>Nie musisz sam rozmyślać o tym jak zaimplementować cały koncept hooków we Flutterze. Ktoś już to zrobił za nas. A w sumie to nie ktoś, a <a href="https://twitter.com/remi_rousselet">Remi Rousselet</a> tworzący na prawdę mocne paczki w ekosystemie, takie jak chociażby opisywany już <a href="/blog/flutter-state-management-provider/">Provider</a>. Dzięki Remi!</p>
+
+<p>Paczkę znajdziesz na <a href="https://pub.dev/packages/flutter_hooks">pub.dev</a>, a instalacja sprowadza się do dodania pojedynczego wpisu w <code class="language-plaintext highlighter-rouge">pubspec.yaml</code> i gotowe. Można zacząć korzystać i rzucić <code class="language-plaintext highlighter-rouge">StatefulWidget</code> w kąt. Tylko co tak na prawdę możemy zrobić z tą paczką? Jakie hooki dostarcza i w jakich sytuacjach ich używać? No i rzecz jasna najważniejsze pytanie …</p>
+
+<blockquote>
+  <p>A po co to komu? A na co to komu potrzebne?</p>
+</blockquote>
+
+<h2 id="złota-zasada">Złota zasada</h2>
+
+<p>Zanim przejdziemy do praktycznego zastosowania, omówmy złotą zasadę korzystania z hooków. Brzmi ona następująco: <strong>“Każdy build widgeta musi zawołać te same hooki w tej samej kolejności”</strong>. Nie ma wyjątków od tej reguły, koniec kropka. Oznacza to, że nie wołasz hooków w obrębie <code class="language-plaintext highlighter-rouge">if/else</code>, ani nie kończysz wywołania builda przed odpalaniem ostatniego ze swoich hooków. Najprościej będzie jeśli zawsze na początku metody <code class="language-plaintext highlighter-rouge">build</code> uruchomisz wszystkie hooki, a dopiero w dalszej części przejdziesz do wykorzystania ich wartości i rysowania drzewa na ekranie.</p>
+
+<p><strong>NIE</strong> dla if-ów:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Widget</span> <span class="nf">build</span><span class="p">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">something</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">useSomeHook</span><span class="o">();</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>NIE</strong> dla hooków uruchamianych po warunkowym wyjściu z builda:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Widget</span> <span class="nf">build</span><span class="p">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">something</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Loading"</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="kd">final</span> <span class="n">data</span> <span class="o">=</span> <span class="n">useSomeHook</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>TAK</strong> dla hooków na starcie, a potem rób co chcesz:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Widget</span> <span class="nf">build</span><span class="p">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">data</span> <span class="o">=</span> <span class="n">useSomeHook</span><span class="o">();</span>
+  <span class="n">useSomeOtherHook</span><span class="o">();</span>
+  <span class="n">useEvenMoreHooks</span><span class="o">();</span>
+
+  <span class="k">if</span> <span class="o">(</span><span class="n">something</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Loading"</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="k">return</span> <span class="n">Text</span><span class="o">(</span><span class="s">"My super app"</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Co jak jednak nie posłuchasz? To co zwykle dzieje się w takich przypadkach, czekają Cię błędy na poziomie uruchomieniowym (<em>runtime</em>). A przecież nikt nie lubi błędów - ani Ty, ani użytkownik Twojej wypieszczonej aplikacji. To co, gotowy?</p>
+
+<h2 id="usestate">useState</h2>
+
+<p>Jeden z najczęściej używanych przez mnie hooków, a na dodatek świetnie nadający się do celów demonstracyjnych. <code class="language-plaintext highlighter-rouge">useState</code> to nic innego jak mechanizm zarządzania lokalnym stanem w obrębie pojedynczego widgeta. Brzmi znajomo? To właśnie główny feature od <code class="language-plaintext highlighter-rouge">StatefulWidgeta</code> zamknięty w ramach jednej funkcji.</p>
+
+<p><img src="https://i.kym-cdn.com/entries/icons/original/000/029/790/2gi1lylqezh21.jpg" alt="The future is now, old man" /></p>
+
+<p>Spójrzmy jak wygląda domyślna aplikacja wygenerowana po <code class="language-plaintext highlighter-rouge">flutter create</code>. Pamiętasz ją? Jedno-przyciskowy ekran zliczający kliknięcia.</p>
+
+<p><img src="/assets/img/blog/hooks/default_app.png" alt="default_app.png" /></p>
+
+<h3 id="statefulwidget">StatefulWidget</h3>
+
+<p>W wersji standardowej mamy dwie powiązane ze sobą klasy (widget i state), użycie <code class="language-plaintext highlighter-rouge">setState</code> i to w gruncie rzeczy tyle.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MyHomePage</span> <span class="kd">extends</span> <span class="n">StatefulWidget</span> <span class="o">{</span>
+  <span class="n">MyHomePage</span><span class="o">({</span><span class="n">Key</span> <span class="n">key</span><span class="o">})</span> <span class="o">:</span> <span class="k">super</span><span class="o">(</span><span class="nl">key:</span> <span class="n">key</span><span class="o">);</span>
+
+  <span class="nd">@override</span>
+  <span class="n">_MyHomePageState</span> <span class="n">createState</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="n">_MyHomePageState</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">_MyHomePageState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">MyHomePage</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kt">int</span> <span class="n">_counter</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+  <span class="kt">void</span> <span class="n">_incrementCounter</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+      <span class="n">_counter</span><span class="o">++;</span>
+    <span class="o">});</span>
+  <span class="o">}</span>
+
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+        <span class="nl">child:</span> <span class="n">Column</span><span class="o">(</span>
+          <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+          <span class="nl">children:</span> <span class="o">[</span>
+            <span class="n">Text</span><span class="o">(</span>
+              <span class="s">'You have pushed the button this many times:'</span><span class="o">,</span>
+            <span class="o">),</span>
+            <span class="n">Text</span><span class="o">(</span>
+              <span class="s">'</span><span class="si">$_counter</span><span class="s">'</span><span class="o">,</span>
+              <span class="nl">style:</span> <span class="n">Theme</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">context</span><span class="o">).</span><span class="na">textTheme</span><span class="o">.</span><span class="na">display1</span><span class="o">,</span>
+            <span class="o">),</span>
+          <span class="o">],</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+      <span class="nl">floatingActionButton:</span> <span class="n">FloatingActionButton</span><span class="o">(</span>
+        <span class="nl">onPressed:</span> <span class="n">_incrementCounter</span><span class="o">,</span>
+        <span class="nl">child:</span> <span class="n">Icon</span><span class="o">(</span><span class="n">Icons</span><span class="o">.</span><span class="na">add</span><span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="hookwidget">HookWidget</h3>
+
+<p>Osiągnięcie tego samego efektu przy pomocy hooków ogranicza się do użycia jednej klasy:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MyHomePage</span> <span class="kd">extends</span> <span class="n">HookWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">counter</span> <span class="o">=</span> <span class="n">useState</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+        <span class="nl">child:</span> <span class="n">Column</span><span class="o">(</span>
+          <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+          <span class="nl">children:</span> <span class="o">[</span>
+            <span class="n">Text</span><span class="o">(</span>
+              <span class="s">'You have pushed the button this many times:'</span><span class="o">,</span>
+            <span class="o">),</span>
+            <span class="n">Text</span><span class="o">(</span>
+              <span class="s">'</span><span class="si">${counter.value}</span><span class="s">'</span><span class="o">,</span>
+              <span class="nl">style:</span> <span class="n">Theme</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">context</span><span class="o">).</span><span class="na">textTheme</span><span class="o">.</span><span class="na">display1</span><span class="o">,</span>
+            <span class="o">),</span>
+          <span class="o">],</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+      <span class="nl">floatingActionButton:</span> <span class="n">FloatingActionButton</span><span class="o">(</span>
+        <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">counter</span><span class="o">.</span><span class="na">value</span><span class="o">++,</span>
+        <span class="nl">child:</span> <span class="n">Icon</span><span class="o">(</span><span class="n">Icons</span><span class="o">.</span><span class="na">add</span><span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Różnica polega na tym, że zamiast dwóch klas mamy teraz tylko jedną, dziedziczącą po <code class="language-plaintext highlighter-rouge">HookWidget</code>. Pamiętaj o tym, bo tylko w takim widgecie możesz używać hooków! Mamy także wywołanie <code class="language-plaintext highlighter-rouge">useState(0)</code>, który tworzy lokalny stan przechowujący liczbę kliknięć (zaczynając od zera). Zwracany obiekt jest typu <code class="language-plaintext highlighter-rouge">ValueNotifier&lt;int&gt;</code>, stąd jego odczyt i zapis nie odywa się bezpośrednio przez <strong>counter</strong>, tylko przez <strong>counter.value</strong> (wartość docelowa). Każda zmiana stanu prowadzi do przebudowania widgeta, zupełnie jak to ma miejsce przy domyślnym <code class="language-plaintext highlighter-rouge">setState</code>.</p>
+
+<p>Na pierwszy rzut oka mogłoby się wydawać, że każde przebudowanie będzie prowadziło do zresetowania licznika. No bo jak to? Przecież ta konkretna linijka jest odpalana za każdym razem gdy rysujemy nasz widget. Masz rację, jest odpalana za każdym razem, ale stan jest automatycznie pamiętany jak to ma miejsce w <code class="language-plaintext highlighter-rouge">StatefulWidget</code>. Magia hooków, a tak na prawdę to polecam spojrzeć do kodu źródłowego <code class="language-plaintext highlighter-rouge">useState</code>. Dosłownie kilka linii kodu które wszystko tłumaczą.</p>
+
+<p>Skoro oba rozwiązania działają tak samo to po co przepłacać? Ja tu widzę osobiście benefity na rzecz <code class="language-plaintext highlighter-rouge">HookWidgeta</code>:</p>
+
+<ul>
+  <li>Jedna klasa zamiast dwóch zaspokaja potrzebę minimalizmu i dobrego smaku</li>
+  <li>Mniej kodu to mniej kłopotów</li>
+  <li>Dodanie stanowości do bezstanowego widgeta ogranicza się do zmiany <code class="language-plaintext highlighter-rouge">extends StatelessWidget</code> na <code class="language-plaintext highlighter-rouge">extends HookWidget</code> (git ma mniejszego diffa)</li>
+  <li>Możliwość użycia pozostałych hooków skoro jesteśmy już w <code class="language-plaintext highlighter-rouge">HookWidget</code></li>
+</ul>
+
+<hr />
+
+<p>Ciekawą alternatywą dla <code class="language-plaintext highlighter-rouge">useState</code> jest <code class="language-plaintext highlighter-rouge">useValueNotifier</code>, który działa na identycznej zasadzie, ale nie przebudowuje widgeta przy zmianie wartości. Nie raz zdarza się, że chcemy trzymać pewną wartość i zmieniać ją w widgecie, ale nie wpływa to nijak na to co prezentujemy użytkownikowi. A skoro nie widać różnicy, to unikajmy zbędnego przerysowywania.</p>
+
+<p>Użyłem go tyle razy, że jestem w stanie zliczyć wystąpienia na palcach jednej ręki, ale zawsze warto pamiętać że mimo wszystko istnieje i czeka na swój czas.</p>
+
+<h2 id="usememoized">useMemoized</h2>
+
+<p>Mamy ograne zarządzanie stanem, ale to przecież nie wszystko co potrafi <code class="language-plaintext highlighter-rouge">StatefulWidget</code>! Co więcej, często używamy odmiany stanowej nawet jeśli żadnego stanu nie potrzebujemy. Wszystko za sprawą potrzeby uruchomienia pewnego kodu tylko raz per widget, który przeprowadzi wstępną inicjalizację, a kolejne buildy będą czerpać z uprzedniego wyniku. Mowa o zbawiennym <code class="language-plaintext highlighter-rouge">initState</code>, który wywołany zostanie tylko raz i umożliwia nam chociażby wysłanie zapytania do API, a następnie korzystanie z zapisanej odpowiedzi przy każdym re-buildzie. Chyba nie chciałbyś bombardować własnego API na każdym renderze? Dobrze, bo ja też nie.</p>
+
+<p>Wersja standardowa w której tylko raz wysyłamy request i wyświetlamy jego odpowiedź w najprostszej możliwej wersji wyglądałaby jak poniżej. Zwróć uwagę że nie parsujemy odpowiedzi do JSONa, ani nie robimy innych zbędnych cyrków. Rysujemy prymitywnego stringa, upraszczamy jak się da.</p>
+
+<p><img src="/assets/img/blog/hooks/album_app.png" alt="album_app.png" /></p>
+
+<h3 id="statefulwidget-1">StatefulWidget</h3>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MyHomePage</span> <span class="kd">extends</span> <span class="n">StatefulWidget</span> <span class="o">{</span>
+  <span class="n">MyHomePage</span><span class="o">({</span><span class="n">Key</span> <span class="n">key</span><span class="o">})</span> <span class="o">:</span> <span class="k">super</span><span class="o">(</span><span class="nl">key:</span> <span class="n">key</span><span class="o">);</span>
+
+  <span class="nd">@override</span>
+  <span class="n">_MyHomePageState</span> <span class="n">createState</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="n">_MyHomePageState</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">_MyHomePageState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">MyHomePage</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kt">String</span> <span class="n">data</span><span class="o">;</span>
+
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">initState</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">initStateAsync</span><span class="o">();</span>
+    <span class="k">super</span><span class="o">.</span><span class="na">initState</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">initStateAsync</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">response</span> <span class="o">=</span> <span class="n">await</span> <span class="n">http</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">'https://jsonplaceholder.typicode.com/albums/1'</span><span class="o">);</span>
+
+    <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+      <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">body</span><span class="o">;</span>
+    <span class="o">});</span>
+  <span class="o">}</span>
+
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+        <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="n">data</span><span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="hookwidget-1">HookWidget</h3>
+
+<p>Wersja zahookowana, w której korzystamy z <code class="language-plaintext highlighter-rouge">useMemoized</code>. Zostanie on wywołany tylko przy pierwszym buildzie, zupełnie jak wspomniany wyżej <code class="language-plaintext highlighter-rouge">initState</code>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MyHomePageHook</span> <span class="kd">extends</span> <span class="n">HookWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">data</span> <span class="o">=</span> <span class="n">useState</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+    <span class="n">useMemoized</span><span class="o">(()</span> <span class="n">async</span> <span class="o">{</span>
+      <span class="kd">final</span> <span class="n">response</span> <span class="o">=</span> <span class="n">await</span> <span class="n">http</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">'https://jsonplaceholder.typicode.com/albums/1'</span><span class="o">);</span>
+
+      <span class="n">data</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">body</span><span class="o">;</span>
+    <span class="o">});</span>
+
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+        <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="n">data</span><span class="o">.</span><span class="na">value</span><span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Znowu mniej kodu, co? Ja już od dawna jestem sprzedany temu rozwiązaniu, ale pamiętam, że chwilę zajęło mi pogodzenie się z tym nowym formatem. W domyślnym zapisie mam przecież dedykowaną metodę <code class="language-plaintext highlighter-rouge">initState</code> w której przeprowadzam wszystkie te specyficzne operacje, a tu nagle mam je robić w buildzie? Brzmi nieswojo, ale na prawdę warto! Po pewnym czasie staje się to zupełnie naturalne i oczywiste.</p>
+
+<p>Z tym stwierdzeniem, że <code class="language-plaintext highlighter-rouge">useMemoized</code> jest uruchamiany tylko raz to tak nie do końca prawda. W sensie w naszym przykładzie jak najbardziej i jeśli będziemy tak go używali to rzeczywiście osiągnięmy wspomnianą <em>jednorazowość</em>. Możemy jednak osiągnąć znacznie więcej!</p>
+
+<h3 id="klucz-do-sterowania-hookiem">Klucz do sterowania hookiem</h3>
+
+<p><code class="language-plaintext highlighter-rouge">useMemoized</code> przyjmuje argument <strong>keys</strong>, który mimo swojej prostoty, otwiera ogrom możliwości (<em>bo jest kluczem!</em>). Koncept polega na tym, że jest to opcjonalna lista obiektów, którą przekazujemy do hooka. Stanie się ona jego identyfikacją, tożsamością. Oznacza to, że jakakolwiek zmiana w tej liście doprowadzi do ponownego uruchomienie hooka przy kolejnym buildzie. Taki system cache-owania. Tak długo jak klucze są identyczne bierz wartość z cache, w przeciwnku wypadku przelicz nową wartość i zapisz ją na przyszłość. Najlepiej będzie jak zobaczymy to w akcji rozbudowując poprzedni przykład. Dodajmy przycisk do zmiany albumu na kolejny. Internaktywność, yay!</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MyHomePageHook</span> <span class="kd">extends</span> <span class="n">HookWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">albumId</span> <span class="o">=</span> <span class="n">useState</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="n">data</span> <span class="o">=</span> <span class="n">useState</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+    <span class="n">useMemoized</span><span class="o">(()</span> <span class="n">async</span> <span class="o">{</span>
+      <span class="kd">final</span> <span class="n">response</span> <span class="o">=</span> <span class="n">await</span> <span class="n">http</span>
+          <span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">'https://jsonplaceholder.typicode.com/albums/</span><span class="si">${albumId.value}</span><span class="s">'</span><span class="o">);</span>
+
+      <span class="n">data</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">body</span><span class="o">;</span>
+    <span class="o">});</span>
+
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+        <span class="nl">child:</span> <span class="n">Column</span><span class="o">(</span><span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span> <span class="nl">children:</span> <span class="o">[</span>
+          <span class="n">Text</span><span class="o">(</span>
+            <span class="s">"Album ID: </span><span class="si">${albumId.value}</span><span class="s">"</span><span class="o">,</span>
+            <span class="nl">style:</span> <span class="n">TextStyle</span><span class="o">(</span><span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">red</span><span class="o">),</span>
+          <span class="o">),</span>
+          <span class="n">Text</span><span class="o">(</span><span class="n">data</span><span class="o">.</span><span class="na">value</span><span class="o">),</span>
+          <span class="n">RaisedButton</span><span class="o">(</span>
+            <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Bump"</span><span class="o">),</span>
+            <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">albumId</span><span class="o">.</span><span class="na">value</span><span class="o">++,</span>
+          <span class="o">)</span>
+        <span class="o">]),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Jak zadziałała aplikacja? Połowicznie:</p>
+
+<p><img src="/assets/img/blog/hooks/album_app_keys.gif" alt="album_app_keys.gif" /></p>
+
+<p>Co prawda <strong>albumId</strong> się ładnie aktualizuje po każdym kliknięciu, ale wyświetlane dane już nie za bardzo. Co można z tym zrobić? Dodać klucze!</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">useMemoized</span><span class="o">(()</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">response</span> <span class="o">=</span> <span class="n">await</span> <span class="n">http</span>
+      <span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">'https://jsonplaceholder.typicode.com/albums/</span><span class="si">${albumId.value}</span><span class="s">'</span><span class="o">);</span>
+
+  <span class="n">data</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">body</span><span class="o">;</span>
+<span class="o">},</span> <span class="o">[</span><span class="n">albumId</span><span class="o">.</span><span class="na">value</span><span class="o">]);</span>
+</code></pre></div></div>
+
+<p>Tym właśnie sposobem powiedzieliśmy <code class="language-plaintext highlighter-rouge">useMemoized</code> że ma wywołać swoją wewnętrzną funkcję za każdym razem gdy zmieni się wartość trzymana w <strong>albumId.value</strong>. Na pierwszy rzut oka cały ten flow jest nieintuicyjny, jednak nic mylnego! To świetnie zaprojektowana machineria do często powtarzających się problemów. Wystarczy delikatnie wysterować swoje rozumowanie na boczny tor i zacząć cieszyć się z prostego i zwięzłego zapisu.</p>
+
+<p><img src="/assets/img/blog/hooks/album_app_keys_fixed.gif" alt="album_app_keys_fixed.gif" /></p>
+
+<p>W liście możesz oczywiście umieścić tyle elementów ile tylko pragniesz. Zmiana któregokolwiek z nich doprowadzi do ponownego odpalenia funkcji w <code class="language-plaintext highlighter-rouge">useMemoized</code>, ale z praktycznego punktu widzenia będzie to najczęściej jeden obiekt, góra dwa.</p>
+
+<h2 id="useeffect">useEffect</h2>
+
+<p>Ostatni z wielkiej trójcy hooków, których używa się najczęściej przy tworzeniu aplikacji. Swoim działaniem jest nieco zbliżony do <code class="language-plaintext highlighter-rouge">useMemoized</code>, ale nie daj się zwieść pozorom - wykorzystasz go w innych okolicznościach i przypadkach.</p>
+
+<p>Główne podobieństwo do <code class="language-plaintext highlighter-rouge">useMemoized</code> polega na tym, że tutaj również dostarczamy opcjonalną listę kluczy do identyfikacji, których zmiana powoduje ponowne uruchomienie wewnętrznej funkcji. A różnica? Praktycznie to są dwie:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">useEffect</code> nie zwraca żadnej wartości, nie trudź się więc z przypisaniem jego wyniku do zmiennej</li>
+  <li>Funkcja uruchamiana przez <code class="language-plaintext highlighter-rouge">useEffect</code> musi zwrócić funkcję (callback) do ewentualnego posprzątania po sobie</li>
+</ul>
+
+<p>Pierwsza różnica jest prosta. <code class="language-plaintext highlighter-rouge">useMemoized</code> zwróci nam wynik swojej funkcji, <code class="language-plaintext highlighter-rouge">useEffect</code> nie. W porządku, a co z tym drugim wymaganiem? Funkcja musi zwrócić funkcję. Dlaczego? Bo taki właśnie jest zamysł stojący za efektami - mogą brudzić, czyli np. otwierać połączenia sieciowe, nasłuchiwać na strumieniach, czy też innych podobnych strukturach i jako dobry developer powinieneś te rzeczy sprzątnąć, zupełnie tak jak robisz to w przypadku metody <code class="language-plaintext highlighter-rouge">dispose</code> na <code class="language-plaintext highlighter-rouge">StatefulWidget</code>.</p>
+
+<p>Kiedy zatem używać <code class="language-plaintext highlighter-rouge">useEffect</code>? Zawsze wtedy gdy musiałbyś użyć <code class="language-plaintext highlighter-rouge">initState</code> połączonego z <code class="language-plaintext highlighter-rouge">dispose</code>. Jeśli potrzebujesz takiego <code class="language-plaintext highlighter-rouge">useMemoized</code>, ale funkcja którą w nim uruchamiasz stackuje pewien problem - np. każde wywołanie dodaje kolejnego listenera - to <code class="language-plaintext highlighter-rouge">useEffect</code> jest stworzony do rozwiązania tego problemu.</p>
+
+<h2 id="hooki">Hooki</h2>
+
+<p>Przedstawione hooki to oczywiście dopiero czubek góry lodowej i nawet samych wbudowanych jest o wiele więcej. Bardzo przydatne okazują się <code class="language-plaintext highlighter-rouge">useAnimationController</code> do przeprowadzania animacji, <code class="language-plaintext highlighter-rouge">usePrevious</code> do uzyskania wartości obiektu z poprzedniego builda, czy chociażby <code class="language-plaintext highlighter-rouge">useFuture</code> zastępujący całkowicie <code class="language-plaintext highlighter-rouge">FutureBuildera</code>. Jeśli chciałbyś zobaczyć co jeszcze oferują hooki to nie ma lepszego miejsca niż oficjalna dokumentacja.</p>
+
+<p>Na koniec pamiętaj o ważnej rzeczy, która nie została wcześniej poruszona. Jeśli potrzebujesz nietypowego hooka, to bez problemu możesz go sam napisać bazując na innym już istniejącym. W swoich projektach mam kilka dodatkowych hooków, które często za mną podążają jak np. <code class="language-plaintext highlighter-rouge">useTabController</code>.</p>
+
+<p>Kod pełnej aplikacji znajdziesz na <a href="https://github.com/vintage/flutter_demo_hooks">https://github.com/vintage/flutter_demo_hooks</a>.</p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-hooks%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=HookWidget%2C+czyli+Flutterowe+hooki%20https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-hooks%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/flutter-hooks/&title=HookWidget%2C+czyli+Flutterowe+hooki%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=HookWidget%2C+czyli+Flutterowe+hooki%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/flutter-hooks/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="Asynchroniczny Dart - Event Loop, Futures, async/await" href="/blog/async-dart-event-loop-futures/">
+            <p>Poprzedni wpis</p>
+            Asynchroniczny Dart - Event Loop, Futures, async/await
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="Nawigowanie między ekranami - Navigator" href="/blog/flutter-navigation/">
+            <p>Następny wpis</p>
+            Nawigowanie między ekranami - Navigator
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>

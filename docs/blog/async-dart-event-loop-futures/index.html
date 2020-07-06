@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/async-dart-event-loop-futures/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Asynchroniczny Dart - Event Loop, Futures, async/await | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Asynchroniczny Dart - Event Loop, Futures, async/await" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Dart jako język jednowątkowy jest w stanie wykonywać tylko jedną operację w danym czasie. Jedna za drugą. Brzmi powolnie? Nic z tych rzeczy! Dowiedz się jak działa Event Loop i kod asynchroniczny." />
+<meta property="og:description" content="Dart jako język jednowątkowy jest w stanie wykonywać tylko jedną operację w danym czasie. Jedna za drugą. Brzmi powolnie? Nic z tych rzeczy! Dowiedz się jak działa Event Loop i kod asynchroniczny." />
+<link rel="canonical" href="https://rykowski.dev/blog/async-dart-event-loop-futures/" />
+<meta property="og:url" content="https://rykowski.dev/blog/async-dart-event-loop-futures/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-27T00:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/async-dart-event-loop-futures/","headline":"Asynchroniczny Dart - Event Loop, Futures, async/await","dateModified":"2020-06-27T00:00:00+02:00","datePublished":"2020-06-27T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/async-dart-event-loop-futures/"},"description":"Dart jako język jednowątkowy jest w stanie wykonywać tylko jedną operację w danym czasie. Jedna za drugą. Brzmi powolnie? Nic z tych rzeczy! Dowiedz się jak działa Event Loop i kod asynchroniczny.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/triangular.jpeg " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Asynchroniczny+Dart+-+Event+Loop%2C+Futures%2C+async%2Fawait" class="title">Asynchroniczny Dart - Event Loop, Futures, async/await</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Czerwiec
+        
+      2020
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>Pisząc dowolną aplikację we Flutterze posługujesz się językiem Dart. Wszystkie ograniczenia i subtelności zdefiniowane w samym języku, będą ci również towarzyszyły we Flutterze. Nie da się inaczej. Flutter stoi na Darcie, koniec i kropka. Czy to dobrze? Jasne, czemu nie. Lubię ten język i mam do niego pewnego rodzaju słabość, ale warto poznać go czasem nieco głębiej poza samą jego składnią.</p>
+
+<p>Nie będziemy jednak wertować całego języka od podstaw, od tego jest oficjalna dokumentacja. Skupimy się jedynie na tym <strong>skąd Dart wie który kod uruchomić w jakim czasie</strong> oraz na czym opiera się cała magia asynchroniczności. Temat jest bardzo szeroki i wymaga zrozumienia kilku podstawowych konceptów od których rozpoczniemy dzisiejszy wpis.</p>
+
+<p><img src="/assets/img/blog/async/logo.png" alt="logo.png" /></p>
+
+<h1 id="jednowątkowy-dart">Jednowątkowy Dart</h1>
+
+<p>Tak jest, zgadza się. <strong>Dart jest językiem jednowątkowym</strong>, tak jak wiele innych popularnych języków programowania jak chociażby <em>JavaScript</em>, czy <em>Python</em>. A co to tak na prawdę oznacza?</p>
+
+<blockquote>
+  <p>Jakieś wątki pewnie i że jest jeden?</p>
+</blockquote>
+
+<p>Bingo! Z samej nazwy można praktycznie wszystko wywnioskować. Aplikacja pisana w Darcie wykonuje wszystkie swoje operacje w obrębie pojedynczego wątku systemowego. A skoro wątek jest tylko jeden, to program może robić tylko jedną rzecz w danym punkcie czasu. Wykona jedną operację, później drugą, trzecią itd. Nie ma tutaj mowy o żadnym zrównoleglaniu prac żeby w tym samym momencie robić rzeczy A, B i C. Zapomnij.</p>
+
+<p>Pierwsze wyobrażenie o takim sposobie wykonywania operacji przynosi obraz powolności. No bo jak to tak? Nie można robić wielu rzeczy na raz? Przecież ŻADNA aplikacja nie może tak działać. To się nie może udać! A jednak się udaje i aplikacje pisane we Flutterze bez problemów osiagają mityczne 60 klatek na sekundę. Jak to się dzieje? O tym już za chwilę.</p>
+
+<p>Sam aspekt jednowątkowości ma z mojej perspektywy dwie zasadnicze zalety. <strong>Pierwszą</strong> jest to, że aktualnie wykonywany kod nie może zostać przez nic przerwany. Tylko jeden wątek ma dostęp do pamięci, więc tylko on steruje tym co się wewnątrz dzieje. Nikt z zewnątrz nie może nagle wskoczyć i zmienić czegokolwiek, jak chociażby wartości obiektów. <strong>Drugą</strong> natomiast zaletą jest brak deadlocków i wyścigów w dostępie do pamięci, gdy w dokładnie tym samym momencie jest kilku zainteresowanych danym obszarem jak np. zmiana wartości współdzielonej zmiennej.</p>
+
+<blockquote>
+  <p>Jeden wątek to w praktyce mniej zmartwień.</p>
+</blockquote>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"package:flutter/foundation.dart"</span><span class="o">;</span>
+
+<span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"start main"</span><span class="o">);</span>
+  <span class="n">print</span><span class="o">(</span><span class="n">randomSort</span><span class="o">([</span><span class="mi">2</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">,</span><span class="mi">7</span><span class="o">,</span><span class="mi">8</span><span class="o">,</span><span class="mi">9</span><span class="o">,</span><span class="mi">10</span><span class="o">]));</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"end main, flag: </span><span class="si">$flag</span><span class="s">"</span><span class="o">);</span>
+<span class="o">}</span>
+
+
+<span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">randomSort</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">easy</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">sort</span><span class="o">();</span>
+  <span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">shuffle</span><span class="o">();</span>
+  
+  <span class="k">while</span> <span class="o">(!</span><span class="n">listEquals</span><span class="o">(</span><span class="n">easy</span><span class="o">,</span> <span class="n">sorted</span><span class="o">))</span> <span class="o">{</span>
+    <span class="n">sorted</span><span class="o">.</span><span class="na">shuffle</span><span class="o">();</span>
+  <span class="o">}</span>
+  
+  <span class="k">return</span> <span class="n">sorted</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Powyższy kod gwarantuje, że wszystkie instrukcje począwszy od pierwszego printa, przez dziwny algorytm sortowania, aż po ostatniego printa zostaną wykonane jedno po drugim. Co więcej - żaden inny kod nie zostanie uruchomiony w między czasie, bez znaczenia jak bardzo byśmy wszystko skomplikowali. Znaczy to tyle, że zmienna <strong>flag</strong> na pewno będzie miała wartość <strong>true</strong>, bo żaden inny kod nie ma prawa być uruchomiony do momentu zakończenia wszystkich <strong>synchronicznych</strong> operacji.</p>
+
+<h1 id="synchroniczność">Synchroniczność</h1>
+
+<p>Wspomniane operacje <strong>synchroniczne</strong> to model ich wykonywania w którym każde kolejne zadanie następuje bezpośrednio po sobie i nie ma w nim miejsca na żadne działania dodatkowe. Przez zadanie mam na myśli pojedynczą instrukcję, dla uproszczenia możemy przyjąć że jest to po prostu jedna linia kodu.</p>
+
+<ol>
+  <li>Uruchamiamy zadanie #1</li>
+  <li>Przetwarzamy je i uzyskujemy wynik</li>
+  <li>Uruchamiamy zadania #2</li>
+  <li>Przetwarzamy je i uzyskujemy wynik</li>
+</ol>
+
+<p>…</p>
+
+<p>n. Uruchamiamy ostatnie zadanie, przetwarzamy i uzyskujemy wynik</p>
+
+<p>Jest to model którego używamy w większości miejsc aplikacji, łatwo można prześledzić co i kiedy jest wykonywane. No bo skoro wykonuje się teraz linia <em>#45</em>, to następna musi być <em>#46</em>. Nie ma innej możliwości, łatwizna.</p>
+
+<p>Ma on jednak zasadniczą wadę, a mianowicie szansę na zablokowanie programu podczas oczekiwanie na wolne zdarzenie takie jak odczyt danych z sieci, czy nawet lokalnego pliku. Chyba nie chcesz zawiesić całej aplikacji na czas gdy odpytujesz swoje API? Jeden wątek, jedno zadanie, a czekanie to też praca w modelu synchronicznym.</p>
+
+<p>Gwarantuję ci, że użytkownik nie będzie wyrozumiały i jest mało zainteresowany faktem jednowątkowości. Ma być szybko i responsywnie! Czyli jak? <strong>Asynchronicznie!</strong></p>
+
+<hr />
+<blockquote>
+  <p>Idziesz do kina na swój ulubiony film. Ustawiasz się w kolejce po bilet i czekasz aż wszystkie osoby przed tobą zostaną obsłużone i zostanie wydany im bilet. Teraz pora na ciebie, możesz kupić bilet i cieszyć się seansem.</p>
+</blockquote>
+
+<h1 id="asynchroniczność">Asynchroniczność</h1>
+
+<p>Kod napisany w sposób <strong>asynchroniczny</strong> różni się od swojego synchronicznego odpowiednika tym, że nie jest w pełni wykonywany “ciągiem”. A przynajmniej nie ma takiej gwarancji. Funkcja asynchroniczna ma możliwość oddania sterowania i wykonywania operacji do innego miejsca w kodzie. Mechanizm ten nie odbywa się oczywiście w sposób losowy i to my pisząc kod wskazujemy na konkretne miejsca, które w czasie oczekiwania na <strong>COŚ</strong> mają zwolnić wątek i dokończyć zaplanowane zadania w momencie gdy to <strong>COŚ</strong> będzie już gotowe.</p>
+
+<blockquote>
+  <p>Czekanie to nie praca. Odpoczywasz? Daj szansę innym zrobić coś produktywnego!</p>
+</blockquote>
+
+<p>Czym będzie to <strong>COŚ</strong> na prawdziwym przykładzie? W dzisiejszych aplikacjach są to najczęściej operacje wejścia-wyjścia (I/O), które z natury nie wymagają udziału procesora, więc mogą go zwolnić dla bardziej potrzebujących:</p>
+<ul>
+  <li>obsługa API, bez znaczenia czy to REST API, GraphQL, czy jeszcze coś innego. Istotnym punktem jest to, że zachodzi tutaj ruch sieciowy.</li>
+  <li>odczyt/zapis lokalnych plików, gdzie praca wykonywana jest przez urządzenie dyskowe, a nie procesor.</li>
+</ul>
+
+<p>Sama asynchroniczność nie ogranicza się jednak do wyżej wymienionych i po prawdzie to każda operacja może być wykonana w taki właśnie sposób.</p>
+
+<p>Pamiętaj przy tym o jednej bardzo, ale to bardzo ważnej rzeczy. Dart nadal pozostaje jednowątkowy! To, że zaplanujesz kod do wykonania asynchronicznego nie znaczy, że będzie wykonywał wiele operacji w jednym czasie. Dalej na poziomie procesora jest ograniczony do <em>“jedna rzecz w jednym czasie”</em>, a cała magia asynchroniczności opiera się na wewnętrznej kolejce zdarzeń zwanej <strong>Event Loop</strong>.</p>
+
+<hr />
+<blockquote>
+  <p>Idziesz do restauracji na swoje ulubione naleśniki. Lokal jest już w połowie zapełniony ludźmi którzy czekają na swoje zamówienia, a mimo to kelner podchodzi i przyjmuje twoje. Co więcej, wcale nie musisz czekać aż dania zostaną wydane wszystkim którzy zamówili wcześniej. Nie blokuje cię więc pan ze stolika #2, który poprosił o pieczonego prosiaka którego przygotowanie zajmie ponad 2h. Ma to sens, prawda?</p>
+</blockquote>
+
+<h1 id="event-loop">Event Loop</h1>
+
+<p>Uruchamiając dowolny program Darta, a więc m.in. aplikację Flutterową, system tworzy nowy wątek w obrębie którego wykonywane będą wszystkie zaprogramowane operacje. W tym właśnie wątku będzie alokowana cała niezbędna pamięć dla twoich obiektów, której nie będziesz mógł współdzielić z żadnym innym wątkiem. Zasada jednowątkowości.</p>
+
+<p>W ramach startowania aplikacji, jedną z pierwszych rzeczy która się wydarzy jest inicjalizacja wewnętrznej pętli zwanej <strong>Event Loop</strong>, która będzie trwała tak długo jak żyje sam wątek. To właśnie ten element układanki jest odpowiedzialny za kolejność w której uruchamiany jest kod programu, szczególnie gdy rozmawiamy o jego asynchronicznej odmianie.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">eventLoop</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">microtask</span> <span class="o">=</span> <span class="n">popMicrotaskFromQueue</span><span class="o">();</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">microTask</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">run</span><span class="o">(</span><span class="n">microTask</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="kd">final</span> <span class="n">event</span> <span class="o">=</span> <span class="n">popEventFromQueue</span><span class="o">();</span>
+
+      <span class="k">if</span> <span class="o">(</span><span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">run</span><span class="o">(</span><span class="n">event</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Event Loop zarządza swoim stanem w formie dwóch bliźniaczo podobnych kolejek FIFO (<strong>F</strong>irst <strong>I</strong>n <strong>F</strong>irst <strong>O</strong>ut), gdzie zadania wykonywane są w takiej kolejności w jakiej zostały do niej dodane.</p>
+
+<h2 id="microtask-queue">Microtask Queue</h2>
+
+<p>Kolejka o wysokim priorytecie do zadań specjalnych, których najpewniej nie będziesz potrzebował przy budowaniu aplikacji. Szczerze powiedziawszy to nigdy nie użyłem jej produkcyjnie, nie było takiej potrzeby. Jej głównym zastosowaniem jest zaplanowanie wykonania pewnego fragmentu kodu asynchronicznie, ale przed wywołaniem jakiegokolwiek kodu umieszczonego na <em>Event Queue</em>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"start main"</span><span class="o">);</span>
+  <span class="n">scheduleMicrotask</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"micro"</span><span class="o">));</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"end main"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Po uruchomieniu powyższego kodu zobaczysz następującą kolejność w konsoli:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. start main
+2. end main
+3. micro
+</code></pre></div></div>
+
+<p>Napis <em>micro</em> jest na pozycji #3, a nie #2, ponieważ jest wykonywany asynchronicznie. Wywołujemy funkcję <code class="language-plaintext highlighter-rouge">scheduleMicrotask</code>, która jako parametr otrzymuje funkcję, która jest niezwłocznie umieszczana na kolejce, ale nie wykonywana! Dopiero, gdy wykonają się wszystkie operacje synchroniczne, <em>Event Loop</em> decyduje o uruchomieniu kolejnego zadania z kolejki, którym jest właśnie ostatni print.</p>
+
+<h2 id="event-queue">Event Queue</h2>
+
+<p>Kolejka o standardowym priorytecie, która zawsze ma dużo pracy i zadań do wykonania. To właśnie tutaj odbywa się większość operacji asynchronicznych każdej aplikacji mobilnej. Na tym poziomie obsługiwane są takie zdarzenia jak gesty użytkownika, odpowiedzi na żądania HTTP, czy timery. Użytkownik stuknął palcem w przycisk? <em>Event</em>. Użytkownik skroluje listę? Dużo <em>eventów</em>. Przyszła w końcu wyczekiwana odpowiedź z serwera na którą tak długo czekałeś? <em>Event</em>. I tak bez końca.</p>
+
+<p>Jak wykonać kod na tej kolejce? Może jakiś analogiczny <code class="language-plaintext highlighter-rouge">scheduleEvent</code>? Byłoby spójnie, ale interfejs jest delikatnie inny. W celu zaplanowania zdarzenia asynchronicznego musisz stworzyć obiektu typu <strong>Future</strong>. Pora na większą ilość praktyki, a co za tym idzie kodu!</p>
+
+<blockquote>
+  <p>W świecie Fluttera mówi się, że wszystko jest widgetem. Teraz już wiesz że to kłamstwo, bo wszystko jest tak na prawdę eventem.</p>
+</blockquote>
+
+<h1 id="future">Future</h1>
+
+<p>W celu zaplanowania i uruchomienia dowolnego kodu na kolejce asynchronicznej tworzymy nowy obiekt typu <strong>Future</strong>. Jeśli pisałeś wcześniej w JavaScript to sposób działania jest identyczny jak w przypadku obiektu <em>Promise</em>. A jeśli nie pisałeś? Spójrzmy:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"start main"</span><span class="o">);</span>
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"future"</span><span class="o">));</span>
+  <span class="n">scheduleMicrotask</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"micro"</span><span class="o">));</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"end main"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. start main
+2. end main
+3. micro
+4. future
+</code></pre></div></div>
+
+<p>Printy <strong>1</strong> oraz <strong>2</strong> to kod uruchamiany synchronicznie. <em>micro</em> wskakuje jako <strong>3</strong>, ponieważ kolejka <em>microtask</em> ma pierwszeństwo przed jakimkolwiek zadaniem na kolejce <em>event</em>. Ostatni jest sam <em>future</em>.</p>
+
+<p>Spójrzmy jeszcze na przykład z większą liczbą zdarzeń:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"start main"</span><span class="o">);</span>
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"future1"</span><span class="o">));</span>
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"future2"</span><span class="o">));</span>
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"future3"</span><span class="o">));</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"end main"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. start main
+2. end main
+3. future1
+4. future2
+5. future3
+</code></pre></div></div>
+
+<p>Nie ma tutaj żadnego zaskoczenia, a jedynie potwierdzenie faktu że zdarzenia są dodawane do kolejki i uruchamiane w odpowiedniej kolejności <em>future1 -&gt; future2 -&gt; future3</em>. Wcześniej dodane zdarzenie oznacza szybsze jego podjęcie i wykonanie.</p>
+
+<p>Warto również przypomnieć raz jeszcze fakt jednowątkowości. To, że zaplanowaliśmy 3 zdarzenia nie oznacza wcale że będą one wykonywane równolegle (<strong>parallel execution</strong>), tylko asynchronicznie (<strong>asynchronous execution</strong>). Jedno po drugim, ze złudzeniem że wszystko to odbywa się w jednym czasie. Iluzja wielowątkowości.</p>
+
+<h2 id="futuredelayed">Future.delayed</h2>
+
+<p><em>Future</em> udostępnia pomocny konstruktor <code class="language-plaintext highlighter-rouge">Future.delayed</code> do zaplanowania zdarzenia, które zostanie wykonane po zadanym czasie. Zdarza mi się nie raz korzystać z tego zapisu, aby zasymulować opóźnienie jak np. przy pobieraniu danych z sieci. Samo działanie jest stosunkowo proste. Pod spodem rejestrowany jest licznik, który dokładnie po upływie zadanego okresu wrzuci do <em>Event Loopa</em> nowe zadanie do wykonania.</p>
+
+<p>Spójrz na poniższy przykład. Funkcje <em>randomSort</em> i <em>listsAreEqual</em> śmiało ignoruj, bo są tutaj tylko po to, aby wprowadzić wolny kod o losowej złożoności.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"future1"</span><span class="o">));</span>
+  <span class="n">Future</span><span class="o">.</span><span class="na">delayed</span><span class="o">(</span>
+    <span class="n">Duration</span><span class="o">(</span><span class="nl">milliseconds:</span> <span class="mi">500</span><span class="o">),</span>
+    <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"future delayed"</span><span class="o">),</span>
+  <span class="o">);</span>
+  <span class="n">randomSort</span><span class="o">([</span><span class="mi">2</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">,</span><span class="mi">7</span><span class="o">,</span><span class="mi">8</span><span class="o">,</span><span class="mi">9</span><span class="o">,</span><span class="mi">10</span><span class="o">]);</span>
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"future2"</span><span class="o">));</span>
+<span class="o">}</span>
+
+
+<span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">randomSort</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">easy</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">sort</span><span class="o">();</span>
+  <span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">shuffle</span><span class="o">();</span>
+  
+  <span class="k">while</span> <span class="o">(!</span><span class="n">listsAreEqual</span><span class="o">(</span><span class="n">easy</span><span class="o">,</span> <span class="n">sorted</span><span class="o">))</span> <span class="o">{</span>
+    <span class="n">sorted</span><span class="o">.</span><span class="na">shuffle</span><span class="o">();</span>
+  <span class="o">}</span>
+  
+  <span class="k">return</span> <span class="n">sorted</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kt">bool</span> <span class="nf">listsAreEqual</span><span class="p">(</span><span class="n">l1</span><span class="o">,</span> <span class="n">l2</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="n">List</span><span class="o">.</span><span class="na">generate</span><span class="o">(</span>
+    <span class="n">l1</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">l1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="n">l2</span><span class="o">[</span><span class="n">i</span><span class="o">]</span>
+  <span class="o">).</span><span class="na">where</span><span class="o">((</span><span class="n">r</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">r</span><span class="o">)</span>
+  <span class="o">.</span><span class="na">toList</span><span class="o">().</span><span class="na">length</span> <span class="o">==</span> <span class="n">l1</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Jaka będzie kolejność wykonania?</p>
+
+<p><strong>A.</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. future1
+2. future delayed
+3. future2
+</code></pre></div></div>
+
+<p><strong>B.</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. future1
+2. future2
+3. future delayed
+</code></pre></div></div>
+
+<p>Wszystko zależy od tego ile akurat zajmie posortowanie listy. Więcej niż 500ms? <strong>A</strong>. Mniej? <strong>B</strong>.</p>
+
+<h2 id="future-i-jego-api">Future i jego API</h2>
+
+<p>Powyższe przykłady wyglądają tak, jakby jedyna różnica w udostępnionym interfesie między <em>microtask</em>, a <em>event</em> polegała na słownictwie. W pierwszym mamy wywołanie funkcji <code class="language-plaintext highlighter-rouge">scheduleMicrotask</code>, a w drugim zawołanie <code class="language-plaintext highlighter-rouge">Future</code>. Z tym, że ten <code class="language-plaintext highlighter-rouge">Future()</code> to konstruktor, który utworzy nowy obiekt zdarzenia i zwróci nam go abyśmy mogli na nim dalej pracować i nim zarządzać. W przypadku <em>microtask</em> nie mamy takiego komfortu, gdyż zwraca nam on nic, czyli <em>void</em>.</p>
+
+<p>Świeżo utworzony <em>Future</em> znajduje się w stanie <strong>zarejestrowanym</strong>, ale nie wykonanym. <em>Event Loop</em> wie już o jego istnieniu i wrzucił go na kolejkę <em>Event Queue</em>, ale w żadnym wypadku nie wykonuje zawartych w nim instrukcji. Na to przyjdzie pora w przyszłości (<em>future</em>) i kiedy ona nadejdzie stan automatycznie przejdzie w <strong>wykonany</strong>.</p>
+
+<h3 id="łańcuch-wywołań-then">Łańcuch wywołań (then)</h3>
+
+<p>Obiekt typu <em>Future</em> udostępnia funkcję <strong>then</strong>, która zostanie zawołana niezwłoczenie po tym, gdy wszystkie zawarte w nim instrukcje zostaną poprawnie wykonane. Taki sygnał zwrotny (<strong>callback</strong>) do poinformowania aplikacji, że wszystko poszło gładko i zwrócenia ostatecznego wyniku operacji.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"start main"</span><span class="o">);</span>
+  
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">"future1"</span><span class="o">);</span>
+    <span class="k">return</span> <span class="s">"future1 completed"</span><span class="o">;</span>
+  <span class="o">}).</span><span class="na">then</span><span class="o">((</span><span class="n">msg</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="n">msg</span><span class="o">));</span>
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"future2"</span><span class="o">));</span>
+
+  <span class="n">print</span><span class="o">(</span><span class="s">"end main"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. start main
+2. end main
+3. future1
+4. future1 completed
+5. future2
+</code></pre></div></div>
+
+<p>Warto zapamiętać, że <em>then</em> jest uruchamiany w sposób synchroniczny, zaraz po tym jak wykona się ostatnia zaplanowana instrukcja wewnątrz aktualne przetwarzanego zdarzenia. To dlatego <em>future1 completed</em> wywoła się przed <em>future2</em>.</p>
+
+<p>Ale super jest ten <em>then</em>! Tylko po co go używać skoro równie dobrze można wszystko zapisać następująco:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"start main"</span><span class="o">);</span>
+
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">"future1"</span><span class="o">);</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">"future1 completed"</span><span class="o">);</span>
+  <span class="o">});</span>
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"future2"</span><span class="o">));</span>
+
+  <span class="n">print</span><span class="o">(</span><span class="s">"end main"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Wynik identyczny, więc o co chodzi? O szczegół implementacyjny. Wyobraź sobie teraz, że nie piszesz własnego <em>future</em> tylko używasz wbudowanego w bibliotekę, powiedzmy do wysłania zapytania do API. Przykład banalny, ale świetnie obrazuje kiedy używany jest <em>then</em> i że pełni on kluczową rolę w przetwarzaniu asynchronicznym.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">http</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"http://moje_api/users"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">then</span><span class="o">((</span><span class="n">users</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="n">users</span><span class="o">));</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Wysyłamy zapytanie na adres <em>http://moje_api/users</em> i jak tylko pojawi się odpowiedź (może minąć nawet kilka sekund) pokazujemy ją na konsoli. Tadam, po to jest <em>then</em>.</p>
+
+<p>Wszystko jest piękne tak długo jak nie ma żadnych błędów, a dobrze wiemy że takie aplikacje nie istnieją. Błąd zawsze przyjdzie i wskoczy znienacka na użytkownika w najmniej testowanym scenariuszu. Nie sprawdziłeś jak aplikacja się zachowa przy wyciąganiu danych z API, gdy nie ma internetu? A no tak, przy developmencie przecież zawsze jesteś wpięty w firmowe wi-fi :)</p>
+
+<h3 id="obsługa-błędów-catcherror">Obsługa błędów (catchError)</h3>
+
+<p>A skoro już o błędach mówimy to <em>Future</em> jest o tyle specyficznym konstruktem, że łapaniem jego wyjątków nie zajmuje się uniwersalny blok <em>try-catch</em>.</p>
+
+<p>Jaki będzie wynik uruchomienia takiego programu?</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"start main"</span><span class="o">);</span>
+
+  <span class="k">try</span> <span class="o">{</span>
+    <span class="n">Future</span><span class="o">(()</span> <span class="o">{</span>
+      <span class="kt">int</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"future"</span><span class="o">);</span>
+    <span class="o">});</span>
+  <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">"ooops"</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="n">print</span><span class="o">(</span><span class="s">"end main"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. start main
+2. end main
+Unhandled exception:
+FormatException: ...
+</code></pre></div></div>
+
+<p>Delikatnie zaskakujące, ale <em>try-catch</em> nie obsłużył wyjątku i zamiast ładnego <em>ooops</em> aplikacja się crashuje. Bardzo niedobrze, ale na logikę to uzasadnione działanie. Blok złapie jedynie wyjątek tworzenia samego obiektu <em>Future</em>, a nie jego funkcji która uruchomi się gdzieś-kiedyś, a na pewno nie w aktualnym przebiegu <em>Event Loopa</em>. Jest to duża pułapka o której programista często zapomina, co udowadnia np. kod z oficjalnej paczki do obsługi <em>Cloud Functions</em> (<em>Firebase</em>):</p>
+
+<p><a href="https://github.com/FirebaseExtended/flutterfire/blob/master/
+packages/cloud_functions/cloud_functions/lib/src/https_callable.dart#L30"><img src="/assets/img/blog/async/flutterfire_async_catch.png" alt="Async catch issue in Flutterfire" /></a></p>
+
+<p>Jest <em>try-catch</em>? Jest. Jest <em>Future</em>? Jest, co sugeruje użycie <em>then</em>. Jest złapany wyjątek w razie problemów? Nie ma. Zdarza się jak widać nawet najlepszym, ale jak w takim razie obsłużyć błędy we właściwy sposób?</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"start main"</span><span class="o">);</span>
+
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="kt">int</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"future"</span><span class="o">);</span>
+  <span class="o">}).</span><span class="na">catchError</span><span class="o">((</span><span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">"ooops"</span><span class="o">);</span>
+  <span class="o">});</span>
+
+  <span class="n">print</span><span class="o">(</span><span class="s">"end main"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. start main
+2. end main
+3. ooops
+</code></pre></div></div>
+
+<p>Z użyciem funkcji <strong>catchError</strong>! Analogicznie jak <em>then</em> uruchamiany jest w momencie gdy wszystko przebiegło poprawnie, tak <em>catchError</em> zostanie wywołany jeśli funkcja rzuciła w dowolnym momencie wyjątkiem. Taki <em>try-catch</em> w wersji funkcyjnej.</p>
+
+<h1 id="test">Test!</h1>
+
+<p>Czas na kartkówkę i skondensowanie całej wiedzy w jednym przykładzie. Pochodzi on ze świetnego <a href="https://web.archive.org/web/20170704074724/https://webdev.dartlang.org/articles/performance/event-loop">artykułu</a> na temat asynchroniczności w Darcie, który serdecznie polecam. To jak, gotowy? Skompiluj w głowie poniższy kod i ustal poprawną kolejność wykonania. Zaliczenie tak złożonego przykładu udowadnia że kolejność uruchamiania kodu nie stanowi dla ciebie już żadnego wyzwania. Poważnie, nie ma już niczego więcej!</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">'start main'</span><span class="o">);</span>
+  <span class="n">scheduleMicrotask</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">'micro1'</span><span class="o">));</span>
+
+  <span class="n">Future</span><span class="o">.</span><span class="na">delayed</span><span class="o">(</span>
+    <span class="n">Duration</span><span class="o">(</span><span class="nl">seconds:</span> <span class="mi">1</span><span class="o">),</span>
+    <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">'future1'</span><span class="o">),</span>
+  <span class="o">);</span>
+
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">'future2'</span><span class="o">);</span>
+  <span class="o">}).</span><span class="na">then</span><span class="o">((</span><span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">'future2.1'</span><span class="o">);</span>
+  <span class="o">}).</span><span class="na">then</span><span class="o">((</span><span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">'future2.2'</span><span class="o">);</span>
+    <span class="n">scheduleMicrotask</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">'future2.micro1'</span><span class="o">));</span>
+  <span class="o">}).</span><span class="na">then</span><span class="o">((</span><span class="n">_</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">'future2.3'</span><span class="o">));</span>
+
+  <span class="n">scheduleMicrotask</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">'micro2'</span><span class="o">));</span>
+
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">'future3'</span><span class="o">);</span>
+  <span class="o">}).</span><span class="na">then</span><span class="o">((</span><span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Future</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">'future3.1'</span><span class="o">));</span>
+  <span class="o">}).</span><span class="na">then</span><span class="o">((</span><span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">'future3.2'</span><span class="o">);</span>
+  <span class="o">});</span>
+
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">'future4'</span><span class="o">));</span>
+  <span class="n">scheduleMicrotask</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">'micro3'</span><span class="o">));</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">'end main'</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Gotowy?</p>
+
+<p>Oto prawidłowa odpowiedź:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. start main
+2. end main
+3. micro1
+4. micro2
+5. micro3
+6. future2
+7. future2.1
+8. future2.2
+9. future2.3
+10. future2.micro1
+11. future3
+12. future3.2
+13. future4
+14. future3.1
+15. future1
+</code></pre></div></div>
+
+<p>Jak do tego doszło? Główne zasady dla przypomnienia:</p>
+<ol>
+  <li>Kod synchroniczny nie może zostać przerwany.</li>
+  <li>Gdy Event Loop dostaje sterowanie to najpierw uruchamia wszystkie microtaski na kolejce.</li>
+  <li>Future muszą czekać aż kolejka microtasków się opróżni.</li>
+  <li>Wywołanie <em>then</em> działa w sposób synchroniczny, Event Loop nie dostaje jeszcze możliwości dalszego sterowania.</li>
+  <li><code class="language-plaintext highlighter-rouge">Future.delayed</code> jest opóźniony.</li>
+</ol>
+
+<h1 id="async--await">async / await</h1>
+
+<p>Standardowa składnia do pracy z kodem asynchronicznym ma dwie zasadnicze wady:</p>
+
+<ol>
+  <li>Wspomniana już <strong>obsługa wyjątków</strong> w której musimy pamiętać z jakiego mechanizmu skorzystać. Blok <em>try-catch</em> dla kody synchronicznego i <em>catchError</em> dla asynchronicznego. Jest to rozwiązanie podatne na błędy programisty.</li>
+  <li><strong>Trudny w śledzeniu kod</strong>. Chcąc prześledzić kolejność wykonania funkcji należy się dodatkowo skupić na wszystkich obiektach <em>future</em> i ich własnym łańcuchu wywołań <em>then</em>.</li>
+</ol>
+
+<p>A co gdyby istniał mechanizm, który rozwiązuje oba te problemy? Możliwość czytania dowolnego kodu od góry do dołu, bez znaczenia czy jest synchroniczny, czy asynchroniczny. Łapania błędów w ustandaryzowany sposób nawet gdy jest uruchamiany przez <em>Event Loop</em>. To nie mrzonka, a najprawdziwszy fakt. Dart dostarcza programiście dwa krótkie słowa kluczowe, które sprawiają, że kod zawsze wygląda jakby był przetwarzany synchronicznie.</p>
+
+<p>Ta dodatkowa składnia to <strong>async</strong> i <strong>await</strong>. Nie dają one co prawda nowych możliwości w kontekście funkcjonalnym, a jedynie wprowadzają cukier składniowy (<strong>syntatic sugar</strong>), aby kod był czytelniejszy i bardziej utrzymywalny.</p>
+
+<h2 id="async">async</h2>
+
+<p>Słowo kluczowe <strong>async</strong> służy do oznaczenia funkcji jako asynchronicznej. Użycie go niesie za sobą następujące implikacje:</p>
+
+<ol>
+  <li>Typ zwracany przez funkcję automatycznie staje się <em>Future&lt;T&gt;</em>. Nawet w najprostszym scenariuszu jak ten:</li>
+</ol>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">getOne</span><span class="p">(</span><span class="o">)</span> <span class="n">async</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>Uruchomienie takiej funkcji zakończy się błędem, bo zwrócony typ to nie <em>int</em>, a <em>Future&lt;int&gt;</em>. Poprawny kod:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">getOne</span><span class="o">()</span> <span class="n">async</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="o">;</span>
+</code></pre></div></div>
+
+<ol>
+  <li>W obrębie funkcji dozwolne jest używanie słowa kluczowego <strong>await</strong>. Bez <em>async</em> nie ma <em>await</em>. Jak <em>yin</em> i <em>yang</em>.</li>
+</ol>
+
+<h2 id="await">await</h2>
+
+<p>Zadaklarowałeś funkcję jako asynchroniczną i co dalej? Masz teraz pełne prawo do potraktowania dowolnego obiektu <em>future</em> składnią <strong>await</strong>. W gruncie rzeczy jest to taki <em>then</em> na sterydach.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'dart:async'</span><span class="o">;</span>
+
+<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"1"</span><span class="o">);</span>
+
+  <span class="k">try</span> <span class="o">{</span>
+    <span class="n">await</span> <span class="n">Future</span><span class="o">(()</span> <span class="o">{</span>
+      <span class="n">print</span><span class="o">(</span><span class="s">"2"</span><span class="o">);</span>
+      <span class="kt">int</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"future"</span><span class="o">);</span>
+    <span class="o">});</span>
+  <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">"3"</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="n">print</span><span class="o">(</span><span class="s">"4"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1
+2
+3
+4
+</code></pre></div></div>
+
+<p>Kod czytany od góry do dołu, łapiący asynchroniczny wyjątek i nie wymagający żadnego skupienia żeby poprawnie wskazać jaka będzie kolejność printowania. O to właśnie chodziło. <em>await</em> nakazuje aby poczekać na pełne wykonanie kodu asynchronicznego i dopiero gdy się on zakończy przejdzie dalej.</p>
+
+<p>Nie jest to jednak jakby się mogło wydawać instrukcja blokująca nasz jedyny wątek. Napotykając na <em>await</em> następuje zwolnienie wykonania i przekazanie kontroli do <em>Event Loop</em>. Analogicznie jak dla <em>then</em>, bo w praktyce on tutaj jest, a jedynie ukrywa się za ładniejszą składnią.</p>
+
+<h1 id="zachłanny-microtask">Zachłanny microtask</h1>
+
+<p>Bardziej jako ciekawostka, niż coś co przydaje się w codziennym pisaniu aplikacji jest zachłanność kolejek. A raczej kolejki, która ma wyższy priorytet - <em>Microtask Queue</em>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'dart:async'</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">attentionPlease</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">scheduleMicrotask</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">attentionPlease</span><span class="o">());</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">print</span><span class="o">(</span><span class="s">"start main"</span><span class="o">);</span>
+  <span class="n">Future</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"future is now"</span><span class="o">));</span>
+
+  <span class="n">scheduleMicrotask</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"micro1"</span><span class="o">));</span>
+  <span class="n">attentionPlease</span><span class="o">();</span>
+  <span class="n">scheduleMicrotask</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"micro2"</span><span class="o">));</span>
+
+  <span class="n">print</span><span class="o">(</span><span class="s">"end main"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>start main
+end main
+micro1
+micro2
+???
+</code></pre></div></div>
+
+<p>Gdzie się podział <em>future is now</em>? Czeka na swoją kolej aż wyższa kolejka się opróżni. Nie nastąpi to jednak nigdy bo gdy tylko kończy się jedno zadanie, dodawane jest kolejne i tak w nieskończoność.</p>
+
+<ol>
+  <li>Wypisz <strong>start main</strong></li>
+  <li>Dodaj <em>future</em> do kolejki</li>
+  <li>Dodaj <em>microtask</em> <strong>micro1</strong> do kolejki</li>
+  <li>Uruchom funkcję która doda nowy <em>microtask</em> do kolejki</li>
+  <li>Dodaj <em>microtask</em> <strong>micro2</strong> do kolejki</li>
+  <li>Wypisz <strong>end main</strong></li>
+  <li>Uruchom microtask: <strong>micro1</strong></li>
+  <li>Uruchom microtask, który dodaje do kolejki następny microtask</li>
+  <li>Uruchom microtask: <strong>micro2</strong></li>
+  <li>Uruchom microtask, który dodaje do kolejki następny microtask</li>
+  <li>Uruchom microtask, który dodaje do kolejki następny microtask</li>
+  <li>Uruchom microtask, który dodaje do kolejki następny microtask</li>
+</ol>
+
+<p>… i tak w nieskończoność dopóki ręcznie nie zamkniemy programu. <em>Future</em> najzwyczajniej w świecie nie ma szansy zostać podjętym przez <em>Event Loop</em>. Zapomniany na wieki. Problem można łatwo rozwiązać poprzez … nieużywanie <code class="language-plaintext highlighter-rouge">scheduleMicrotask</code> jeśli nie jest to całkowicie niezbędne.</p>
+
+<h1 id="podsumowanie">Podsumowanie</h1>
+
+<p>Dart pomimo tego, że jest jednowątkowy to radzi sobie świetnie z przetwarzaniem instrukcji i zachowaniem responsywności swojego jedynego wątku. Zadania nie wymagające czasu pracy procesora jak ruch sieciowy, czy operacje na plikach wykonują się z boku i tylko w odpowiednim momencie dorzucają nowe zdarzenia do <em>Event Loop</em>. Kieruje on i decyduje o tym co ma się teraz wykonać z uwzględnieniem dwóch podległych kolejek. Pisz kod z wykorzystaniem <em>async/await</em>, aby ograniczyć ryzyko błędów i ułatwić sobie powrót do takiego kodu za jakiś czas. To na prawdę działa.</p>
+
+<p>Jest to pierwszy wpis z serii dotyczącej przetwarzanie instrukcji w aplikacjach Flutterowych. W najbliższym czasie spodziewaj się kontynuacji, która zachwieje faktem wykonywania tylko jednej instrukcji w danym czasie, nawet pomimo wspomnianej już kika razy jednowątkowości. Do następnego!</p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fasync-dart-event-loop-futures%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Asynchroniczny+Dart+-+Event+Loop%2C+Futures%2C+async%2Fawait%20https%3A%2F%2Frykowski.dev%2Fblog%2Fasync-dart-event-loop-futures%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/async-dart-event-loop-futures/&title=Asynchroniczny+Dart+-+Event+Loop%2C+Futures%2C+async%2Fawait%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Asynchroniczny+Dart+-+Event+Loop%2C+Futures%2C+async%2Fawait%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/async-dart-event-loop-futures/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="Asynchroniczny Dart - Isolates" href="/blog/async-dart-isolates/">
+            <p>Poprzedni wpis</p>
+            Asynchroniczny Dart - Isolates
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="HookWidget, czyli Flutterowe hooki" href="/blog/flutter-hooks/">
+            <p>Następny wpis</p>
+            HookWidget, czyli Flutterowe hooki
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>

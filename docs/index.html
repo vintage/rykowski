@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>rykowski.dev | Flutter Blog o programowaniu aplikacji mobilnych</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="rykowski.dev" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Flutter Blog o programowaniu aplikacji mobilnych" />
+<meta property="og:description" content="Flutter Blog o programowaniu aplikacji mobilnych" />
+<link rel="canonical" href="https://rykowski.dev/" />
+<meta property="og:url" content="https://rykowski.dev/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<link rel="next" href="https://rykowski.dev/page/2" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/","headline":"rykowski.dev","name":"rykowski.dev","description":"Flutter Blog o programowaniu aplikacji mobilnych","@type":"WebSite","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/triangular.jpeg " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <div class="home">
+
+    <div id="main" class="call-out"
+         style="background-image: url('/assets/img/pexels/triangular.jpeg')">
+        <h1> <font color="#5FC9F8">Flutter</font><br /><small>Blog o programowaniu aplikacji mobilnych</small> </h1>
+    </div>
+
+    <div class="posts">
+    
+    <div class="post-teaser">
+        
+        <span>
+          <header>
+            <h1>
+              <a aria-label="Asynchroniczny Dart - Isolates" class="post-link" href="/blog/async-dart-isolates/">
+                Asynchroniczny Dart - Isolates
+              </a>
+            </h1>
+            
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Lipiec
+        
+      2020
+    </p></div>
+
+          </header>
+          
+              <div class="excerpt">
+                  
+                     Równoległe przetwarzania w Darcie? Jak najbardziej możliwe! Rozbijmy skorupę jednowątkowości dzięki dodatkowej mocy dostarczanej przez izolaty. Jednowątkowość z wieloma wątkami.
+                  
+              </div>
+          
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+        
+        <span>
+          <header>
+            <h1>
+              <a aria-label="Asynchroniczny Dart - Event Loop, Futures, async/await" class="post-link" href="/blog/async-dart-event-loop-futures/">
+                Asynchroniczny Dart - Event Loop, Futures, async/await
+              </a>
+            </h1>
+            
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Czerwiec
+        
+      2020
+    </p></div>
+
+          </header>
+          
+              <div class="excerpt">
+                  
+                     Dart jako język jednowątkowy jest w stanie wykonywać tylko jedną operację w danym czasie. Jedna za drugą. Brzmi powolnie? Nic z tych rzeczy! Dowiedz się jak działa Event Loop i kod asynchroniczny.
+                  
+              </div>
+          
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+        
+        <span>
+          <header>
+            <h1>
+              <a aria-label="HookWidget, czyli Flutterowe hooki" class="post-link" href="/blog/flutter-hooks/">
+                HookWidget, czyli Flutterowe hooki
+              </a>
+            </h1>
+            
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Maj
+        
+      2020
+    </p></div>
+
+          </header>
+          
+              <div class="excerpt">
+                  
+                     Nie lubisz StatefulWidgetów za ich rozwarstwienie na dwie klasy, lub z jakiegokolwiek innego powodu, a mimo to musisz wykonać kod w sposób niemożliwy dla StatelessWidgeta? Daj szansę hookom i HookWidgetowi, który robi to samo ale lepiej.
+                  
+              </div>
+          
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+        
+        <span>
+          <header>
+            <h1>
+              <a aria-label="Nawigowanie między ekranami - Navigator" class="post-link" href="/blog/flutter-navigation/">
+                Nawigowanie między ekranami - Navigator
+              </a>
+            </h1>
+            
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Listopad
+        
+      2019
+    </p></div>
+
+          </header>
+          
+              <div class="excerpt">
+                  
+                     Niemal każda aplikacja mobilna składa się z wielu ekranów po których wędruje użytkownik w trakcie jej używania. Ekran startowy, lista z przedmiotami, czy detal prezentujący szczegółowe dane o wybranym obiekcie. Dzięki Flutterowi nawigacja jest prosta i przyjazna - wszystko za sprawą wbudowanego Navigatora.
+                  
+              </div>
+          
+      </span>
+    </div>
+    
+    <div class="post-teaser">
+        
+        <span>
+          <header>
+            <h1>
+              <a aria-label="Zarządzanie stanem aplikacji - Provider" class="post-link" href="/blog/flutter-state-management-provider/">
+                Zarządzanie stanem aplikacji - Provider
+              </a>
+            </h1>
+            
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Sierpień
+        
+      2019
+    </p></div>
+
+          </header>
+          
+              <div class="excerpt">
+                  
+                     Każda średnia i duża aplikacja we Flutterze wymaga narzędzia do zarządzania stanem globalnym. Kiedy go potrzebujesz i dlaczego stan lokalny to za mało? Poznaj Providera - bibliotekę, która ułatwia proces do granic możliwości.
+                  
+              </div>
+          
+      </span>
+    </div>
+    
+</div>
+
+
+<div class="pagination">
+    <div class="previous">
+        
+        
+        
+        <!-- < previous -->
+        <a aria-label="Poprzednia strona" href=""
+           style="visibility:hidden" class="button">
+            <span><i class="fa fa-chevron-left"></i></span>
+            Poprzednia strona
+        </a>
+    </div>
+
+    <div class="page_number">
+        1 / 2
+    </div>
+
+    <div class="next">
+        
+        <!-- next > -->
+        <a aria-label="Następna strona" href="/page/2"
+            class="button">
+            Następna strona
+            <span><i class="fa fa-chevron-right"></i></span>
+        </a>
+
+        
+        
+    </div>
+</div>
+
+
+
+
+</div>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>

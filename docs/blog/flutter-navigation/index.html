@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/flutter-navigation/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Nawigowanie między ekranami - Navigator | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Nawigowanie między ekranami - Navigator" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Niemal każda aplikacja mobilna składa się z wielu ekranów po których wędruje użytkownik w trakcie jej używania. Ekran startowy, lista z przedmiotami, czy detal prezentujący szczegółowe dane o wybranym obiekcie. Dzięki Flutterowi nawigacja jest prosta i przyjazna - wszystko za sprawą wbudowanego Navigatora." />
+<meta property="og:description" content="Niemal każda aplikacja mobilna składa się z wielu ekranów po których wędruje użytkownik w trakcie jej używania. Ekran startowy, lista z przedmiotami, czy detal prezentujący szczegółowe dane o wybranym obiekcie. Dzięki Flutterowi nawigacja jest prosta i przyjazna - wszystko za sprawą wbudowanego Navigatora." />
+<link rel="canonical" href="https://rykowski.dev/blog/flutter-navigation/" />
+<meta property="og:url" content="https://rykowski.dev/blog/flutter-navigation/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-11-30T00:00:00+01:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/flutter-navigation/","headline":"Nawigowanie między ekranami - Navigator","dateModified":"2019-11-30T00:00:00+01:00","datePublished":"2019-11-30T00:00:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-navigation/"},"description":"Niemal każda aplikacja mobilna składa się z wielu ekranów po których wędruje użytkownik w trakcie jej używania. Ekran startowy, lista z przedmiotami, czy detal prezentujący szczegółowe dane o wybranym obiekcie. Dzięki Flutterowi nawigacja jest prosta i przyjazna - wszystko za sprawą wbudowanego Navigatora.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/triangular.jpeg " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Nawigowanie+mi%C4%99dzy+ekranami+-+Navigator" class="title">Nawigowanie między ekranami - Navigator</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Listopad
+        
+      2019
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>Myśląc o aplikacji mobilnej wyobrażasz sobie najprawdopodobniej kafelek na wyświetlaczu telefonu, który możesz stuknąć w celu uruchomienia programu na pełnym ekranie. W zależności od szybkości urządzenia już po chwili widzisz to czego się spodziewasz, czyli aplikację. A właściwie to jej <strong>ekran startowy (początkowy)</strong>.</p>
+
+<p><strong>Ekran startowy</strong>. Tak właśnie nazwiemy pierwszy widok, który jest nam prezentowany tuż po uruchomieniu się aplikacji. I tak dla <em>Twittera</em> będzie to ściana z tweetami, w <em>Messengerze</em> lista kontaktów z którymi ostatnio korespondowaliśmy, a w <em>Uberze</em> panel do zamówienia podwózki. Oczywista oczywistość.</p>
+
+<blockquote>
+  <p>Oni to wiedzą Kocie.</p>
+</blockquote>
+
+<p>Co jednak zrobisz, gdy powiem Ci, że aplikacja składa się z reguły z wielu ekranów, a ten startowy to dopiero początek? Że możesz przechodzić do różnych miejsc przy użyciu przycisków, menu, czy gestów? Weźmy takiego Messengera. Możesz wejść w szczegóły konwersacji, aby ją odczytać, czy napisać nową wiadomość do rozmówcy, a nawet przejść do ekranu z relacjami swoich znajomych.</p>
+
+<blockquote>
+  <p>…</p>
+</blockquote>
+
+<p>Wzruszysz ramionami, lub weźmiesz mnie za durnia, bo przecież <strong>KAŻDA</strong> aplikacja udostępnia możliwość nawigowania między różnymi sekcjami i nie trzeba o tym pisać wstępu. Dobrze się składa, przejdźmy do działania!</p>
+
+<p><img src="/assets/img/blog/navigator/logo.png" alt="logo.png" /></p>
+
+<h2 id="navigator">Navigator</h2>
+
+<p>Skoro nawigacja między ekranami jest tak kluczowa dla każdej aplikacji mobilnej, to czy Flutter ułatwia developerem zmierzenie się z tym problemem? Czy może potrzebujemy doinstalować zewnętrzną zależność, która ogra za nas wszelkie trudy? Zamknij <strong>pubspec.yaml</strong>, nie potrzebujemy niczego ponad sam framework, który z pudełka dostarcza widget (a jakże) <code class="language-plaintext highlighter-rouge">Navigator</code> upraszający cały proces do granic możliwości.</p>
+
+<p>Czym tak właściwie jest <code class="language-plaintext highlighter-rouge">Navigator</code>? Najprościej mówiąc, jest to widget, który wewnątrz siebie zarządza listą dzieci (widgetów) w formie tzw. <strong>stosu</strong> oraz udostępnia spójny interfejs do wkładania i zdejmowania elementów właśnie poprzez stos. A ten cały stos? To popularna struktura danych (spokojnie!) polegająca na tym, że zaczynamy z “pustym stołem” na który wykładamy (<strong>push</strong>) karty w sposób jedna na drugą, przykrywając je w całości. Gdy stos będzie zawierał kilka kart, jako jego użytkownik mamy dostęp tylko do karty na samym wierzchu. W przypadku gdy chcemy dostać się głębiej - musimy najpierw zrzucić (<strong>pop</strong>) karty powyżej. Ot i cała filozofia stosu.</p>
+
+<p><img src="/assets/img/blog/navigator/stack.png" alt="logo.png" /></p>
+
+<blockquote>
+  <p>Screen 1 jest na samym dole stosu, a Screen 4 na samej górze co gwarantuje mu to, że jest aktualnie widocznym ekranem. Wkładając nowy ekran znajdzie się on na górze stosu, a jeśli chcielibyśmy ponownie wyświetlić Screen 1 to musimy najpierw pozrzucać w nicość ekrany ponad nim (zaczynając od samej góry).</p>
+</blockquote>
+
+<p>Stos w Navigatorze różni się od przedstawionego opisu wyłącznie tym, że zamiast kart operujemy ekranami. Wkładamy je i zdejmujemy, zawsze widząc wyłącznie ekran, który znajduje się na samej górze stosu. Ten wrzucony na niego jako ostatni.</p>
+
+<p>Demistyfikację Navigatora i sposobu jego działania możemy uznać za zakończoną. Wiesz już w teorii jak działa i jesteś gotowy na mięcho - praktyczne użycie w aplikacji, które udowodni, że temat nie jest tak płytki jak może się to teraz wydawać.</p>
+
+<h2 id="portal">Portal</h2>
+
+<p>Zacznijmy od początku, czyli od ekranu startowego. Stworzymy w tym celu aplikację o roboczej nazwie <strong>Portal</strong>, którą będziemy rozwijać przez dalszą część wpisu o dodatkowe mechaniki i sposoby nawigowania.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">runApp</span><span class="o">(</span><span class="n">MaterialApp</span><span class="o">(</span>
+    <span class="nl">home:</span> <span class="n">RouteOne</span><span class="o">(),</span>
+  <span class="o">));</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">RouteOne</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+        <span class="nl">child:</span> <span class="n">Column</span><span class="o">(</span>
+          <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+          <span class="nl">children:</span> <span class="o">[</span>
+            <span class="n">Text</span><span class="o">(</span><span class="s">"Navigator Demo"</span><span class="o">),</span>
+            <span class="n">RaisedButton</span><span class="o">(</span>
+              <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Push"</span><span class="o">),</span>
+              <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">{},</span>
+            <span class="o">),</span>
+          <span class="o">],</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Pamiętasz jak wspominałem o “pustym stole” stosu na starcie? To nie do końca prawda w projekcie pisanym we Flutterze. Użytkownik uruchamiający aplikację widzi przecież ekran z tekstem i przyciskiem, a nie czarną dziurę. Stos nie jest więc wcale pusty! Magia? Technologia! Parametr <code class="language-plaintext highlighter-rouge">home</code> przekazany do <code class="language-plaintext highlighter-rouge">MaterialApp</code> wkłada wskazany widget na stos przy starcie, tak by zainicjalizować ekran początkowy. Wygodne, bo po co robić to ręcznie, prawda?</p>
+
+<p>Po uruchomieniu aplikacji powinienieś zobaczyć poniższy widok. Przycisk rzecz jasna nie działa - nie zaprogramowaliśmy co dokładnie ma się wydarzyć po kliknięciu. A skoro tego nie zrobiliśmy to przycisk robi absolutne NIC.</p>
+
+<p><img src="/assets/img/blog/navigator/start_project.png" alt="start_project.png" /></p>
+
+<h2 id="naprzód-push">Naprzód (push)</h2>
+
+<p>Podstawową operacją w nawigowaniu jest wepchnięcie nowego ekranu na stos, a nie jego zdjęcie. Dlaczego? Bo żeby coś zrzucić ze stosu, trzeba najpierw to na niego dodać. Prosta logika w moim wykonaniu jest prosta. Co więc uczynimy w tym momencie? Wepchniemy nowy ekran na stos! A ekran to nic innego jak dowolny widget, a skoro dowolny - to nie musimy nawet tworzyć dla niego osobnej klasy. Wepchniemy na stos bezpośrednio zlepek widgetów - tak aby udowodnić że można tam wrzucić dosłownie cokolwiek.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RaisedButton</span><span class="o">(</span>
+  <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Push"</span><span class="o">),</span>
+  <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="n">Navigator</span><span class="o">.</span><span class="na">push</span><span class="o">(</span>
+      <span class="n">context</span><span class="o">,</span>
+      <span class="n">MaterialPageRoute</span><span class="o">(</span>
+        <span class="nl">builder:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">Center</span><span class="o">(</span>
+          <span class="nl">child:</span> <span class="n">RaisedButton</span><span class="o">(</span>
+            <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Pop"</span><span class="o">),</span>
+            <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">{},</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">},</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Implementacja wygląda dość oczywiście. Wywołujemy funkcję <code class="language-plaintext highlighter-rouge">Navigator.push</code>, której zadaniem jak nazwa sugeruje jest wrzucenie nowego ekranu na stos (czyli jego wyświetlenie). Pierwszym parametr to <code class="language-plaintext highlighter-rouge">context</code>, który jest przekazywany do metody <code class="language-plaintext highlighter-rouge">build</code> naszego widgeta, drugi natomiast wydaje się bardziej interesujący i mniej zrozumiały. Mieliśmy przecież wrzucić widget, a wcale tak to nie wygląda.</p>
+
+<p>Czyżbym znowu nie powedział całej prawdy o nawigacji? Masz mnie. Navigator zawiera stos ekranów, jednak ekranem jest obiekt typu <code class="language-plaintext highlighter-rouge">PageRoute</code>, a nie bezpośrednio nasz widget docelowy. Oficjalnie przyjęte nazewnictwo jest takie, że na stosie znajdują się <strong>routes</strong> (ścieżki?), jednak można śmiało zamiennie używać słowa ekran, czy też strona, które są bardziej adekwatne w naszym ojczystym języku.</p>
+
+<p>Skoro “oszustwo” ze ścieżkami zostało wyjaśnione to co tu się właściwie dzieje? Tworzymy nową instancję widgeta <code class="language-plaintext highlighter-rouge">MaterialPageRoute</code>, który działa na zasadzie tzw. <em>buildera</em>. Nie otrzymuje on jak to zwykle bywa parametru <code class="language-plaintext highlighter-rouge">child</code>, lecz funkcję <code class="language-plaintext highlighter-rouge">builder</code>, która dynamicznie buduje niezbędne drzewo w odpowiednim momencie (gdy zachodzi proces nawigacji). Zadaniem funkcji jest de facto zwrócenie pełnego drzewa widgetów na nowym ekranie, który za moment zostanie wyświetlony użytkownikowi.</p>
+
+<p>Sam w sobie <code class="language-plaintext highlighter-rouge">MaterialPageRoute</code> dostarcza jeszcze jedną ważną składową do naszej aplikacji - animację. Ekran nie jest chamsko podmieniany na nowy jak w maszynie stanowej, zamiast tego dostajemy ładną animację przejścia, która dostosowuje się do aktualnej platformy, aby jak najlepiej odwzorować natywne niuanse. Możesz rzecz jasna napisać własną animację przejścia poprzez rozszerzenie bazowego <code class="language-plaintext highlighter-rouge">PageRoute</code> i cieszyć się w pełni dostosowanym doznaniem, lub ewentualnie skorzystać z wbudowanego <code class="language-plaintext highlighter-rouge">CupertinoPageRoute</code>, który wymusi animację typu <em>iOS</em> na wszystkich dostępnych platformach. Wybór należy do Ciebie, jedyne co trzeba zrobić to podmienić wywołanie <code class="language-plaintext highlighter-rouge">MaterialPageRoute</code> na własną klasę.</p>
+
+<p><img src="/assets/img/blog/navigator/material_animation.gif" alt="material_animation.gif" /></p>
+
+<blockquote>
+  <p>Animacja Material w stylu Android</p>
+</blockquote>
+
+<p><img src="/assets/img/blog/navigator/cupertino_animation.gif" alt="cupertino_animation.gif" /></p>
+
+<blockquote>
+  <p>Animacja Cupertino w stylu iOS</p>
+</blockquote>
+
+<h2 id="widget-per-ekran">Widget per ekran</h2>
+
+<p>Mimo tego, że podczas nawigacji możemy wepchnąć dowolne drzewo z widgetami jako nowy ekran to dobra praktyka mówi - nie rób tego. Serio. Zamiast tego stwórz pachnący nowością widget (klasę) i w nim umieśc to co dokładnie chcesz narysować. Tak nakazuje przyzwoitość. Dlaczego? Żeby kod był łatwiej utrzymywalny i czytelniejszy, ale również dlatego, że nigdy nie wiesz z jakiego miejsca w aplikacji będzie można się dostać do danego ekranu w przyszłości. Dzisiaj jest to prosty przycisk, jutro zarząd chciałby dodatkowe menu po lewej stronie, a za miesiąc użytkownik będzie smagał palcem po ekranie rysując odpowiednie gesty nawigacyjne, które zaprowadzą go również do ekranu docelowego.</p>
+
+<blockquote>
+  <p>Stosuj się do zasady “Nowy ekran, nowy widget”, a będziesz szczęśliwszym programistom. Zaufaj mi i całej społeczności Flutterowej.</p>
+</blockquote>
+
+<p>Wierzę, że dałeś się przekonać do dobrego i jesteś gotowy na drobny refaktoring w kodzie. Stworzymy odseparowany widget na nasz drugi ekran, tak by był łatwo dostępny z dowolnego miejsca w kodzie:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">RouteTwo</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+        <span class="nl">child:</span> <span class="n">RaisedButton</span><span class="o">(</span>
+          <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Pop"</span><span class="o">),</span>
+          <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">{},</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>I oczywiście użyjmy <code class="language-plaintext highlighter-rouge">RouteTwo</code> zamiast bezpośredniego drzewa podczas przejścia między ekranami:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RaisedButton</span><span class="o">(</span>
+  <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Push"</span><span class="o">),</span>
+  <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="n">Navigator</span><span class="o">.</span><span class="na">push</span><span class="o">(</span>
+      <span class="n">context</span><span class="o">,</span>
+      <span class="n">MaterialPageRoute</span><span class="o">(</span>
+        <span class="nl">builder:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">RouteTwo</span><span class="o">(),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">},</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<h2 id="wstecz-natywnie">Wstecz (natywnie)</h2>
+
+<p>Połowa operacji na stosie za nami. Wpychamy na niego nowy ekran, więc umiemy chodzić do przodu. W niektórych aplikacjach może to nawet wystarczyć. Użytkownik nawiguje przed siebie i nie jest zainteresowany tym co już było, lub nawet gdy jest - nie dajemy mu szansy powrotu.</p>
+
+<p>Czy aby jednak na pewno nie możemy się w aktualnej wersji cofnąć do ekranu startowego? Przycisk <em>Pop</em>  nie jest w stanie nam pomóc, bo nie został oprogramowany. Musimy jednak pamiętać o systemie operacyjnym uruchamiającym program, który sam z siebie dostarcza mechanizm cofania. Nawet w sytuacji gdy programista sam nie uwzględni takiej możliwości. Dziękuję panie <em>System Operacyjny</em> za zrobienie tego za mnie!</p>
+
+<p>Mowa oczywiście o <strong>przycisku cofania</strong> w Androidzie, zarówno tym sprzętowym jak i wirtualnym. Użytkownik zawsze ma możliwość wduszenia strzałki wstecz, która zrzuci aktualny ekran ze stosu i cofnie użytkownika do poprzedniego ekranu, lub jeśli takowego nie ma - zaprezentuje pulpit urządzenia, który jest poza naszą kontrolą. Podobnie sytuacja wygląda na iOS, gdzie cofamy się przy użyciu gestu pociągnięcia za ekran od lewej do prawej.</p>
+
+<blockquote>
+  <p>Pamiętaj o tym i trzymaj zawsze z tyłu głowy, że nawet gdy nie udostępnisz przycisku cofnięcia to system zrobi to za Ciebie. Zupełnie jak przeglądarka internetowa która również posiada przyciski do nawigowania, bez znaczenia jaką stronę aktualne wyświetla.</p>
+</blockquote>
+
+<h2 id="wstecz-pop">Wstecz (pop)</h2>
+
+<p>Nie jesteśmy jednak zdani wyłącznie na cofanie z poziomu systemu. Tworząc interfejs przyjazny użytkownikowi trafimy w końcu na sytuację w której chcemy dać możliwość cofnięcia się przy użyciu własnej kontrolki, lub programowo np. ekran czasowy, ktory dostępny jest tylko przez 5 sekund po których następuje cofnięcie (ponosi mnie fantazja).</p>
+
+<p>Czy tak się da? Nie może by inaczej, wszystko pod programistyczną kontrolą! Nawet sama operacja jest łatwiejsza niż wrzucanie nowego ekranu, bo nie musimy mówić co zrzucamy. Mówimy po prostu - zrzuć ten ekran, zapomnij o nim na wieki.</p>
+
+<p>Zaaplikuj poniższy kod na klasie <code class="language-plaintext highlighter-rouge">RouteTwo</code>, aby możliwa była pełna nawigacja przy użyciu elementów wewnątrz aplikacji.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RaisedButton</span><span class="o">(</span>
+  <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Pop"</span><span class="o">),</span>
+  <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="n">Navigator</span><span class="o">.</span><span class="na">pop</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+  <span class="o">},</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Trudno cokolwiek tutaj objaśniać. Wywołujemy funkcję <code class="language-plaintext highlighter-rouge">Navigator.pop</code> z aktualnym kontekstem i gotowe. Ekran zostaje zrzucony, uruchamia się animacja, lądujemy na ekranie poprzedzającym. Łatwiej się nie da.</p>
+
+<h2 id="ścieżki-nazwane">Ścieżki nazwane</h2>
+
+<p>Większe aplikacje zawierające dużą liczbę ekranów rządzą się swoimi prawami. O ile przedstawione sposoby nawigacji są uniwersalne i zadziałają w aplikacji o dowolnej złożoności, to często rezygnuje się ze standardowego <code class="language-plaintext highlighter-rouge">Navigator.push</code> na rzecz <code class="language-plaintext highlighter-rouge">Navigator.pushNamed</code>. Wynik działania obu tych funkcji jest identyczny - użytkownik trafia na nowy ekran - różni się jedynie sposób wywołania. Pierwsza funkcja wymaga manualnego utworzenia <code class="language-plaintext highlighter-rouge">PageRoute</code> wraz z powiązanym widgetem za każdym razem gdy chcemy przeprowadzić nawigację. Druga natomiast potrzebuje wyłącznie nazwy ścieżki do której chcemy przekierować użytkownika.</p>
+
+<p>Spójrz na oba wywołania i sam zdecyduj które jest przyjemniejsze w utrzymywaniu:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="n">option1</span> <span class="o">=</span> <span class="n">Navigator</span><span class="o">.</span><span class="na">push</span><span class="o">(</span>
+  <span class="n">context</span><span class="o">,</span> <span class="n">MaterialPageRoute</span><span class="o">(</span>
+    <span class="nl">builder:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">RouteTwo</span><span class="o">(),</span>
+  <span class="o">)</span>
+<span class="o">);</span>
+
+<span class="kd">var</span> <span class="n">option2</span> <span class="o">=</span> <span class="n">Navigator</span><span class="o">.</span><span class="na">pushNamed</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="s">"/route-two"</span><span class="o">);</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Złota zasada programowania: <strong>“Im mniej kodu tym lepiej”</strong></p>
+</blockquote>
+
+<p>Zalety <code class="language-plaintext highlighter-rouge">push</code>:</p>
+<ul>
+  <li>Istnieje</li>
+  <li>Nieznacznie łatwiej przekazywać dane podczas nawigowania</li>
+</ul>
+
+<p>Zalety <code class="language-plaintext highlighter-rouge">pushNamed</code>:</p>
+<ul>
+  <li>Mniej kodu</li>
+  <li>Brak bezpośredniej zależności (importy) między różnymi widgetami</li>
+  <li>Mniej kodu × każde wywołanie nawigacji</li>
+  <li>Również istnieje</li>
+</ul>
+
+<p>Jeśli więc <em>pushNamed</em> jest tak dobry i bezkonkurencyjny to wymieńmy przycisk z pierwszego ekranu, aby skorzystał z wymienionych dobrodziejstw.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RaisedButton</span><span class="o">(</span>
+  <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Push"</span><span class="o">),</span>
+  <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="n">Navigator</span><span class="o">.</span><span class="na">pushNamed</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="s">"/route-two"</span><span class="o">);</span>
+  <span class="o">},</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Voilà! Przycisk przestał teraz całkowicie działać i nie wykonuje po stuknięciu żadnej akcji. Co do #####? Czyli że niby zapis jest krótszy i w ogóle, ale nie robi tego co powinien? Daj mi chwilę a wszystko wytłumaczę, momencik. Z grubsza chodzi o to, że nawigujemy do ścieżki <strong>/route-two</strong>, ale skąd Flutter ma wiedzieć gdzie to jest? Potrzebujemy skonfigurować drogowskazy do ścieżek dostępnych w obrębie aplikacji.</p>
+
+<p><img src="/assets/img/blog/navigator/signpost.jpg" alt="signpost.jpg" /></p>
+
+<p>Co z tymi drogowskazami? Jak powiedzieć aplikacji, że pod daną ścieżką znajduje się dany widget? Nic prostszego! Wszystkie obsługiwane ścieżki aplikacji należy zdefiniować na poziomie <code class="language-plaintext highlighter-rouge">MaterialApp</code> poprzez parametr <code class="language-plaintext highlighter-rouge">routes</code>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">runApp</span><span class="o">(</span><span class="n">MaterialApp</span><span class="o">(</span>
+  <span class="nl">home:</span> <span class="n">RouteOne</span><span class="o">(),</span>
+  <span class="nl">routes:</span> <span class="o">{</span>
+    <span class="s">"/route-two"</span><span class="o">:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">RouteTwo</span><span class="o">(),</span>
+  <span class="o">}</span>
+<span class="o">));</span>
+</code></pre></div></div>
+
+<p>Każdy ekran aplikacji musi zostać zadeklarowany właśnie w obrębie <code class="language-plaintext highlighter-rouge">routes</code>. Jedynym wyjątkiem jest ekran startowy, który bez naszego udziału rejestruje się pod adresem <strong>/</strong>. Jeśli sam spróbujesz go zarejestrować otrzymasz błąd kompilacji, mówiący o tym, że operacja nie ma sensu, bo framework robi to za Ciebie.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">runApp</span><span class="o">(</span><span class="n">MaterialApp</span><span class="o">(</span>
+  <span class="nl">home:</span> <span class="n">RouteOne</span><span class="o">(),</span>
+  <span class="nl">routes:</span> <span class="o">{</span>
+    <span class="c1">// The entry below is added automatically by the framework itself</span>
+    <span class="c1">// do not add it manually to avoid compilation errors</span>
+    <span class="s">"/"</span><span class="o">:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">RouteOne</span><span class="o">(),</span>
+    <span class="s">"/route-two"</span><span class="o">:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">RouteTwo</span><span class="o">(),</span>
+  <span class="o">}</span>
+<span class="o">));</span>
+</code></pre></div></div>
+
+<p>Automatyczna rejestracja nie jest jednak magiczna i związana jest z parametrem <code class="language-plaintext highlighter-rouge">home</code>. W przypadku gdy parametr został podany to widget ten będzie wyświetlany dla ścieżki <strong>/</strong>, jednak jeśli go pominiemy to musimy powiedzieć frameworkowi która ze ścieżek jest początkową, poprzez parametr <code class="language-plaintext highlighter-rouge">initialRoute</code>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">runApp</span><span class="o">(</span><span class="n">MaterialApp</span><span class="o">(</span>
+  <span class="nl">initialRoute:</span> <span class="s">"/"</span><span class="o">,</span>
+  <span class="nl">routes:</span> <span class="o">{</span>
+    <span class="s">"/"</span><span class="o">:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">RouteOne</span><span class="o">(),</span>
+    <span class="s">"/route-two"</span><span class="o">:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">RouteTwo</span><span class="o">(),</span>
+  <span class="o">}</span>
+<span class="o">));</span>
+</code></pre></div></div>
+
+<p>W taki właśnie sposób odbywa się dodawanie nowych ekranów w sposób nazwany. A jak zrzucić ekran nowym sposobem? <code class="language-plaintext highlighter-rouge">Navigator.popNamed</code>? Nic z tych rzeczy! Operacja typu <em>pop</em> zrzuca aktualny ekran ze stosu, nie musi wiedzieć jaka jest jego nazwa. Zostajemy więc przy starym i sprawdzonym <code class="language-plaintext highlighter-rouge">Navigator.pop</code>.</p>
+
+<h2 id="przekazywanie-danych">Przekazywanie danych</h2>
+
+<p>Jeśli chodzi o sam sposób nawigowania między ekranami to pokryliśmy wszystkie niezbędne aspekty. Do przodu, do tyłu, z małą ilością kodu, bez powtarzania się po całej aplikacji. Czego można chcieć więcej? Cóż, kojarzysz adresy URL w aplikacjach webowych jak np: <strong>/users/16</strong>, który wyświetla profil użytkownika o identyfikatorze <em>16</em>? Można zmienić identyfikator na inny dowolny i zobaczyć profil innego użytkownika (o ile istnieje). Dla każdego profilu URL (ścieżka) jest ciut inna, jednak wszystkie kierują na ten sam ekran - różnią się jedynie dane które prezentujemy.</p>
+
+<p>Podobna zależność zachodzi w aplikacjach mobilnych. Weźmy uprzednio wspomnianego Messengera prezentującego listę kontaktów z którymi ostatnio pisaliśmy. Stuknięcie w pozycję kontaktu zabiera nas do konwersacji z daną osobą, a nie do listy wszystkich możliwych wysłanych wiadomości. Ekran szczegółowy otrzymuje informację od ekranu poprzedzającego o identyfikatorze rozmowy którą musi wyświetlić. Przecież Facebook nie jest w stanie zaimplementować całkowicie osobnych ekranów, gdzie jeden będzie prezentował rozmowę z Panią Tereską (pozdrawiam!), a drugi z Panem Krzysiem.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">BaseChatWidget</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{}</span>
+<span class="kd">class</span> <span class="nc">ChatTereska</span> <span class="kd">extends</span> <span class="n">BaseChatWidget</span> <span class="o">{}</span>
+<span class="kd">class</span> <span class="nc">ChatKrzysio</span> <span class="kd">extends</span> <span class="n">BaseChatWidget</span> <span class="o">{}</span>
+<span class="kd">class</span> <span class="nc">ChatMyself</span> <span class="kd">extends</span> <span class="n">BaseChatWidget</span> <span class="o">{}</span>
+<span class="c1">// ...</span>
+</code></pre></div></div>
+
+<p>W celu wysłania dynamicznych danych do ekranu posłużymy się tzw. <strong>argumentami</strong>. Jest to obiekt przekazywany jako parametr o nazwie <strong>arguments</strong> do funkcji <code class="language-plaintext highlighter-rouge">Navigator.pushNamed</code> i parametryzujący ekran o zdefiniowane dane. A czym mogą być dane? Czymkolwiek. Listą, liczbą, ciągiem znaków, obiektem … Generalnie - wszystkim. Najczęściej jest to  jednak obiekt typu klucz-wartość, którego elastyczność idealnie wpasowuje się w scenariusz nawigacji.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Totally valid</span>
+<span class="n">Navigator</span><span class="o">.</span><span class="na">pushNamed</span><span class="o">(</span><span class="s">"/route"</span><span class="o">,</span> <span class="nl">arguments:</span> <span class="o">[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">]);</span>
+<span class="n">Navigator</span><span class="o">.</span><span class="na">pushNamed</span><span class="o">(</span><span class="s">"/route"</span><span class="o">,</span> <span class="nl">arguments:</span> <span class="mi">1</span><span class="o">);</span>
+<span class="c1">// Most popular</span>
+<span class="n">Navigator</span><span class="o">.</span><span class="na">pushNamed</span><span class="o">(</span><span class="s">"/route"</span><span class="o">,</span> <span class="nl">arguments:</span> <span class="o">{</span>
+  <span class="s">"name"</span><span class="o">:</span> <span class="s">"John"</span><span class="o">,</span>
+  <span class="s">"age"</span><span class="o">:</span> <span class="mi">16</span><span class="o">,</span>
+<span class="o">});</span>
+</code></pre></div></div>
+
+<p>Tak będzie wyglądał nasz nowy przycisk wysyłający użytkownika do drugiego ekranu. Wysyłamy argumenty z imieniem i wiekiem, które docelowo wyświetlimy na nowym ekranie.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RaisedButton</span><span class="o">(</span>
+  <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Push"</span><span class="o">),</span>
+  <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="n">Navigator</span><span class="o">.</span><span class="na">pushNamed</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="s">"/route-two"</span><span class="o">,</span> <span class="nl">arguments:</span> <span class="o">{</span>
+      <span class="s">"name"</span><span class="o">:</span> <span class="s">"Kamil"</span><span class="o">,</span>
+      <span class="s">"age"</span><span class="o">:</span> <span class="mi">31</span><span class="o">,</span>
+    <span class="o">});</span>
+  <span class="o">},</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Tyle wystarczy jeśli chodzi o wysłanie danych do nowego ekranu. Dostarczamy argumenty, które są następnie automatycznie przekierowywane do punktu docelowego. Wszystko gra, ale pozostaje pewna kluczowa rzecz która chodzi Ci zapewne po głowie. Co z tego, że dane zostały wysłane skoro nie wiadomo jak je odczytać? Co z tego, że wysłałem rakietę w kosmos jeśli nie mam z nią absolutnie żadnego kontaktu? Czas na …</p>
+
+<h2 id="odbieranie-danych">Odbieranie danych</h2>
+
+<p>… odebranie danych w ścieżce docelowej i zrobienie z nich pożytku. Nawet jeśli nie takiego turbo prawdziwego, to chociaż wyświetlimy dane na ekranie. Tak, żeby udowodnić realność odbioru - w prawdziwej aplikacji zrobisz z danymi co Ci <del>się podoba</del> biznes wymyśli.</p>
+
+<p>Wyciąganie argumentów odbywa się poprzez przydługie wywołanie <code class="language-plaintext highlighter-rouge">ModalRoute.of(context).settings.arguments</code>. W ten sposób uzyskujemy dostęp do obiektu który przekazaliśmy chwilę wcześniej w zawołaniu <code class="language-plaintext highlighter-rouge">Navigator.pushNamed</code>. A skoro tak - jesteśmy gotowi do wyświetlenia przekazanych danych na ekranie.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">RouteTwo</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Get the data</span>
+    <span class="n">Map</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">,</span> <span class="kd">dynamic</span><span class="o">&gt;</span> <span class="n">args</span> <span class="o">=</span> <span class="n">ModalRoute</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">context</span><span class="o">).</span><span class="na">settings</span><span class="o">.</span><span class="na">arguments</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="n">name</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="s">"name"</span><span class="o">];</span>
+    <span class="kd">final</span> <span class="n">age</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="s">"age"</span><span class="o">];</span>
+
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+        <span class="nl">child:</span> <span class="n">Column</span><span class="o">(</span>
+          <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+          <span class="nl">children:</span> <span class="o">[</span>
+            <span class="c1">// Display arguments data</span>
+            <span class="n">Text</span><span class="o">(</span><span class="s">"Name: </span><span class="si">$name</span><span class="s">"</span><span class="o">),</span>
+            <span class="n">Text</span><span class="o">(</span><span class="s">"Age: </span><span class="si">$age</span><span class="s">"</span><span class="o">),</span>
+            <span class="n">RaisedButton</span><span class="o">(</span>
+              <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Pop"</span><span class="o">),</span>
+              <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">Navigator</span><span class="o">.</span><span class="na">pop</span><span class="o">(</span><span class="n">context</span><span class="o">),</span>
+            <span class="o">),</span>
+          <span class="o">],</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="zakaz-powrotu">Zakaz powrotu</h2>
+
+<p>Ostatnią rzeczą związaną z nawigacją we Flutterze którą chcę zaprezentować jest możliwość reagowania na sytuację w której użytkownik wycofuje się z ekranu. Nie ma znaczenia, czy robi to udostępnionym przyciskiem w aplikacji który pod spodem wywołuje <code class="language-plaintext highlighter-rouge">Navigator.pop</code>, przyciskiem fizycznym, wirtualnym, czy nawet gestem. Jako programista jesteś w stanie bardzo łatwo zapobiec możliwości cofania się do poprzedniego ekranu - służy do tego widget <code class="language-plaintext highlighter-rouge">WillPopScope</code>. Jego działanie jest banalnie proste i wymagana jedynie zdefiniowania parametru <code class="language-plaintext highlighter-rouge">onWillPop</code>, który jest funkcją zwracającą informację, czy cofnięcie może zostać wykonane. Inaczej mówiąc jeśli zdefiniowana przez nasz funkcja zwróci <code class="language-plaintext highlighter-rouge">true</code> to użytkownik zostanie poprawnie cofnięty, jeśli jednak zwrócimy <code class="language-plaintext highlighter-rouge">false</code> to nic się nie wydarzy. Użytkownik zostanie na dotychczasowym ekranie.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">WillPopScope</span><span class="o">(</span>
+  <span class="nl">onWillPop:</span> <span class="n">async</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="kc">false</span><span class="o">,</span>
+  <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"No popping!"</span><span class="o">),</span>
+<span class="o">);</span>
+</code></pre></div></div>
+
+<p>Czy widget ten ma sens? Po co chcielibyśmy blokować użytkownika na ekranie i nie dać mu możliwości powrotu? Okropny UX! Pełna zgoda, jednak funkcjonalność ta przydaje się do warunkowego opuszczania ekranu jak np:</p>
+<ul>
+  <li>możesz z niego wyjść dopiero po upływie X czasu</li>
+  <li>po wduszeniu wstecz pojawia komunikat potwierdzający, aby użytkownik nie stracił postępu z obecnego ekranu</li>
+  <li>jakikolwiek inny scenariusz</li>
+</ul>
+
+<p>Sprawdźmy w praktyce jak działa <code class="language-plaintext highlighter-rouge">WillPopScope</code> na prostym przykładzie. Dodamy do aplikacji nowy ekran (route) o nazwie <code class="language-plaintext highlighter-rouge">TrapRoute</code>, który uwięzi użytkownika na swoich włościach do momentu aż nie kliknie 5 razy wstecz na telefonie. Nie udostępnimy tam żadnego przycisku cofania - niech będzie to prawdziwa pułapka na nieświadomą ofiarę!</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">runApp</span><span class="o">(</span><span class="n">MaterialApp</span><span class="o">(</span>
+  <span class="nl">initialRoute:</span> <span class="s">"/"</span><span class="o">,</span>
+  <span class="nl">routes:</span> <span class="o">{</span>
+    <span class="s">"/"</span><span class="o">:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">RouteOne</span><span class="o">(),</span>
+    <span class="s">"/route-two"</span><span class="o">:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">RouteTwo</span><span class="o">(),</span>
+    <span class="s">"/trap"</span><span class="o">:</span> <span class="o">(</span><span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">Trap</span><span class="o">(),</span>
+  <span class="o">}</span>
+<span class="o">));</span>
+</code></pre></div></div>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">RouteTwo</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">args</span> <span class="o">=</span> <span class="n">ModalRoute</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">context</span><span class="o">).</span><span class="na">settings</span><span class="o">.</span><span class="na">arguments</span><span class="o">;</span>
+
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">Column</span><span class="o">(</span>
+        <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceAround</span><span class="o">,</span>
+        <span class="nl">crossAxisAlignment:</span> <span class="n">CrossAxisAlignment</span><span class="o">.</span><span class="na">stretch</span><span class="o">,</span>
+        <span class="nl">children:</span> <span class="o">[</span>
+          <span class="n">Text</span><span class="o">(</span><span class="s">"Name: </span><span class="si">$args</span><span class="s">['name']"</span><span class="o">),</span>
+          <span class="n">Text</span><span class="o">(</span><span class="s">"Age: </span><span class="si">$args</span><span class="s">['name']"</span><span class="o">),</span>
+          <span class="n">RaisedButton</span><span class="o">(</span>
+            <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Pop"</span><span class="o">),</span>
+            <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">Navigator</span><span class="o">.</span><span class="na">pop</span><span class="o">(),</span>
+          <span class="o">),</span>
+          <span class="c1">// New button for trap route</span>
+          <span class="n">RaisedButton</span><span class="o">(</span>
+            <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Trap"</span><span class="o">),</span>
+            <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">Navigator</span><span class="o">.</span><span class="na">pushNamed</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="s">"/trap"</span><span class="o">),</span>
+          <span class="o">),</span>
+        <span class="o">]</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Trap</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="kt">int</span> <span class="n">backCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">body:</span> <span class="n">WillPopScope</span><span class="o">(</span>
+          <span class="nl">onWillPop:</span> <span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+            <span class="n">backCount</span><span class="o">++;</span>
+
+            <span class="k">return</span> <span class="n">backCount</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="o">;</span>
+          <span class="o">},</span>
+          <span class="nl">child:</span> <span class="n">Image</span><span class="o">.</span><span class="na">network</span><span class="o">(</span>
+            <span class="s">"https://rykowski.dev/assets/img/blog/navigator/trap.jpg"</span><span class="o">,</span>
+            <span class="nl">width:</span> <span class="mi">300</span><span class="o">,</span>
+            <span class="nl">height:</span> <span class="mi">250</span><span class="o">,</span>
+          <span class="o">)</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Pułapka gotowa. Użytkownik po wejściu w ekran musi 5x kliknąć wstecz aby z niego wyjść. Zgodnie z planem, ale nie rób tak w produkcyjnej aplikacji. Użytkownicy nie lubią tego typu niespodzianek i jeśli nie mogą się cofnąć to po prostu zamykają cała aplikację. A tego powstrzymać nie możemy.</p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-navigation%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Nawigowanie+mi%C4%99dzy+ekranami+-+Navigator%20https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-navigation%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/flutter-navigation/&title=Nawigowanie+mi%C4%99dzy+ekranami+-+Navigator%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Nawigowanie+mi%C4%99dzy+ekranami+-+Navigator%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/flutter-navigation/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="HookWidget, czyli Flutterowe hooki" href="/blog/flutter-hooks/">
+            <p>Poprzedni wpis</p>
+            HookWidget, czyli Flutterowe hooki
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="Zarządzanie stanem aplikacji - Provider" href="/blog/flutter-state-management-provider/">
+            <p>Następny wpis</p>
+            Zarządzanie stanem aplikacji - Provider
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>

@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/flutter-monetization-admob/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Zarabianie i monetyzacja - Reklamy AdMob | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Zarabianie i monetyzacja - Reklamy AdMob" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Darmowe aplikacje mobilne również na siebie zarabiają. W jaki sposób? Istnieje wiele strategii monetyzacyjnych, a jedną z nich są reklamy AdMob w różnych wariantach. Pierwszy krok w zarabianiu na aplikacji pisanej we Flutter." />
+<meta property="og:description" content="Darmowe aplikacje mobilne również na siebie zarabiają. W jaki sposób? Istnieje wiele strategii monetyzacyjnych, a jedną z nich są reklamy AdMob w różnych wariantach. Pierwszy krok w zarabianiu na aplikacji pisanej we Flutter." />
+<link rel="canonical" href="https://rykowski.dev/blog/flutter-monetization-admob/" />
+<meta property="og:url" content="https://rykowski.dev/blog/flutter-monetization-admob/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-07-17T00:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/flutter-monetization-admob/","headline":"Zarabianie i monetyzacja - Reklamy AdMob","dateModified":"2019-07-17T00:00:00+02:00","datePublished":"2019-07-17T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-monetization-admob/"},"description":"Darmowe aplikacje mobilne również na siebie zarabiają. W jaki sposób? Istnieje wiele strategii monetyzacyjnych, a jedną z nich są reklamy AdMob w różnych wariantach. Pierwszy krok w zarabianiu na aplikacji pisanej we Flutter.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/triangular.jpeg " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Zarabianie+i+monetyzacja+-+Reklamy+AdMob" class="title">Zarabianie i monetyzacja - Reklamy AdMob</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Lipiec
+        
+      2019
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>Pisanie aplikacji mobilnych to świetna zabawa. Tworzenie czegoś z myślą, że będzie używane przez setki, tysiace, a nawet miliony ludzi pobierajacych naszą apkę ze sklepów to mieszanka dumy, ekscytacji i czystego fun-u. Tak to wygląda przynajmiej z naszej strony - czysto technicznej. Wypuszczamy aplikację, dopieszczamy ją o nowe funkcjonalności i rozwiązujemy najbardziej krytyczne, lub uciążliwe błędy. Zastanawiałeś się jednak czy jest coś więcej? Coś ważniejszego?</p>
+
+<blockquote>
+  <p>Druga strona medalu - strona biznesowa.</p>
+</blockquote>
+
+<p>Może to zabrzmieć brutalnie, zwłaszcza z ust programisty - przecież jestem jednym z Was! <strong>Warstwa biznesowa jest stroną nadrzędna, a technologia powinna służyć biznesowi w osiąganiu wyznaczonych celów</strong>, nie na odwrót. Jakie cele może mieć biznes? Bo cele techniczne są nam w większości znane:</p>
+
+<ol>
+  <li>Czysty i schludny kod</li>
+  <li>Korzystanie z nowych narzędzi/frameworków</li>
+  <li>Posiadanie dużego pokrycia testami</li>
+  <li>Automatyzacja powtarzających się czynności (np. build aplikacji)</li>
+  <li>I wiele, wiele więcej.</li>
+</ol>
+
+<blockquote>
+  <p>Biznes ma jeden kluczowy cel - zarabianie $$$. To między innymi z tych środków bierze się Twoja i moja wypłata.</p>
+</blockquote>
+
+<h2 id="sposoby-monetyzacji">Sposoby monetyzacji</h2>
+
+<p>O tym właśnie przeczytasz w tym wpisie. O zarabianiu na aplikacjach mobilnych, czyli jak monetyzować użytkowników. O tym w jaki sposób “wycisnąć” trochę grosza, nawet z hobbistycznego projektu robionego po godzinach. W sposób etyczny i co ważniejsze nienachalny, abyś nie wstydził się swojego dzieła przed (nie)znajomymi. W jaki sposób można zarabiać na aplikacji? W przeróżny taki jak:</p>
+
+<ul>
+  <li>sprzedaż danych o użytkowniku</li>
+  <li>kopanie kryptowaluty</li>
+  <li>mikropłatności</li>
+</ul>
+
+<p>Najłatwiejszym jednak środkiem zarabiania, jeśli przyjmiemy że głównym kryterium doboru jest zainwestowany czas w implementację okazują się reklamy. Jest to również często pierwsza myśl, gdy zaczynasz myśleć o jakiejkolwiek monetyzacji - czy to aplikacja webowa, czy mobilna. Pomimo faktu, że nikt ich nie lubi, to <strong>Polsat</strong> od lat korzysta z tego patentu i ma się całkiem nieźle. Podstawa to umiejętne nimi zarządzanie i używanie we właściwym momencie. Dlaczego akurat reklamy, a nie którakolwiek pozycja z powyższej listy?</p>
+
+<ol>
+  <li>Sprzedaż danych o użytkowniku wymaga abyś dane te gdzieś zbierał, przetwarzał i miał klienta który chętnie za nie zapłaci. Problemem jest fakt, że nie masz takiego klienta. No i wynalazek w stylu <strong>RODO</strong> mocno komplikuje cały proceder.</li>
+  <li>Kopanie kryptowaluty na telefonie użytkownika jest mało wydajne, zajeżdza baterię, a przede wszystkim jest mało etyczne - chyba, że go powiadomisz o tym fakcie, ale wtedy pewnie odinstaluje aplikację. Kto celowo chciałby dołączyć do farmy zombie?</li>
+  <li>Mikropłatości uważam za świetną strategię monetyzacyjną, jednak wpierw trzeba mieć na tyle dobry produkt, aby móc przekonać użytkownika do barteru <strong>twarda waluta -&gt; wirtualne dobro</strong>. Myślisz że Twój aktualny produkt jest na tyle dobry, aby sprzedawać wirtualne złote monety komuś innemu niż mamie i tacie?</li>
+</ol>
+
+<p>Mamy pełną jasność - zaczynamy od reklam. Reklama reklamie jednak nierówna, o czym przekonasz się w nieco dalszej części wpisu.</p>
+
+<p><img src="/assets/img/blog/admob/logo.png" alt="logo.png" /></p>
+
+<h2 id="zrozumieć-reklamy">Zrozumieć reklamy</h2>
+
+<p>Wyświetlanie reklam w aplikacji mobilnej opiera się na udostępnianiu określonej przestrzeni ekranu reklamodawcy, który wstawi w to miejsce odpowiednią wizualizację. Zupełnie jak w świecie rzeczywisitym - reklamodawca wynajmuje przestrzeń reklamową np. bilboard przy drodze szybkiego ruchu i rozwiesza na nim swój plakat reklamujący nową Hondę, czy też firma, która wykupuje od pewnej stacji telewizyjnej czas antenowy, podczas którego zajmie ekran widza swoim krótkim spotem.</p>
+
+<p>Wszystko fajnie, koncept jest stosunkowo jasny. Pozostaje jedynie kwestia <strong>znalezienia reklamodawcy</strong>, który zechciałby rozwiesić u nas swój “plakat reklamowy”. Nie musimy na szczęście szukać zainteresowanej firmy na własną rękę, dzięki czemu odpada nam konieczność implementacji własnego silnika reklamowego, rozliczeniowego i miliona innych zbędnych z punktu widzenia aplikacji funkcjonalności. Wystarczy wybrać jednego z istniejących dostawców reklam, zintegrować się z jego SDK i zacząć wyświetlać reklamy.</p>
+
+<h2 id="dostawcy-reklam-sieć-reklamowa">Dostawcy reklam (sieć reklamowa)</h2>
+
+<p>Wybrać dostawcę? Ale którego? Na rynku dostępne są dziesiątki dostawców - mniejszych i większych - spośród których można wybrać tego najlepszego. A najlepszy to ten, który płaci najwięcej za wyświetlenia. <strong>Nie tylko.</strong> Uwzględnijmy kilka pomniejszych kwestii które koniecznie należy mieć na uwadze:</p>
+
+<ol>
+  <li><strong>Wypłacalność dostawcy</strong>. Szkoda byłoby zbierać wirtualne złotówki przez kilka miesięcy, a w momencie wypłaty dowiedzieć się, że nic się nie dzieje i nasze środki pozostaną wirtualne na wieki.</li>
+  <li>Istnieje <strong>szczegółowa dokumentacja</strong> opisująca proces integracyjny. Oszczędzi nam to czasu na osadzanie reklam metodą prób i błędów, gdzie nigdy nie mamy pewności że wszystko zrobiliśmy jak należy.</li>
+  <li>Dojrzałe i <strong>rozbudowane SDK</strong>. Takie które umożliwi nam wyświetlanie różnych rodzajów kreacji reklamowych (o tym za chwilę), czy możliwość sterowania dopasowaniem reklamy. Jeśli masz aplikację o tematyce motoryzacyjnej to dopasowana reklama będzie dotyczyć m.in. nowej Hondy, a nie leku na hemoroidy.</li>
+  <li><strong>Fill rate</strong>, czyli duża ilość reklamodawców wewnątrz sieci. Dostawca nie osadza własnych reklam, lecz reklamy zlecone przez reklamodawców. Im większa liczba takich reklamodawców, tym większa szansa na to, że będziemy mieli jakąkolwiek reklamę do wyświetlenia. Co nam z tego, że dostawca płaci 3x więcej niż konkurencja, skoro reklamę wyświetlimy 1 na 100 użytkowników. Przykładowo Pepsi zleca kampanię reklamową przez AdMob, a AdMob zleca swoim partnerom (Tobie) wyświetlanie reklamy.</li>
+</ol>
+
+<p>Kwestii tego typu jest zdecydowanie więcej, dlatego aby oszczędzić nam obojgu czasu przejdę już do sedna. Skorzystaj z <strong>AdMob</strong>. Jest to sieć reklamowa, której właścicielem jest <strong>Google</strong> (tak samo jak Fluttera), istnieje na rynku niemal od zawsze i jest rozwiązaniem, którego sam używam w swoich aplikacjach. Bardziej zarekomendować nie potrafię - <strong>Wszyscy mają AdMob - mam i ja</strong>.</p>
+
+<h2 id="konto-w-admob">Konto w AdMob</h2>
+
+<p>Rozpoczęcie dowolnej integracji wymaga niemal zawsze utworzenia stosownego konta na platformie docelowej. Nie inaczej jest w przypadku AdMoba - konto wymagane, nic nie poradzisz. Proces jest prosty, niefinezyjny, nie warto nad nim dogłębnie rozpisywać - do brzegu!</p>
+
+<ol>
+  <li>Przejdź na stronę <a href="https://admob.google.com/home/">https://admob.google.com/home/</a> i kliknij w przycisk <strong>Sign up</strong></li>
+  <li>Zaloguj się swoim kontem Google i wypełnij krótki formularz:
+    <ul>
+      <li>Country or territory: Poland</li>
+      <li>Time zone: (UTC+01:00) Prague</li>
+      <li>Billing currency: Polish Zloty (PLN)</li>
+      <li>Zaakceptuj regulamin (po ewentualnym przeczytaniu)</li>
+    </ul>
+  </li>
+  <li>Odpowiedz <em>No</em> na wszystkie pytania o <del>spam</del> mailing</li>
+  <li>Podaj numer telefonu w celu weryfikacji (preferuję SMS) - nie zostaną naliczone żadne koszty.</li>
+  <li>Konto w platformie utworzone, zostałeś <strong>partnerem</strong>.</li>
+</ol>
+
+<p>Masz już własne konto, ale to za mało. Musisz dodatkowo stworzyć nową aplikację z poziomu panelu administracyjnego. W tym celu z bocznego menu wybierz <strong>Aplikacje &gt; Dodaj aplikację</strong> i postępuj zgodnie z krokami formularza. Podaj nazwę swojej aplikacji oraz docelową platformę. <strong>Zaraz, zaraz.</strong> Jak to platformę? Przecież aplikacja jest pisana we Flutterze, więc cross-platformowa i dostępna na obu. Oczywiście! W takim celu musisz stworzyć dwie osobne aplikacje w panelu - jedną dla Android, drugą dla iOS.</p>
+
+<p>Po podaniu podstawowych danych, możesz przejść do sekcji <strong>Jednostki reklamowe &gt; Dodaj jednostkę reklamową</strong>, aby tworzyć tzw. <strong>jednostki reklamowe</strong>. Jest to jednak krok opcjonalny, na czas wpisu będziemy korzystali z ogólnodostępnych identyfikatorów testowych.</p>
+
+<h2 id="jednostki-reklamowe">Jednostki reklamowe</h2>
+
+<p>Jednostka reklamowa to bezpośredni element, który osadzasz w aplikacji mobilnej. Każda jednostka posiada dwie podstawowe cechy: unikalny identyfikator oraz typ. Identyfikatora użyjesz w momencie wyświetlania reklamy, tak aby dostawca reklamowy wiedział, że to Ty osadzasz daną reklamę i należą Ci się za to pieniądze. Typ kreacji to taki <strong>enum</strong>, który przyjmuje jedną z trzech wartości: baner, reklama pełnoekranowa, reklama nagradzająca. O tym czym się różnią, jak i kiedy ich używać dowiesz się w kolejnej sekcji.</p>
+
+<h2 id="praktyka">Praktyka</h2>
+
+<p>Teoria reklamowa za nami, pora przetestować je na żyjącym organizmie. Osadźmy błyszczący baner w aplikacji i zacznijmy zarabiać (nie)godziwe pieniądze! <strong>STOP</strong>. Pozostał jeszcze jeden krok aby móc eksperymentować z jednostkami reklamowymi - musimy przeprowadzić wstępną konfiguracjo-integrację:</p>
+
+<h3 id="wstępna-konfiguracja">Wstępna konfiguracja</h3>
+
+<ol>
+  <li>W pliku <em>pubspec.yaml</em> dodaj nową zależność i zainstaluj ją:
+    <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">dependencies</span><span class="pi">:</span>
+  <span class="na">firebase_admob</span><span class="pi">:</span> <span class="s">0.9.0+1</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Nie wiesz jak zainstalować dodaną zależność? W konsoli przejdź do katalogu projektu i wykonaj następującą komendę:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flutter pub get
+</code></pre></div></div>
+
+<ol>
+  <li><em>[Android]</em> W pliku <strong>android/app/src/main/AndroidManifest.xml</strong> w obrębie węzła <em>&lt;application&gt;</em> dodaj informację o identyfikatorze aplikacji z AdMob. Zastąp <code class="language-plaintext highlighter-rouge">[ADMOB_APP_ID]</code> wartością z panelu AdMob, którą znajdziesz wybierając aplikację z listy i przechodząc do sekcji jej ustawień.</li>
+</ol>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;meta-data</span>
+    <span class="na">android:name=</span><span class="s">"com.google.android.gms.ads.APPLICATION_ID"</span>
+    <span class="na">android:value=</span><span class="s">"[ADMOB_APP_ID]"</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p><img src="/assets/img/blog/admob/admob_dashboard.png" alt="admob_dashboard.png" /></p>
+
+<p>Jeśli masz problem z poprawnym umiejscowieniem znacznika, lub nie masz pewności czy wstawiłeś go w odpowiednim miejscu - spójrz na przykładowy plik <a href="https://github.com/vintage/flutter_demo_ads/blob/master/android/app/src/main/AndroidManifest.xml#L13:L15">AndroidManifest.xml</a>.</p>
+
+<ol>
+  <li><em>[iOS]</em> W pliku <strong>ios/Runner/Info.plist</strong> dodaj nową parę klucz-wartość. Zastąp <code class="language-plaintext highlighter-rouge">[ADMOB_APP_ID]</code> wartością z panelu AdMob, którą znajdziesz w identyczny sposób jak w przypadku konfiguracji Androida.</li>
+</ol>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;key&gt;</span>GADApplicationIdentifier<span class="nt">&lt;/key&gt;</span>
+<span class="nt">&lt;string&gt;</span>[ADMOB_APP_ID]<span class="nt">&lt;/string&gt;</span>
+</code></pre></div></div>
+
+<p>Przykładowy plik <a href="https://github.com/vintage/flutter_demo_ads/blob/master/ios/Runner/Info.plist#L44:L45">Info.plist</a>.</p>
+
+<blockquote>
+  <p>Pamiętaj aby podając identyfikatory aplikacji, platformy zgadzały się z tym co jest zapisane w panelu. Jeśli przykładowo w pliku <em>AndroidManifest.xml</em> podasz klucz pasujący do platformy <em>iOS</em> to aplikacja może przestać się uruchamiać.</p>
+</blockquote>
+
+<ol>
+  <li>Przed rozpoczęciem osadzania reklam musisz koniecznie zainicjalizować klienta reklamowego. Najprościej jest to zrobić wewnątrz metody <code class="language-plaintext highlighter-rouge">main</code> w pliku <strong>lib/main.dart</strong>.</li>
+</ol>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'dart:io'</span> <span class="kd">show</span> <span class="n">Platform</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">'package:firebase_admob/firebase_admob.dart'</span><span class="o">;</span>
+
+<span class="kd">const</span> <span class="n">ANDROID_KEY</span> <span class="o">=</span> <span class="s">"[ANDROID_KEY]"</span><span class="o">;</span>
+<span class="kd">const</span> <span class="n">IOS_KEY</span> <span class="o">=</span> <span class="s">"[IOS_KEY]"</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kt">String</span> <span class="n">appId</span> <span class="o">=</span> <span class="n">Platform</span><span class="o">.</span><span class="na">isAndroid</span> <span class="o">?</span> <span class="n">ANDROID_KEY</span> <span class="o">:</span> <span class="n">IOS_KEY</span><span class="o">;</span>
+  <span class="n">FirebaseAdMob</span><span class="o">.</span><span class="na">instance</span><span class="o">.</span><span class="na">initialize</span><span class="o">(</span><span class="nl">appId:</span> <span class="n">appId</span><span class="o">);</span>
+  
+  <span class="n">runApp</span><span class="o">(</span><span class="n">App</span><span class="o">());</span>
+<span class="o">}</span>
+
+<span class="c1">// ...</span>
+</code></pre></div></div>
+
+<p>Gdzie <code class="language-plaintext highlighter-rouge">[ANDROID_KEY]</code> i <code class="language-plaintext highlighter-rouge">[IOS_KEY]</code> muszą zostać podmienione na identyczne wartości jakich użyłeś odpowiednio w plikach <em>AndroidManifest.xml</em> i <em>Info.plist</em>. Przykładowy <a href="https://github.com/vintage/flutter_demo_ads/blob/master/lib/main.dart#L1-L14">main.dart</a>.</p>
+
+<p>Jeśli chodzi o wstępną konfigurację - mamy to. Jesteśmy teraz w pełni przygotowani, aby wskoczyć do kodu Fluttera i rozpocząć pisanie aplikacji demonstracyjno-reklamowej.</p>
+
+<h3 id="layout-aplikacji">Layout aplikacji</h3>
+
+<p>Layout aplikacji będzie się składać początkowo z trzech przycisków, gdzie każdy jest odpowiedzialny za wyświetlenie reklamowy odpowiedniego typu. Żadego fancy stylowania, surowy widok umożliwiający nam rozegranie partii z reklamami.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">App</span> <span class="kd">extends</span> <span class="n">StatefulWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">_AppState</span> <span class="n">createState</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="n">_AppState</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">_AppState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">App</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kt">void</span> <span class="n">showBanner</span><span class="o">()</span> <span class="o">{}</span>
+  <span class="kt">void</span> <span class="n">showInterstitial</span><span class="o">()</span> <span class="o">{}</span>
+  <span class="kt">void</span> <span class="n">showRewardVideo</span><span class="o">()</span> <span class="o">{}</span>
+
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">MaterialApp</span><span class="o">(</span>
+      <span class="nl">title:</span> <span class="s">'AdMob demo'</span><span class="o">,</span>
+      <span class="nl">home:</span> <span class="n">Scaffold</span><span class="o">(</span>
+        <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+          <span class="nl">child:</span> <span class="n">Column</span><span class="o">(</span>
+            <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+            <span class="nl">children:</span> <span class="o">[</span>
+              <span class="n">RaisedButton</span><span class="o">(</span>
+                <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Show banner"</span><span class="o">),</span>
+                <span class="nl">onPressed:</span> <span class="n">showBanner</span><span class="o">,</span>
+              <span class="o">),</span>
+              <span class="n">RaisedButton</span><span class="o">(</span>
+                <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Show interstitial"</span><span class="o">),</span>
+                <span class="nl">onPressed:</span> <span class="n">showInterstitial</span><span class="o">,</span>
+              <span class="o">),</span>
+              <span class="n">RaisedButton</span><span class="o">(</span>
+                <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Show reward video"</span><span class="o">),</span>
+                <span class="nl">onPressed:</span> <span class="n">showRewardVideo</span><span class="o">,</span>
+              <span class="o">),</span>
+            <span class="o">],</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>App</strong> od samego początku implementowany jest jako widget stanowy - <del>czuję</del> wiem, że im dalej w las tym bardziej będziemy potrzebowali zarządzać stanem. Jeśli chodzi o sam layout to jest on prosty w opór. Trzy przyciski na środku ekranu wołające powiązane funkcje, które aktualnie nic nie robią. A skoro nic nie robią to na pewno nie wyświetlają też reklam. <strong>Jeszcze!</strong></p>
+
+<p><img src="/assets/img/blog/admob/layout.png" alt="layout.png" /></p>
+
+<h2 id="wyświetlanie-reklam">Wyświetlanie reklam</h2>
+
+<p>Wyświetlanie reklamy - nie zależnie od jej typu - zawsze opiera się o identyczny scenariusz jeśli chodzi o implementację. Różnią się szczegóły, detale takie jak kiedy dokładnie pokażemy reklamę. To jednak problem czysto UX. Od strony kodu wyróżniamy dwa główne kroki do osiągnięcia celu:</p>
+
+<ol>
+  <li>Załadowanie reklamy (<strong>load</strong>) - pierwszą rzeczą jaką musimy zrobić jest wysłanie żądania do reklamodawcy (AdMob), żeby dostarczył nam kreację określonego typu. Wołamy reklamodawcę i informujemy go, że w niedługim czasie będziemy chcieli pokazać przykładowo baner i niech nam dostarczy odpowiednią wizualizację. Operacja albo się uda, albo i nie. Od czego zależy sukces? Przede wszystkim od dostępności połączenia z internetem (nie ma internetu, nie ma reklam) oraz <strong>fill rate</strong>, który omawialiśmy wyżej.</li>
+  <li>Wyświetlenie reklamy (<strong>show</strong>) - gdy reklama zostanie poprawnie załadowana nie jest automatycznie prezentowana na ekranie. Musimy sami podjąć kolejną akcję, aby pokazać ją użytkownikowi. Jest to akcja typu <em>“czysta formalność”</em> - konkretna kreacja zostałą już zaciągnięta na telefon użytkownika i oczekuje jedynie sygnału do zmaterializowania się na ekranie.</li>
+</ol>
+
+<h3 id="baner-banner">Baner (Banner)</h3>
+
+<p>Baner reklamowy, czyli pasek na pełną szerokość ekranu i określoną wysokość (32, 50, lub 90 pikseli). Wyświetlany najczęśćiej na samym dole aplikacji. Z punktu widzenia osadzania tej jednostki reklamowej - najprościej jest zlecić dobranie rozmiaru SDK, tak aby określiło odpowiednią wysokość banera (<strong>smart size</strong>). Brana jest pod uwagę w tym wypadku rozdzielczość ekranu, tak aby pomimo stale wyświetlanej reklamy zapewnić jak największy komfort użytkowania. Jeśli masz własną wizję lub nietypowy design wymagający określonego banera to możesz to prosto skonfigurować pod własne potrzeby. Jednostka charakteryzuje się łatwością osadzenia - przy starcie aplikacji wystarczy załadować reklamę i ją wyświetlić. Sama będzie zmieniała swoją zawartośc co określony interwał (<strong>rotacja reklamy</strong>), a my nie musimy się martwić niczym więcej.</p>
+
+<p><img src="/assets/img/blog/admob/banner.png" alt="banner.png" /></p>
+
+<p>W aplikacji przyjęliśmy wstępny scenariusz, że to użytkownik klika w przycisk, aby zobaczyć baner reklamowy. Tak też zróbmy poprzez odpowiednią implementację powiązanej metody:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">showBanner</span><span class="p">(</span><span class="o">)</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="kd">var</span> <span class="n">banner</span> <span class="o">=</span> <span class="n">BannerAd</span><span class="o">(</span>
+    <span class="nl">adUnitId:</span> <span class="n">BannerAd</span><span class="o">.</span><span class="na">testAdUnitId</span><span class="o">,</span>
+    <span class="nl">targetingInfo:</span> <span class="n">MobileAdTargetingInfo</span><span class="o">(),</span>
+    <span class="nl">size:</span> <span class="n">AdSize</span><span class="o">.</span><span class="na">smartBanner</span><span class="o">,</span>
+  <span class="o">);</span>
+  <span class="n">banner</span><span class="o">.</span><span class="na">listener</span> <span class="o">=</span> <span class="o">(</span><span class="n">MobileAdEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">event</span> <span class="o">==</span> <span class="n">MobileAdEvent</span><span class="o">.</span><span class="na">loaded</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">banner</span><span class="o">.</span><span class="na">show</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">};</span>
+  <span class="n">banner</span><span class="o">.</span><span class="na">load</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Sporo się tutaj dzieje jak na pierwszy raz - tak przynajmniej to wygląda. W rzeczywistości to <strong>żaden rocket science</strong>!.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="n">banner</span> <span class="o">=</span> <span class="n">BannerAd</span><span class="o">(</span>
+  <span class="nl">adUnitId:</span> <span class="n">BannerAd</span><span class="o">.</span><span class="na">testAdUnitId</span><span class="o">,</span>
+  <span class="nl">targetingInfo:</span> <span class="n">MobileAdTargetingInfo</span><span class="o">(),</span>
+  <span class="nl">size:</span> <span class="n">AdSize</span><span class="o">.</span><span class="na">smartBanner</span><span class="o">,</span>
+<span class="o">);</span>
+</code></pre></div></div>
+
+<p>Tworzymy nową instancję typu <strong>BannerAd</strong>, czyli baner reklamowy. Interesujące są argumenty które dostarczamy:</p>
+
+<ul>
+  <li><strong>adUnitId</strong> to identyfikator jednostki reklamowej do wyświetlenia. Najważniejszy z parametrów, bo to on odpowiada czy wyświetlasz swoją reklamę za którą masz płacone, czy np. sąsiada z bloku obok (też jest programistą?). Aktualna wersja kodu wykorzystuje zdefiniowaną stałą, która wyświetli baner testowy (bezpieczny, bo można go klikać do woli bez ryzyka zbanowania).</li>
+  <li><strong>targetingInfo</strong> pozwala na określenie dodatkowych wytycznych odnośnie samej reklamy, zawężenie grupy odbiorców. Możemy zdefiniować, że aplikacji używają głównie dzieci i dostaniemy reklamy wyłącznie z określonej puli. Możemy także podać listę słów kluczowych, które wiemy że pasują do obecnego użytkownika, aby zaprezentować mu lepiej dopasowaną reklamę. <strong>WIN-WIN</strong>. Ewentualnie nie definiować nic (co też robimy) - Google i tak wie wiele o użytkowniku z własnych źródeł.</li>
+  <li><strong>size</strong> określa jak się spodziewasz rozmiar reklamy. Z własnego doświadczenia polecam zawsze korzystać z <strong>AdSize.smartBanner</strong>, szkoda czasu i życia na zastanawianie się samemu jaki rozmiar dobrać, aby był adekwatny do urządzenia użytkownika. Parametr występuje tylko na reklamach typu baner.</li>
+</ul>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">banner</span><span class="o">.</span><span class="na">listener</span> <span class="o">=</span> <span class="o">(</span><span class="n">MobileAdEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">event</span> <span class="o">==</span> <span class="n">MobileAdEvent</span><span class="o">.</span><span class="na">loaded</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">banner</span><span class="o">.</span><span class="na">show</span><span class="o">();</span>
+  <span class="o">}</span>
+<span class="o">};</span>
+</code></pre></div></div>
+
+<p>Rozpoczynamy nasłuchiwanie na wszelkie zdarzenia które przytrafią się naszemu nowo utworzonemu banerowi. Z praktycznego punktu widzenia interesuje nas jeden konkretny - <strong>MobileAdEvent.loaded</strong> - który otrzymamy, gdy tylko reklama zostanie poprawnie załadowana na urządzenie. W tym momencie chcemy zrobić już tylko jedną rzecz - pokazać reklamę na ekranie. <strong>PROFIT</strong>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">banner</span><span class="o">.</span><span class="na">load</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>Rozpoczęcie procesu ładowania reklamy. Nie dostarczamy tutaj żadnych argumentów - wszystkie istotne dane zostały już określone w momencie konstruowania instancji banera. Cała obsługa tego co dzieje się podczas/po załadowaniu wizualizacji odbywa się bezpośrednio w listenerze zdefiniowanym wyżej.</p>
+
+<p>Uruchom aplikację i stuknij w przycisk <strong>Show banner</strong>. Początkowo nic się nie zadzieje, jednak po maksymalnie paru sekundach zobaczysz na dole ekranu baner z reklamą testową. <strong>Sukces!</strong> Jedyny problem jaki pozostał do rozwiązania to nienaturalność. Baner jest najczęściej ładowany i pokazywany tuż po uruchomieniu aplikacji - użytkownik nie podejmuje żadnej akcji z tym związanej. Wyrzućmy dedykowany przycisk, a funkcję <strong>showBanner</strong> zawołajmy bezpośrednio w metodzie <strong>initState</strong>, aby baner pokazał się tak szybko jak to tylko możliwe.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">_AppState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">App</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">initState</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">showBanner</span><span class="o">();</span>
+    <span class="k">super</span><span class="o">.</span><span class="na">initState</span><span class="o">();</span>
+  <span class="o">}</span>
+  <span class="c1">// ...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>SDK umożliwia pokazanie kilku banerów na jednym ekranie (np. góra+dół), jednak jest to niezgodne z polityką AdMob. Nie rób tego, jeśli nie chcesz zostać zbanowany razem ze zgromadzonymi środkami. Pamiętaj - w jednym czasie na ekranie może być widoczny tylko jeden baner!</p>
+</blockquote>
+
+<h3 id="reklama-pełnoekranowa-interstitial">Reklama pełnoekranowa (Interstitial)</h3>
+
+<p>Wariant pełnoekranowego modala całkowicie przykrywającego zawartość aplikacji. W przeciwieństwie do banera nie jest widoczny przez cały czas i to od Ciebie zależy kiedy go pokażesz - lepiej nie na starcie aplikacji bo cuchnie to tandetą i skutkuje błyskawicznym odinstalowaniem aplikacji z telefonu. Idealnym momentem są za to tzw. <strong>przerywniki</strong>. Moment w którym kończy się pewien proces/etap jak np. przejście poziomu w grze, czy odznaczenie wszystkich pozycji na wirtualnej liście jako ukończone. Wszystko zależy od konkretnej aplikacji i znalezienia złotego (ewentualnie srebrnego) punktu w którym można się wpasować z reklamą.</p>
+
+<p><img src="/assets/img/blog/admob/interstitial.png" alt="interstitial.png" /></p>
+
+<p>Warto pamiętać o tym, że lepiej pokazać reklamę użytkownikowi zadowolonemu, niż sfrustrowanemu. Stoi za tym prosty powód i wytłumaczenie. Obejrzenie reklamy obniża poziom ogólnie przyjętego szczęścia, jakakolwiek by ona nie była. <strong>Nikt nie lubi reklam</strong>. Jeśli więc postanowiłeś, że pokażesz reklamę użytkownikowi za każdym razem gdy błędnie wypełni formularz - przemyśl to. Przeleje się czara goryczy, a użytkownik wystawi Ci niepochlebną opinię w sklepie i odinstaluję aplikację na wieki wieków. <strong>Amen</strong>.</p>
+
+<p>Analogicznie jak w przypadku banera - chcemy zaprezentować reklamę użytkownikowi po stuknięciu w przycisk. Tym razem jednak zamiast małego banera, wyświetlimy pełnoekranową jednostkę która zasłoni cały dotychczasowy widok.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">showInterstitial</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">var</span> <span class="n">interstitial</span> <span class="o">=</span> <span class="n">InterstitialAd</span><span class="o">(</span>
+    <span class="nl">adUnitId:</span> <span class="n">InterstitialAd</span><span class="o">.</span><span class="na">testAdUnitId</span><span class="o">,</span>
+    <span class="nl">targetingInfo:</span> <span class="n">MobileAdTargetingInfo</span><span class="o">(),</span>
+  <span class="o">);</span>
+  <span class="n">interstitial</span><span class="o">.</span><span class="na">listener</span> <span class="o">=</span> <span class="o">(</span><span class="n">MobileAdEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">event</span> <span class="o">==</span> <span class="n">MobileAdEvent</span><span class="o">.</span><span class="na">loaded</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">interstitial</span><span class="o">.</span><span class="na">show</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">};</span>
+  <span class="n">interstitial</span><span class="o">.</span><span class="na">load</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Kod wygląda jakby znajomo prawda? To niemal kalka z funkcji <code class="language-plaintext highlighter-rouge">showBanner</code>! Tworzymy instancję reklamy <code class="language-plaintext highlighter-rouge">InterstitialAd</code>, zaczynamy nasłuchiwać zdarzeń i wysyłamy żądanie ładowania. Nic co warte byłoby dodatkowego opisu. Główna różnica polega na tym, że nie definiujemy rozmiaru kreacji. Dlaczego? Bo reklama pełnoekranowa jest pełnoekranowa aka zajmuje pełną dostępną przestrzeń ekranu. <strong>Obvious</strong>.</p>
+
+<p>Wstępna implementacja gotowa. Kliknięcie w przycisk rozpoczyna ładowanie reklamy, po czym automatycznie pojawia się na ekranie. Niby fajnie, ale znowu - nie życiowo. Nie planuję komplikować oczywiście naszej aplikacji, aby użycie kreacji tego typu miało 100% sens, jednak szczypta zmian jest mile widziana. Pamiętasz kiedy jest dobry moment na pokazanie reklamy pełnoekranowej? Gdy użytkownik zamyka pewien proces np. wygrywa kolejny poziom w grze.</p>
+
+<p>Zasymulujmy w opór prostą grę, która będzie polegała na wyborze z dostępnych kwadratów tego który ma kolor czerwony. Wiem, wiem - brzmi głupio, ale lepiej obrazuje <strong>sposób</strong> wykorzystania reklamy tego typu. Zastąp przycisk pokazujący reklamę następującym kodem, który wyświetli 4 kwadraty zielone i 1 czerwony. Kliknięcie na czerwony oznacza zwycięstwo i przejście na kolejny poziom + reklama.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Row</span><span class="o">(</span>
+  <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceEvenly</span><span class="o">,</span>
+  <span class="nl">children:</span> <span class="n">boxes</span><span class="o">,</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Dostępne kwadraty trzymane są w stanie aplikacji, aby w momencie przejścia na kolejny poziom móc je zaktualizować. Zainicjalizujmy wstępnie listę wartościami.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">_AppState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">App</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="n">List</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">boxes</span> <span class="o">=</span> <span class="o">[];</span>
+  
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">initState</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">boxes</span> <span class="o">=</span> <span class="n">getInitialBoxes</span><span class="o">();</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+  
+  <span class="n">List</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">getInitialBoxes</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">[</span>
+      <span class="n">Container</span><span class="o">(</span><span class="nl">width:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">height:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">green</span><span class="o">),</span>
+      <span class="n">Container</span><span class="o">(</span><span class="nl">width:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">height:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">green</span><span class="o">),</span>
+      <span class="n">GestureDetector</span><span class="o">(</span>
+        <span class="nl">child:</span> <span class="n">Container</span><span class="o">(</span><span class="nl">width:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">height:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">red</span><span class="o">),</span>
+        <span class="nl">onTap:</span> <span class="n">showInterstitial</span><span class="o">,</span>
+      <span class="o">),</span>
+      <span class="n">Container</span><span class="o">(</span><span class="nl">width:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">height:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">green</span><span class="o">),</span>
+      <span class="n">Container</span><span class="o">(</span><span class="nl">width:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">height:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">green</span><span class="o">),</span>
+    <span class="o">];</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="/assets/img/blog/admob/boxes_demo.gif" alt="boxes_demo.gif" /></p>
+
+<p>To jednak nie wszystko. Chcemy też mieć pewność <strong>kiedy dokładnie</strong> wyświetli się reklama - z dokładnością do teraz, a nie za sekundę-dwie. Aby to osiągnąć musimy załadować reklamę na początku gry, a w odpowiednim czasie jedynie ją wyświetlić. Wymaga to trochę zmian w kodzie aplikacji. Po pierwsze załadujmy reklamę na samym starcie, jednak bez listenera który pokaże ją gdy tylko będzie dostępna.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">_AppState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">App</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="n">InterstitialAd</span> <span class="n">interstitial</span><span class="o">;</span>
+  
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">initState</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">interstitial</span> <span class="o">=</span> <span class="n">InterstitialAd</span><span class="o">(</span>
+      <span class="nl">adUnitId:</span> <span class="n">InterstitialAd</span><span class="o">.</span><span class="na">testAdUnitId</span><span class="o">,</span>
+      <span class="nl">targetingInfo:</span> <span class="n">MobileAdTargetingInfo</span><span class="o">(),</span>
+    <span class="o">);</span>
+    <span class="n">interstitial</span><span class="o">.</span><span class="na">load</span><span class="o">();</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Dodatkowo niezbędna jest zmiana funkcji <code class="language-plaintext highlighter-rouge">showInterstitial</code>, aby nie tworzyła obiektu reklamy do załadowania - kroki te zostały już wykonane na starcie. Jedyna odpowiedzialność tej funkcji to wyświetlenie reklamy. Po pokazaniu reklamy chcemy również wygenerować nową planszę w sposób pseudolosowy. Brzmi fancy, w rzeczywistości ograniczymy się do przetasowania elementów - nie gwarantujemy, że po przetasowaniu nie trafimy znowu na ten sam rozkład.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">showInterstitial</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">boxes</span><span class="o">.</span><span class="na">shuffle</span><span class="o">();</span>
+  <span class="o">});</span>
+  <span class="n">interstitial</span><span class="o">.</span><span class="na">show</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Uruchom aplikację ponownie i wciel się w rolę gracza. Przez “<em>wciel się</em>” mam na myśli fakt, abyś udawał że zastanawiasz się który z kwadratów jest czerwony (chyba że poważnie masz z tym problem) - daj czas reklamie na załadowanie się w tle. Wybierz odpowiedni kwadracik i gotowe - reklama wyskakuje zanim zdążysz mrugnąć. Świetnie, ale co z graczem który od razu kliknie w dobry kwadracik? <strong>Nic</strong>. Z reguły proces podczas którego ładujesz reklamę jest dłuższy niż czas potrzebny na jej załadowanie - wyimaginowany problem. A nawet jeśli się zdarzy to najłatwiej się z tym po prostu pogodzić - czasem użytkownik nie zobaczy reklamy. Jest to zdecydowanie lepsze rozwiązanie niż blokowanie możliwości przejścia procesu póki nie będziesz miał gotowej reklamy.</p>
+
+<p>Jeśli przy testowaniu byłeś odpowiednio ciekawski to zauważyłeś prawdopodobnie pewien intrygujący fakt. Pierwsze zwycięstwo rzeczywiście wyświetla reklamę, jednak po jej zamknięciu i ponownej wygranej nic się dzieje. <strong>Brak reklamy to brak profitu.</strong> Dlaczego działa tylko w pierwszej próbie? Powód jest prozaiczny. Reklamę tworzysz i ładujesz tylko raz przy starcie. Jeśli pokażesz ją użytkownikowi to koniec, nie ma więcej. Nie możesz pokazać dwa razy tej samej załadowanej kreacji.</p>
+
+<p>Rozwiązaniem jest obsłużenie zdarzenia zamknięcia reklamy i utworzenie w tym momencie nowej instancji reklamowej. W takim przypadku pokażesz użytkownikowi aktualną reklamę, a tuż po zamknięciu zaczniesz ładować kolejną kreacją na przyszłość. Proste i błyskotliwe - takie rozwiązania lubię i polecam. Wymaga to jednak drobnego refaktoringu, gdyż nie mamy teraz dedykowanej funkcji która re-inicjalizuje obiekt <code class="language-plaintext highlighter-rouge">InterstitialAd</code>. W obrębie <code class="language-plaintext highlighter-rouge">initState</code> zastąp cały kod operujący na obiekcie <code class="language-plaintext highlighter-rouge">interstitial</code> wywołaniem funkcji <code class="language-plaintext highlighter-rouge">loadInterstitial</code>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@override</span>
+<span class="kt">void</span> <span class="nf">initState</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">loadInterstitial</span><span class="o">();</span>
+  <span class="c1">// ...</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loadInterstitial</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">interstitial</span> <span class="o">=</span> <span class="n">InterstitialAd</span><span class="o">(</span>
+    <span class="nl">adUnitId:</span> <span class="n">InterstitialAd</span><span class="o">.</span><span class="na">testAdUnitId</span><span class="o">,</span>
+    <span class="nl">targetingInfo:</span> <span class="n">MobileAdTargetingInfo</span><span class="o">(),</span>
+  <span class="o">);</span>
+  <span class="n">interstitial</span><span class="o">.</span><span class="na">listener</span> <span class="o">=</span> <span class="o">(</span><span class="n">MobileAdEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">event</span> <span class="o">==</span> <span class="n">MobileAdEvent</span><span class="o">.</span><span class="na">closed</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">loadInterstitial</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">};</span>
+  <span class="n">interstitial</span><span class="o">.</span><span class="na">load</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="reklama-nagradzająca-rewarded-video">Reklama nagradzająca (Rewarded video)</h3>
+
+<p>Brat bliźniak reklamy pełnoekranowej jeśli chodzi o formę prezentacji - zasłania cały ekran szukając atencji. Główna różnica polega na wyczuciu momentu w którym chcemy ją zaprezentować użytkownikowi. Bo o ile forma jest niemal identyczna, to intencja diametralnie się różni i należy być ostrożnym w jej używaniu. Jak nazwa sugeruje ma ona coś wspólnego z nagradzaniem użytkownika. Powstaje, więc <strong>transakcja wiązana</strong>: Ty dostajesz pieniądze za wyświetlenie, a użytkownik dostaje … No właśnie, co?</p>
+
+<p>To zależy. Od aplikacji. Od tego co jest w stanie zaoferować użytkownikowi w zamian za obejrzenie reklamy. Dodatkowe życie? Wirtualne złote monety? Czasowe odblokowanie pewnych funkcjonalności? Każda odpowiedź jest dobra. Musisz jedynie zaprojektować swój interfejs w taki sposób, aby użytkownik świadomie uruchomił reklamę tego typu i wiedział jaka czeka go nagroda za w pełni obejrzaną reklamę (z reguły trwają 30 sekund). SDK poinformuje Cię, czy użytkownik obejrzał reklamę w całości, czy też przerwał ją w trakcie (a wtedy nie dasz mu nagrody).</p>
+
+<p><img src="/assets/img/blog/admob/reward_video.png" alt="reward_video.png" /></p>
+
+<p>Mamy już doświadczenie z osadzaniem reklamy pełnoekranowej, tutaj implementacja będzie bardziej niż zbliżona.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@override</span>
+<span class="kt">void</span> <span class="nf">initState</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">loadRewardVideo</span><span class="o">();</span>
+  <span class="c1">// ...</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loadRewardVideo</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">RewardedVideoAd</span><span class="o">.</span><span class="na">instance</span><span class="o">.</span><span class="na">listener</span> <span class="o">=</span> <span class="o">(</span><span class="n">RewardedVideoAdEvent</span> <span class="n">event</span><span class="o">,</span> <span class="o">{</span><span class="kt">String</span> <span class="n">rewardType</span><span class="o">,</span> <span class="kt">int</span> <span class="n">rewardAmount</span><span class="o">})</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">event</span> <span class="o">==</span> <span class="n">RewardedVideoAdEvent</span><span class="o">.</span><span class="na">closed</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">loadRewardVideo</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">};</span>
+  <span class="n">RewardedVideoAd</span><span class="o">.</span><span class="na">instance</span><span class="o">.</span><span class="na">load</span><span class="o">(</span>
+    <span class="nl">adUnitId:</span> <span class="n">RewardedVideoAd</span><span class="o">.</span><span class="na">testAdUnitId</span><span class="o">,</span>
+    <span class="nl">targetingInfo:</span> <span class="n">MobileAdTargetingInfo</span><span class="o">(),</span>
+  <span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">showRewardVideo</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">RewardedVideoAd</span><span class="o">.</span><span class="na">instance</span><span class="o">.</span><span class="na">show</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Kod wygląda niemal identycznie jak w przypadku reklamy pełnoekranowej, a główna różnica polega na tym, że sami nie tworzymy instancji obiektu reklamowego. <code class="language-plaintext highlighter-rouge">RewardedVideoAd</code> udostępnia swoją instancję jako <strong>singleton</strong> poprzez <code class="language-plaintext highlighter-rouge">RewardedVideoAd.instance</code>. Jest to zabieg projektowy uniemożliwiający nam ładowania w jednym czasie więcej niż 1 reklamy nagradzającej. <em>Not a big deal</em>.</p>
+
+<p>Drugą ważną, a nawet ważniejszą rzeczą niż singletonowy interfejs jest nietypowy <strong>listener</strong>. Przyjmuje on co prawda obiekt zdarzenia (nuda), ale pojawiają się też dwa nowe parametry:</p>
+
+<ul>
+  <li><strong>rewardType</strong> - rodzaj nagrody w postaci ciągu znaków, którą otrzyma użytkownik po obejrzeniu reklamy (np. <em>monety</em>).</li>
+  <li><strong>rewardAmount</strong> - wartość/kwota nagrody w postaci liczby całkowitej, którą nagrodzisz użytkownika (np. <em>10</em>).</li>
+</ul>
+
+<p>Skąd pochodzą te wartości? Definiujesz je w momencie tworzenia nowej jednostki reklamowej z poziomu panelu administracyjnego AdMob. To od Ciebie zależy jakie wartości przyjmą i co z nimi zrobisz. W przykładzie korzystamy z <code class="language-plaintext highlighter-rouge">RewardedVideoAd.testAdUnitId</code>, który definiuje rodzaj nagrody jako <em>coins</em> o wartości równej <em>10</em> - czyli 10 wirtualnych monet za obejrzenie reklamy.</p>
+
+<p><img src="/assets/img/blog/admob/admob_dashboard_reward_video.png" alt="admob_dashboard_reward_video.png" /></p>
+
+<p>Reklama poprawnie wyświetla się na ekranie, pora do domu …</p>
+
+<p><img src="/assets/img/blog/admob/reward_video.gif" alt="reward_video.gif" /></p>
+
+<p>… <strong>nie tak szybko</strong>. Pamiętasz definicję tej jednostki reklamowej? Transakcja wiązana, nagroda dla obu stron. Póki co Ty masz nagrodę, bo reklama została obejrzana, ale co z biednym użytkownikiem? Jego czas jest <del>bezwartościowy</del> bezcenny! Naprawmy nasz błąd, wprowadzając do gry <del>bezcenne</del> bezwartościowe monety, które można pozyskać na dwa sposoby:</p>
+
+<ol>
+  <li>Przejście poziomu w grze daje użytkownikowi <strong>1</strong> monetę.</li>
+  <li>Obejrzenie reklamy daje monet <strong>10</strong>. Taki <strong>Pay-to-win</strong> nam wyszedł, a raczej <strong>Watch-to-win</strong>.</li>
+</ol>
+
+<p>Balans na bok, czas na wirtualną pseudowalutę! Na początku gry balans gracza to 0 monet.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">_AppState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">App</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kt">int</span> <span class="n">coins</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  
+  <span class="c1">// ...</span>
+</code></pre></div></div>
+
+<p>Przejście pojedynczego poziomu nagradza 1 monetą …</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">showInterstitial</span><span class="p">(</span><span class="o">)</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">coins</span><span class="o">++;</span>
+    <span class="n">boxes</span><span class="o">.</span><span class="na">shuffle</span><span class="o">();</span>
+  <span class="o">});</span>
+  <span class="c1">// ...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>… a objerzenie reklamy rozbija bank w postaci 10 monet.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">loadRewardVideo</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">RewardedVideoAd</span><span class="o">.</span><span class="na">instance</span><span class="o">.</span><span class="na">listener</span> <span class="o">=</span>
+        <span class="o">(</span><span class="n">RewardedVideoAdEvent</span> <span class="n">event</span><span class="o">,</span> <span class="o">{</span><span class="kt">String</span> <span class="n">rewardType</span><span class="o">,</span> <span class="kt">int</span> <span class="n">rewardAmount</span><span class="o">})</span> <span class="o">{</span>
+      <span class="c1">// ...</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">event</span> <span class="o">==</span> <span class="n">RewardedVideoAdEvent</span><span class="o">.</span><span class="na">completed</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
+          <span class="n">coins</span> <span class="o">+=</span> <span class="n">rewardAmount</span><span class="o">;</span>
+        <span class="o">});</span>
+      <span class="o">}</span>
+    <span class="o">};</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Pozostała jedynie kwestia wyświetlenia aktualnego salda monetowego, aby użytkownik mógł śledzić swój majątek i jego ciągły przyrost. Dodaj nowy widget do <code class="language-plaintext highlighter-rouge">Column</code> z prostym tekstem.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">children:</span> <span class="o">[</span>
+  <span class="n">Text</span><span class="o">(</span><span class="s">"Coins: </span><span class="si">$coins</span><span class="s">"</span><span class="o">),</span>
+  <span class="c1">// ...</span>
+<span class="o">]</span>
+</code></pre></div></div>
+
+<p>Ostatnią rzeczą którą warto zrobić jest zmiana tekstu na przycisku wyświetlającym reklamę z <strong>Show reward video</strong> na <strong>Get FREE coins</strong>, lub coś równie wymownego. Nikt nie lubi reklam, ale każdy lubi darmowe fanty 💰.</p>
+
+<h2 id="reklamy-produkcyjne">Reklamy produkcyjne</h2>
+
+<p>Wyświetlanie reklam testowych zadziałało bezbłędnie, ale w prawdziwej aplikacji zdecydowanie wolałbyś wyświetlać własne jednostki. W tym celu należy podmienić wystąpienia <strong>xyzAd.testAdUnitId</strong> na własne identyfikatory reklamowe wygenerowane w panelu AdMob.</p>
+
+<ol>
+  <li>Przejdź na stronę <a href="https://admob.google.com/home/">https://admob.google.com/home/</a> i zaloguj się.</li>
+  <li>Z sekcji <strong>Aplikacje</strong> wybierz aplikację dla której chcesz utworzyć jednostki reklamowe.</li>
+  <li>Z bocznego menu przejdź do sekcji <strong>Jednostki reklamowe</strong> i kliknij przycisk <strong>Zacznij teraz</strong></li>
+</ol>
+
+<p><img src="/assets/img/blog/admob/adunit_1.png" alt="adunit_1.png" /></p>
+
+<ol>
+  <li>Wybierz typ jednostki którą chcesz utworzyć (<strong>Zaawansowane reklamy natywne</strong> nie są jeszcze wspierane we Flutterze)</li>
+</ol>
+
+<p><img src="/assets/img/blog/admob/adunit_2.png" alt="adunit_2.png" /></p>
+
+<ol>
+  <li>Podaj nazwę jednostki, która będzie widoczna tylko dla Ciebie w panelu np. <em>[Android] testApp banner</em></li>
+  <li>Skopiuj identyfikator reklamowy i użyj go przy inicjalizacji odpowiedniej jednostki reklamowej na danej platformie.</li>
+</ol>
+
+<p><img src="/assets/img/blog/admob/adunit_3.png" alt="adunit_3.png" /></p>
+
+<ol>
+  <li>Powtórz czynność dla wszystkich platform/jednostek które chcesz wspierać w aplikacji.</li>
+</ol>
+
+<blockquote>
+  <p>W przypadku gdy w konsoli pojawiają się błędy typu <code class="language-plaintext highlighter-rouge">failedToLoad</code> - odczekaj godzinę, dwie, aż nowo utworzona jednostka będzie poprawnie rozpoznawana przez systemy reklamodawcy. Cierpliwość popłaca.</p>
+</blockquote>
+
+<h2 id="podsumowanie">Podsumowanie</h2>
+
+<p>Masz teraz mocne i solidne podstawy - zarówno teoretyczne jak i praktyczne - dotyczące monetyzacji przez reklamy. Nie ma żadnych przeciwwskazań, abyś wybrał innego dostawcę reklam pod warunkiem, że istnieje stabilna paczka pod Fluttera. Pełny kod aplikacji reklamowej znajdziesz na <a href="https://github.com/vintage/flutter_demo_ads">GitHubie</a>.</p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-monetization-admob%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Zarabianie+i+monetyzacja+-+Reklamy+AdMob%20https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-monetization-admob%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/flutter-monetization-admob/&title=Zarabianie+i+monetyzacja+-+Reklamy+AdMob%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Zarabianie+i+monetyzacja+-+Reklamy+AdMob%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/flutter-monetization-admob/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+    <div id="previous-post">
+        <a alt="Zarządzanie stanem aplikacji - Provider" href="/blog/flutter-state-management-provider/">
+            <p>Poprzedni wpis</p>
+            Zarządzanie stanem aplikacji - Provider
+        </a>
+    </div>
+    
+
+    
+    <div id="next-post">
+        <a alt="Zarządzanie stanem aplikacji - StatefulWidget" href="/blog/flutter-state-management-stateful/">
+            <p>Następny wpis</p>
+            Zarządzanie stanem aplikacji - StatefulWidget
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>
