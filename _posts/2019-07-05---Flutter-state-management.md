@@ -45,7 +45,7 @@ Trudne słowa, które w rzeczywistości łatwo jest zrozumieć. Osobiście sporo
 
 ### Styl imperatywny
 
-Styl imperatywny dotyczy przede wszystkim starszych technologii - Android SDK, czy iOS UIKit. Nie mam z nimi większego komercyjnego doświadczenia, dlatego posłużę się przykładem z aplikacji webowych i technologią jQuery. Niegdyś brylująca technologia do tworzenia aplikacji, dzisiaj leciwy i schorowany dziad(ek). Nie jesteśmy tu jednak żeby wspominać historię, czy wgłębiać się w wady-zalety jQuery, a zrozumieć imperatywny UI. Spójrzmy więc na prosty przykład, który łatwo zrozumieć nawet bez znajomości tej biblioteki:
+Styl imperatywny dotyczy przede wszystkim starszych technologii - Android SDK, czy iOS UIKit. Nie mam z nimi większego komercyjnego doświadczenia, dlatego posłużę się przykładem z aplikacji webowych i technologią jQuery. Niegdyś brylująca technologia do tworzenia aplikacji, dzisiaj leciwy i schorowany dziad(ek). Nie jesteśmy tu jednak żeby wspominać historię, czy wgłębiać się w wady i zalety jQuery, a zrozumieć imperatywny UI. Spójrzmy więc na prosty przykład, który łatwo zrozumieć nawet bez znajomości tej biblioteki:
 
 ```javascript
 $("input.name").on("change", function() {
@@ -96,7 +96,6 @@ Dość teorii, daj praktykę! Najłatwiej uczyć się i walidować zdobytą wied
 Co więc proponuję? **GRĘ!** Duże (bo drukowane) słowo na mały projekt, ale stworzymy prostego clickera limitowanego czasem. Nie będzie miał zbyt wiele polotu, ale na pewno będziemy się przy nim lepiej bawili niż wiesz przy czym (⬆️), a dodatkowo opanujemy niezbędne **techniki zarządzania stanem**. Poniżej możesz zerknąć na nasz docelowy design, który będzie nam towarzyszył przez resztę wpisu.
 
 ![poketap_layout.png](/assets/img/blog/poketap_layout.png)
-*<div align="center">PokeTap - wytrenuj swojego stworka.</div>*
 
 Gra polega na klikanie w przycisk **Trenuj** tak wiele razy jak to możliwe w ciągu limitowanego czasu 60 sekund. Każdy klik zwiększa nasz poziom oraz atrybuty ataku i obrony. Typowy **grind**, ale bez endgame. Zaczynajmy!
 
@@ -250,7 +249,7 @@ class _MyWidgetState extends State<MyWidget> {
 }
 ```
 
-Druga wymagana składowa do utworzenia widgetu stanowego. Jest to część zmienna (**mutable**), która może zmieniać swoje dane w trakcie życia - co spowoduje automatyczne przebudowanie elementu wizualnego. Zwróć uwagę na znak **_** przed nazwą klasy - oznacza on, że klasa jest prywatna i nie można jej przykładowo zaimportować z innego pliku. Jeśli potrzebujesz do niej dostępu z zewnątrz - nie używaj prefixu **_**, nie jest on wymagany, lecz zalecany.
+Druga wymagana składowa do utworzenia widgetu stanowego. Jest to część zmienna (**mutable**), która może zmieniać swoje dane w trakcie życia - co spowoduje automatyczne przebudowanie elementu wizualnego. Zwróć uwagę na znak **\_** przed nazwą klasy - oznacza on, że klasa jest prywatna i nie można jej przykładowo zaimportować z innego pliku. Jeśli potrzebujesz do niej dostępu z zewnątrz - nie używaj prefixu **_**, nie jest on wymagany, lecz zalecany.
 
 Dostęp do parametrów `MyWidget` z klasy `_MyWidgetState` odbywa się poprzez obiekt **widget**. W zademonstrowanym przykładie metoda build rysuje wartość z pola *widget.name* (*name* zadeklarowane jest w *MyWidget*).
 
