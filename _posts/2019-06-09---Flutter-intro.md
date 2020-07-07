@@ -93,7 +93,6 @@ Co w praktyce oznacza, że Flutter sam rysuje wszystko co jest widoczne w aplika
 Kwestia wbudowanych komponentów graficznych które oddane są do naszej dyspozycji robi robotę. Nie będę ich tutaj opisywał, ograniczę się wyłącznie do faktu, że Flutter posiada pełne i oficjalne wsparcie dla Material Design (znowu Google). Wiesz co to znaczy, prawda? Setki prostych i stylowych elementów do wykorzystania, z czego każdy można ostylować do własnych potrzeb poprzez dedykowany obiekt styli. **Wow!**
 
 ![flutter_ui.gif](/assets/img/blog/flutter_ui.gif)
-*UI aplikacji The History of Everything*
 
 ### Wydajność
 
