@@ -254,7 +254,7 @@
 
 <h3 id="styl-imperatywny">Styl imperatywny</h3>
 
-<p>Styl imperatywny dotyczy przede wszystkim starszych technologii - Android SDK, czy iOS UIKit. Nie mam z nimi większego komercyjnego doświadczenia, dlatego posłużę się przykładem z aplikacji webowych i technologią jQuery. Niegdyś brylująca technologia do tworzenia aplikacji, dzisiaj leciwy i schorowany dziad(ek). Nie jesteśmy tu jednak żeby wspominać historię, czy wgłębiać się w wady-zalety jQuery, a zrozumieć imperatywny UI. Spójrzmy więc na prosty przykład, który łatwo zrozumieć nawet bez znajomości tej biblioteki:</p>
+<p>Styl imperatywny dotyczy przede wszystkim starszych technologii - Android SDK, czy iOS UIKit. Nie mam z nimi większego komercyjnego doświadczenia, dlatego posłużę się przykładem z aplikacji webowych i technologią jQuery. Niegdyś brylująca technologia do tworzenia aplikacji, dzisiaj leciwy i schorowany dziad(ek). Nie jesteśmy tu jednak żeby wspominać historię, czy wgłębiać się w wady i zalety jQuery, a zrozumieć imperatywny UI. Spójrzmy więc na prosty przykład, który łatwo zrozumieć nawet bez znajomości tej biblioteki:</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">input.name</span><span class="dl">"</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">change</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
@@ -308,8 +308,7 @@
 
 <p>Co więc proponuję? <strong>GRĘ!</strong> Duże (bo drukowane) słowo na mały projekt, ale stworzymy prostego clickera limitowanego czasem. Nie będzie miał zbyt wiele polotu, ale na pewno będziemy się przy nim lepiej bawili niż wiesz przy czym (⬆️), a dodatkowo opanujemy niezbędne <strong>techniki zarządzania stanem</strong>. Poniżej możesz zerknąć na nasz docelowy design, który będzie nam towarzyszył przez resztę wpisu.</p>
 
-<p><img src="/assets/img/blog/poketap_layout.png" alt="poketap_layout.png" />
-<em>&lt;div align="center"&gt;PokeTap - wytrenuj swojego stworka.&lt;/div&gt;</em></p>
+<p><img src="/assets/img/blog/poketap_layout.png" alt="poketap_layout.png" /></p>
 
 <p>Gra polega na klikanie w przycisk <strong>Trenuj</strong> tak wiele razy jak to możliwe w ciągu limitowanego czasu 60 sekund. Każdy klik zwiększa nasz poziom oraz atrybuty ataku i obrony. Typowy <strong>grind</strong>, ale bez endgame. Zaczynajmy!</p>
 
@@ -464,7 +463,7 @@
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Druga wymagana składowa do utworzenia widgetu stanowego. Jest to część zmienna (<strong>mutable</strong>), która może zmieniać swoje dane w trakcie życia - co spowoduje automatyczne przebudowanie elementu wizualnego. Zwróć uwagę na znak <strong><em>** przed nazwą klasy - oznacza on, że klasa jest prywatna i nie można jej przykładowo zaimportować z innego pliku. Jeśli potrzebujesz do niej dostępu z zewnątrz - nie używaj prefixu **</em></strong>, nie jest on wymagany, lecz zalecany.</p>
+<p>Druga wymagana składowa do utworzenia widgetu stanowego. Jest to część zmienna (<strong>mutable</strong>), która może zmieniać swoje dane w trakcie życia - co spowoduje automatyczne przebudowanie elementu wizualnego. Zwróć uwagę na znak <strong>_</strong> przed nazwą klasy - oznacza on, że klasa jest prywatna i nie można jej przykładowo zaimportować z innego pliku. Jeśli potrzebujesz do niej dostępu z zewnątrz - nie używaj prefixu <strong>_</strong>, nie jest on wymagany, lecz zalecany.</p>
 
 <p>Dostęp do parametrów <code class="language-plaintext highlighter-rouge">MyWidget</code> z klasy <code class="language-plaintext highlighter-rouge">_MyWidgetState</code> odbywa się poprzez obiekt <strong>widget</strong>. W zademonstrowanym przykładie metoda build rysuje wartość z pola <em>widget.name</em> (<em>name</em> zadeklarowane jest w <em>MyWidget</em>).</p>
 
