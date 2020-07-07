@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://rykowski.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rykowski.dev/" rel="alternate" type="text/html" /><updated>2020-07-06T21:40:03+02:00</updated><id>https://rykowski.dev/feed.xml</id><title type="html">rykowski.dev</title><subtitle>Flutter | Blog o programowaniu aplikacji mobilnych</subtitle><entry><title type="html">Asynchroniczny Dart - Isolates</title><link href="https://rykowski.dev/blog/async-dart-isolates/" rel="alternate" type="text/html" title="Asynchroniczny Dart - Isolates" /><published>2020-07-05T00:00:00+02:00</published><updated>2020-07-05T00:00:00+02:00</updated><id>https://rykowski.dev/blog/async-dart-isolates</id><content type="html" xml:base="https://rykowski.dev/blog/async-dart-isolates/">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://rykowski.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rykowski.dev/" rel="alternate" type="text/html" /><updated>2020-07-07T19:57:49+02:00</updated><id>https://rykowski.dev/feed.xml</id><title type="html">rykowski.dev</title><subtitle>Flutter | Blog o programowaniu aplikacji mobilnych</subtitle><entry><title type="html">Asynchroniczny Dart - Isolates</title><link href="https://rykowski.dev/blog/async-dart-isolates/" rel="alternate" type="text/html" title="Asynchroniczny Dart - Isolates" /><published>2020-07-05T00:00:00+02:00</published><updated>2020-07-05T00:00:00+02:00</updated><id>https://rykowski.dev/blog/async-dart-isolates</id><content type="html" xml:base="https://rykowski.dev/blog/async-dart-isolates/">&lt;blockquote&gt;
   &lt;p&gt;Jest to drugi wpis z serii o modelu wykonawczym w Darcie i powiązanej z nim asynchroniczności. Aby wyciągnąć maksimum wiedzy z tego wpisu, niezbędna jest wiedza z poprzedniego, który tłumaczy działanie Event Loop, Futures i programowania z użyciem async/await. Znajdziesz go &lt;a href=&quot;/blog/async-dart-event-loop-futures/&quot;&gt;tutaj&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -2941,7 +2941,7 @@ micro2
 
 &lt;h3 id=&quot;styl-imperatywny&quot;&gt;Styl imperatywny&lt;/h3&gt;
 
-&lt;p&gt;Styl imperatywny dotyczy przede wszystkim starszych technologii - Android SDK, czy iOS UIKit. Nie mam z nimi większego komercyjnego doświadczenia, dlatego posłużę się przykładem z aplikacji webowych i technologią jQuery. Niegdyś brylująca technologia do tworzenia aplikacji, dzisiaj leciwy i schorowany dziad(ek). Nie jesteśmy tu jednak żeby wspominać historię, czy wgłębiać się w wady-zalety jQuery, a zrozumieć imperatywny UI. Spójrzmy więc na prosty przykład, który łatwo zrozumieć nawet bez znajomości tej biblioteki:&lt;/p&gt;
+&lt;p&gt;Styl imperatywny dotyczy przede wszystkim starszych technologii - Android SDK, czy iOS UIKit. Nie mam z nimi większego komercyjnego doświadczenia, dlatego posłużę się przykładem z aplikacji webowych i technologią jQuery. Niegdyś brylująca technologia do tworzenia aplikacji, dzisiaj leciwy i schorowany dziad(ek). Nie jesteśmy tu jednak żeby wspominać historię, czy wgłębiać się w wady i zalety jQuery, a zrozumieć imperatywny UI. Spójrzmy więc na prosty przykład, który łatwo zrozumieć nawet bez znajomości tej biblioteki:&lt;/p&gt;
 
 &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;input.name&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;change&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
@@ -2995,8 +2995,7 @@ micro2
 
 &lt;p&gt;Co więc proponuję? &lt;strong&gt;GRĘ!&lt;/strong&gt; Duże (bo drukowane) słowo na mały projekt, ale stworzymy prostego clickera limitowanego czasem. Nie będzie miał zbyt wiele polotu, ale na pewno będziemy się przy nim lepiej bawili niż wiesz przy czym (⬆️), a dodatkowo opanujemy niezbędne &lt;strong&gt;techniki zarządzania stanem&lt;/strong&gt;. Poniżej możesz zerknąć na nasz docelowy design, który będzie nam towarzyszył przez resztę wpisu.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/poketap_layout.png&quot; alt=&quot;poketap_layout.png&quot; /&gt;
-&lt;em&gt;&amp;lt;div align=&quot;center&quot;&amp;gt;PokeTap - wytrenuj swojego stworka.&amp;lt;/div&amp;gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/blog/poketap_layout.png&quot; alt=&quot;poketap_layout.png&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Gra polega na klikanie w przycisk &lt;strong&gt;Trenuj&lt;/strong&gt; tak wiele razy jak to możliwe w ciągu limitowanego czasu 60 sekund. Każdy klik zwiększa nasz poziom oraz atrybuty ataku i obrony. Typowy &lt;strong&gt;grind&lt;/strong&gt;, ale bez endgame. Zaczynajmy!&lt;/p&gt;
 
@@ -3151,7 +3150,7 @@ micro2
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Druga wymagana składowa do utworzenia widgetu stanowego. Jest to część zmienna (&lt;strong&gt;mutable&lt;/strong&gt;), która może zmieniać swoje dane w trakcie życia - co spowoduje automatyczne przebudowanie elementu wizualnego. Zwróć uwagę na znak &lt;strong&gt;&lt;em&gt;** przed nazwą klasy - oznacza on, że klasa jest prywatna i nie można jej przykładowo zaimportować z innego pliku. Jeśli potrzebujesz do niej dostępu z zewnątrz - nie używaj prefixu **&lt;/em&gt;&lt;/strong&gt;, nie jest on wymagany, lecz zalecany.&lt;/p&gt;
+&lt;p&gt;Druga wymagana składowa do utworzenia widgetu stanowego. Jest to część zmienna (&lt;strong&gt;mutable&lt;/strong&gt;), która może zmieniać swoje dane w trakcie życia - co spowoduje automatyczne przebudowanie elementu wizualnego. Zwróć uwagę na znak &lt;strong&gt;_&lt;/strong&gt; przed nazwą klasy - oznacza on, że klasa jest prywatna i nie można jej przykładowo zaimportować z innego pliku. Jeśli potrzebujesz do niej dostępu z zewnątrz - nie używaj prefixu &lt;strong&gt;_&lt;/strong&gt;, nie jest on wymagany, lecz zalecany.&lt;/p&gt;
 
 &lt;p&gt;Dostęp do parametrów &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MyWidget&lt;/code&gt; z klasy &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_MyWidgetState&lt;/code&gt; odbywa się poprzez obiekt &lt;strong&gt;widget&lt;/strong&gt;. W zademonstrowanym przykładie metoda build rysuje wartość z pola &lt;em&gt;widget.name&lt;/em&gt; (&lt;em&gt;name&lt;/em&gt; zadeklarowane jest w &lt;em&gt;MyWidget&lt;/em&gt;).&lt;/p&gt;
 
@@ -3938,8 +3937,7 @@ flutter run
 
 &lt;p&gt;Kwestia wbudowanych komponentów graficznych które oddane są do naszej dyspozycji robi robotę. Nie będę ich tutaj opisywał, ograniczę się wyłącznie do faktu, że Flutter posiada pełne i oficjalne wsparcie dla Material Design (znowu Google). Wiesz co to znaczy, prawda? Setki prostych i stylowych elementów do wykorzystania, z czego każdy można ostylować do własnych potrzeb poprzez dedykowany obiekt styli. &lt;strong&gt;Wow!&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_ui.gif&quot; alt=&quot;flutter_ui.gif&quot; /&gt;
-&lt;em&gt;UI aplikacji The History of Everything&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_ui.gif&quot; alt=&quot;flutter_ui.gif&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;wydajność&quot;&gt;Wydajność&lt;/h3&gt;
 
