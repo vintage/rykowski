@@ -10,7 +10,7 @@ favicon: assets/favicon.png                             # Icon displayed in the 
 
 # Header and footer text
 header_text: <font color="#5FC9F8">Flutter</font><br /><small>Blog o programowaniu aplikacji mobilnych</small>  # Change Blog header text
-header_feature_image: assets/img/pexels/triangular.jpeg
+header_feature_image: assets/img/pexels/home_header.png
 footer_text: >
   Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
 
