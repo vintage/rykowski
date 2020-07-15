@@ -31,59 +31,23 @@
     <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
     
 
-    <!-- Google Analytics -->
+    <!-- Google Analytics / Cookie Consent -->
+    <script>
+      const cookieName = 'cookie-notice-dismissed-https://rykowski.dev';
+      const isCookieConsent = 'true';
+      const analyticsName = 'UA-77793311-12';
+    </script>
+
     
-        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
-</span><a id="cookie-notice-accept" class="button">Approve</a>
-</div>
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-<script>
-  function createCookie(name, value, days) {
-    var expires = "";
-    if (days) {
-      var date = new Date();
-      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + value + expires + "; path=/";
-  }
-
-  function readCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-  }
-
-  if(readCookie('cookie-notice-dismissed')==='true') {
+        <div id="cookie-notice"><span>Czy zgadzasz się na ciasteczka?
+          </span><a id="cookie-notice-accept" class="button">OK</a>
+        </div>
     
-      // Google tag manager
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-77793311-12');
-      // Google analytics
-      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-      ga('create', 'UA-77793311-12', 'auto');
-      ga('send', 'pageview');
     
-  } else {
-    document.getElementById('cookie-notice').style.display = 'block';
-  }
-
-  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
-    createCookie('cookie-notice-dismissed','true',31);
-    document.getElementById('cookie-notice').style.display = 'none';
-    location.reload();
-  });
-
-</script>
-
+        <!-- Global site tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+        <!-- Page analysis (analytics.js) -->
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
     
 
     <!-- seo tags -->
@@ -103,7 +67,14 @@
 {"url":"https://rykowski.dev/blog/flutter-state-management-provider/","headline":"Zarządzanie stanem aplikacji - Provider","dateModified":"2019-08-16T00:00:00+02:00","datePublished":"2019-08-16T00:00:00+02:00","description":"Każda średnia i duża aplikacja we Flutterze wymaga narzędzia do zarządzania stanem globalnym. Kiedy go potrzebujesz i dlaczego stan lokalny to za mało? Poznaj Providera - bibliotekę, która ułatwia proces do granic możliwości.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-state-management-provider/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
-    <meta property="og:image" content="https://rykowski.dev/assets/img/pexels/home_header.png " />
+    <meta property="og:image" content="https://rykowski.dev/">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:title" content="Zarządzanie stanem aplikacji - Provider">
+    <meta name="twitter:description" content="Jest to druga część serii o zarządzaniu stanem aplikacji we Flutterze. W poprzednim wpisie rozmawialiśmy o tym czym dokładnie jest stan i w jaki sposób odbyw...">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://rykowski.dev/">
 </head>
 
   <body>

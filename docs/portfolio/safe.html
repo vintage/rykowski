@@ -31,59 +31,23 @@
     <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
     
 
-    <!-- Google Analytics -->
+    <!-- Google Analytics / Cookie Consent -->
+    <script>
+      const cookieName = 'cookie-notice-dismissed-https://rykowski.dev';
+      const isCookieConsent = 'true';
+      const analyticsName = 'UA-77793311-12';
+    </script>
+
     
-        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
-</span><a id="cookie-notice-accept" class="button">Approve</a>
-</div>
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-<script>
-  function createCookie(name, value, days) {
-    var expires = "";
-    if (days) {
-      var date = new Date();
-      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + value + expires + "; path=/";
-  }
-
-  function readCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-  }
-
-  if(readCookie('cookie-notice-dismissed')==='true') {
+        <div id="cookie-notice"><span>Czy zgadzasz się na ciasteczka?
+          </span><a id="cookie-notice-accept" class="button">OK</a>
+        </div>
     
-      // Google tag manager
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-77793311-12');
-      // Google analytics
-      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-      ga('create', 'UA-77793311-12', 'auto');
-      ga('send', 'pageview');
     
-  } else {
-    document.getElementById('cookie-notice').style.display = 'block';
-  }
-
-  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
-    createCookie('cookie-notice-dismissed','true',31);
-    document.getElementById('cookie-notice').style.display = 'none';
-    location.reload();
-  });
-
-</script>
-
+        <!-- Global site tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+        <!-- Page analysis (analytics.js) -->
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
     
 
     <!-- seo tags -->
@@ -103,7 +67,14 @@
 {"url":"https://rykowski.dev/portfolio/safe","headline":"Creative","dateModified":"2014-08-16T00:00:00+02:00","datePublished":"2014-08-16T00:00:00+02:00","description":"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? Use this area of the page to describe your project. The icon above is part of a free icon set by Flat Icons. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/portfolio/safe"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
-    <meta property="og:image" content="https://rykowski.dev/assets/img/portfolio/safe.png " />
+    <meta property="og:image" content="https://rykowski.dev/assets/img/portfolio/safe.png">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:title" content="Creative">
+    <meta name="twitter:description" content="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore verita...">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://rykowski.dev/assets/img/portfolio/safe.png">
 </head>
 
   <body>
