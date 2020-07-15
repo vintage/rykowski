@@ -1,4 +1,5 @@
 ---
+color: rgb(69,190,247)
 title: Nawigowanie między ekranami - Navigator
 date: "2019-11-30"
 layout: "post"

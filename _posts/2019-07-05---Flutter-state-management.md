@@ -1,4 +1,5 @@
 ---
+color: rgb(69,190,247)
 title: Zarządzanie stanem aplikacji - StatefulWidget
 date: "2019-07-05"
 layout: "post"

@@ -1,4 +1,5 @@
 ---
+color: rgb(69,190,247)
 title: Nowy gracz aplikacji mobilnych - Flutter
 date: "2019-06-09"
 layout: "post"

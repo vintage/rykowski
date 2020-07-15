@@ -1,12 +1,11 @@
 ---
+color: rgb(69,190,247)
 title: MobX i Flutter - automatyczny stan
 date: "2020-07-15"
 layout: "post"
 slug: "flutter-mobx"
 excerpt: "MobX jest świetnym i sprawdzonym w boju rozwiązaniem do zarządzania stanem aplikacji. Nie wymaga dużej ilości kodu, jest wydajny i sporo rzeczy dzieje się bez udziału programisty."
-feature-img: "assets/img/blog/mobx/header.png"
 thumbnail: "assets/img/blog/mobx/thumbnail.png"
-
 ---
 
 Flutter posiada dziesiątki rozwiązań przeznaczonych do zarządzania stanem aplikacji. Bardziej, lub mniej popularne, przekombinowane, proste w użyciu. Generalnie jest pełen wachlarz możliwości i każdy bez problemu znajdzie coś dla siebie i swojego projektu.

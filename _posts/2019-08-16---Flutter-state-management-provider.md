@@ -1,4 +1,5 @@
 ---
+color: rgb(69,190,247)
 title: Zarządzanie stanem aplikacji - Provider
 date: "2019-08-16"
 layout: "post"

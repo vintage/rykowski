@@ -1,9 +1,11 @@
 ---
+color: rgb(69,190,247)
 title: HookWidget, czyli Flutterowe hooki
 date: "2020-05-08"
 layout: "post"
 slug: "flutter-hooks"
 excerpt: "Nie lubisz StatefulWidgetów za ich rozwarstwienie na dwie klasy, lub z jakiegokolwiek innego powodu, a mimo to musisz wykonać kod w sposób niemożliwy dla StatelessWidgeta? Daj szansę hookom i HookWidgetowi, który robi to samo ale lepiej."
+thumbnail: "assets/img/blog/hooks/thumbnail.png"
 ---
 
 Czym właściwie są **hooki**? Jest to termin dobrze znany wszystkim programistom m.in. Reacta, gdzie hooki jakiś czas temu opanowały cały ekosystem i wybuchł na nie ogromny hype. Powstały przede wszystkim po to, aby ułatwić współdzielenie logiki między stanowymi ~~komponentami~~ widgetami (takimi jak `StatefulWidget`) oraz uprościć logikę, która stoi za tzw. **life-cycle methods**, czyli co powinno się wydarzyć przed pierwszym renderowaniem, przy kolejnych, jak reagować na zmiany parametrów renderowania itd. Generalnie wszystko sprowadza się do tego jak zebrać cały ten bałagan i zrobić go czytelniejszym.
@@ -11,8 +13,6 @@ Czym właściwie są **hooki**? Jest to termin dobrze znany wszystkim programist
 Czy się udało? W Reacie jak najbardziej! Większość developerów już przeszła na nowe rozwiązanie, które z własnego doświadczenia również szczerze polecam. A co z Flutterem? No bo przecież dobrze wiemy, że styl pisania aplikacji jest mocno podobny (deklaratywny), więc może hooki są też dla nas? Przyznaj szczerze, że w głębi serca to jednak nie przepadasz za wbudowanym `StatefulWidgetem` i chętnie byś go wymienił na inne rozwiązanie, tylko jakie?
 
 > Flutterowcy żądają hooków!
-
-![logo.png](/assets/img/blog/hooks/logo.png)
 
 # Flutter Hooks
 

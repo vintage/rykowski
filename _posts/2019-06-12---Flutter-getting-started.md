@@ -1,4 +1,5 @@
 ---
+color: rgb(69,190,247)
 title: Flutter - konfiguracja i rozpoczęcie przygody 
 date: "2019-06-12"
 layout: "post"

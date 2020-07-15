@@ -1,4 +1,5 @@
 ---
+color: rgb(69,190,247)
 title: Pozycjonowanie elementów w gridzie - Row i Column
 date: "2019-06-23"
 layout: "post"

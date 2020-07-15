@@ -1,16 +1,16 @@
 ---
+color: rgb(69,190,247)
 title: Asynchroniczny Dart - Event Loop, Futures, async/await
 date: "2020-06-27"
 layout: "post"
 slug: "async-dart-event-loop-futures"
 excerpt: "Dart jako język jednowątkowy jest w stanie wykonywać tylko jedną operację w danym czasie. Jedna za drugą. Brzmi powolnie? Nic z tych rzeczy! Dowiedz się jak działa Event Loop i kod asynchroniczny."
+thumbnail: "assets/img/blog/async/thumbnail.png"
 ---
 
 Pisząc dowolną aplikację we Flutterze posługujesz się językiem Dart. Wszystkie ograniczenia i subtelności zdefiniowane w samym języku, będą ci również towarzyszyły we Flutterze. Nie da się inaczej. Flutter stoi na Darcie, koniec i kropka. Czy to dobrze? Jasne, czemu nie. Lubię ten język i mam do niego pewnego rodzaju słabość, ale warto poznać go czasem nieco głębiej poza samą jego składnią.
 
 Nie będziemy jednak wertować całego języka od podstaw, od tego jest oficjalna dokumentacja. Skupimy się jedynie na tym **skąd Dart wie który kod uruchomić w jakim czasie** oraz na czym opiera się cała magia asynchroniczności. Temat jest bardzo szeroki i wymaga zrozumienia kilku podstawowych konceptów od których rozpoczniemy dzisiejszy wpis.
-
-![logo.png](/assets/img/blog/async/logo.png)
 
 # Jednowątkowy Dart
 
