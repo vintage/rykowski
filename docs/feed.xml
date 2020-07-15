@@ -1,4 +1,432 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://rykowski.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rykowski.dev/" rel="alternate" type="text/html" /><updated>2020-07-07T19:57:49+02:00</updated><id>https://rykowski.dev/feed.xml</id><title type="html">rykowski.dev</title><subtitle>Flutter | Blog o programowaniu aplikacji mobilnych</subtitle><entry><title type="html">Asynchroniczny Dart - Isolates</title><link href="https://rykowski.dev/blog/async-dart-isolates/" rel="alternate" type="text/html" title="Asynchroniczny Dart - Isolates" /><published>2020-07-05T00:00:00+02:00</published><updated>2020-07-05T00:00:00+02:00</updated><id>https://rykowski.dev/blog/async-dart-isolates</id><content type="html" xml:base="https://rykowski.dev/blog/async-dart-isolates/">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://rykowski.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rykowski.dev/" rel="alternate" type="text/html" /><updated>2020-07-15T21:04:55+02:00</updated><id>https://rykowski.dev/feed.xml</id><title type="html">rykowski.dev</title><subtitle>Flutter | Blog o programowaniu aplikacji mobilnych</subtitle><entry><title type="html">MobX i Flutter - automatyczny stan</title><link href="https://rykowski.dev/blog/flutter-mobx/" rel="alternate" type="text/html" title="MobX i Flutter - automatyczny stan" /><published>2020-07-15T00:00:00+02:00</published><updated>2020-07-15T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-mobx</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-mobx/">&lt;p&gt;Flutter posiada dziesiątki rozwiązań przeznaczonych do zarządzania stanem aplikacji. Bardziej, lub mniej popularne, przekombinowane, proste w użyciu. Generalnie jest pełen wachlarz możliwości i każdy bez problemu znajdzie coś dla siebie i swojego projektu.&lt;/p&gt;
+
+&lt;p&gt;Co jednak zrobić, gdy nie masz czasu, ani chęci w testowaniu i porównywaniu mnogości opcji? Postaw na sprawdzony wariant w postaci &lt;strong&gt;MobX&lt;/strong&gt;, który w ekosystemie JavaScript już dawno udowodnił, że ma solidne fundamenty, a praca z nim to czysta przyjemność. Warto na niego postawić również w przypadku aplikacji Flutterowych!&lt;/p&gt;
+
+&lt;h2 id=&quot;mobx&quot;&gt;MobX&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;MobX&lt;/strong&gt; to biblioteka do zarządzania stanem, w której wiele rzeczy dzieje się automatycznie. Sprawia to, że jako programista nie musisz się nimi przejmować. Wszystko za sprawą &lt;em&gt;TFRP&lt;/em&gt; (&lt;em&gt;Transparent Functional Reactive Programming&lt;/em&gt;) wokół którego wszystko zostało zaprojektowane i zbudowane. Z jednej strony magiczne rozwiązania to zło, bo przecież musisz wiedzieć jak wszystko dokładnie działa, a z drugiej … Czy nie chcesz przestać się martwić o każdy jeden aspekt oprogramowania? W Darcie nie zajmujesz się alokacją pamięci, ani też jej uwalnianiem, i zakładam, że nie chciałbyś robić tego ręcznie. &lt;em&gt;Garbage Collector&lt;/em&gt; sam się wszystkim zajmuje. Czasem lepiej zdać się na gotowe i sprawdzone rozwiązanie, a samemu skupić się na rzeczach, które trudniej zautomatyzować narzędziami. Jak chociażby implementacja logiki biznesowej, czy zapierający dech w piersiach UI.&lt;/p&gt;
+
+&lt;p&gt;To co finalnie otrzymujesz korzystając z &lt;em&gt;MobX&lt;/em&gt; to posiadanie zawsze aktualnego stanu, który wyświetlany jest użytkownikowi. A wszystko to przy niskim nakładzie pracy i prostocie kodu, którą potrafiłbym wytłumaczyć nawet mojej mamie. Oczywiście pod warunkiem że by chciała … a w to szczerze wątpie.&lt;/p&gt;
+
+&lt;h3 id=&quot;fundamenty-koncepcyjne&quot;&gt;Fundamenty koncepcyjne&lt;/h3&gt;
+
+&lt;p&gt;Fundamenty &lt;em&gt;MobX&lt;/em&gt; składają się z zaledwie trzech podstawowych konceptów. Są to odpowiednio:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Observable&lt;/strong&gt;, przechowujący stan aplikacji w formie obserwowalnej&lt;/li&gt;
+  &lt;li&gt;Akcja (&lt;strong&gt;Action&lt;/strong&gt;) do manipulowania (zmieniania) stanu&lt;/li&gt;
+  &lt;li&gt;Reakcja (&lt;strong&gt;Reaction&lt;/strong&gt;), jako obserwator stanu uruchamiany po jego każdorazowej zmianie&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Przyjrzymy się każdej ze składowych z bliska już za moment, podczas budowania prostej aplikacji, ale poniższy diagram w prosty sposób prezentuje jakie są zależności między tymi elementami. Uruchomienie akcji (&lt;em&gt;Actions&lt;/em&gt;) prowadzi do zmiany stanu (&lt;em&gt;Observables&lt;/em&gt;), który powiadamia o tym fakcie powiązane reakcje (&lt;em&gt;Reactions&lt;/em&gt;).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/blog/mobx/mobx_triad.png&quot; alt=&quot;MobX triad&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;przygotowanie-projektu&quot;&gt;Przygotowanie projektu&lt;/h3&gt;
+
+&lt;p&gt;W celu wykorzystania pełnego potencjału drzemiącego w &lt;em&gt;MobX&lt;/em&gt; będziemy potrzebowali kilku zależności. Nie jest to co prawda wymóg, ale im większy projekt budujesz tym bardziej docenisz dostarczoną automatyzację.&lt;/p&gt;
+
+&lt;p&gt;Podstawowa paczka to &lt;strong&gt;mobx&lt;/strong&gt;. Dostarcza pełne wsparcie biblioteczne do zarządzania stanem i nie jest ograniczona do działania wyłącznie we Flutterze. Możesz jej równie dobrze używać w aplikacjach konsolowych pisanych w czystym Darcie. Jej uzupełnieniem jest &lt;strong&gt;flutter_mobx&lt;/strong&gt;, dzięki któremu dostajemy wymieniony wyżej element reakcji w postaci widgeta &lt;em&gt;Observer&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Dwie kolejne biblioteki są umieszczone w sekcji &lt;em&gt;dev_dependencies&lt;/em&gt;, bo używamy ich tylko w fazie developmentu. Nie są one częścią zbudowanej już aplikacji, a stanowią ”jedynie” wsparcie programisty w postaci narzędzia. W projekcie wykorzystamy je do automatycznego generowania klas, aby zademonstrować maksymalne ograniczenie powtarzalnego kodu (&lt;em&gt;boilerplate code&lt;/em&gt;).&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;dependencies&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;mobx&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;flutter_mobx&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;dev_dependencies&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;build_runner&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;mobx_codegen&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Pamiętaj o zainstalowaniu nowo dodanych zależności przez &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;flutter pub get&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;ui-aplikacji&quot;&gt;UI aplikacji&lt;/h4&gt;
+
+&lt;p&gt;Aplikacja pokazowa ma dwa zasadnicze ekrany i jej celem jest jedynie pokazanie jak wspołgrać z &lt;em&gt;MobXem&lt;/em&gt;. Nie doszukuj się w niej przełomowych funkcjonalności, a tym bardziej ładnego UI - to dobry motyw na całkowicie osobny wpis.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Pierwszy ekran (startowy) informuje użytkownika że musi się zalogować poprzez stuknięcie w przycisk.&lt;/li&gt;
+  &lt;li&gt;Drugi ekran wyświetla aktualnie zalogowanego użytkownika. Nazwa, data urodzenia i lista umiejętności, którą można rozszerzać.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Dodatkowo w górnym pasku zawsze prezentowana jest ilość użytkowników, którzy wylogowali się podczas trwania sesji użytkowej.&lt;/p&gt;
+
+&lt;div class=&quot;row&quot;&gt;
+    
+    &lt;div class=&quot;column&quot;&gt;
+        &lt;img src=&quot;/assets/img/blog/mobx/ui_unauthenticated.png&quot; alt=&quot;ui_unauthenticated.png&quot; /&gt;
+    &lt;/div&gt;
+    
+    &lt;div class=&quot;column&quot;&gt;
+        &lt;img src=&quot;/assets/img/blog/mobx/ui_authenticated.png&quot; alt=&quot;ui_authenticated.png&quot; /&gt;
+    &lt;/div&gt;
+    
+&lt;/div&gt;
+
+&lt;p&gt;Kod statycznej aplikacji, czysty UI:&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:flutter/material.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;runApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyApp&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;isAuthenticated&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MaterialApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+      &lt;span class=&quot;nl&quot;&gt;theme:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ThemeData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;textTheme:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextTheme&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+          &lt;span class=&quot;nl&quot;&gt;bodyText2:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextStyle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;nl&quot;&gt;fontSize:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+      &lt;span class=&quot;nl&quot;&gt;home:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Scaffold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;appBar:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AppBar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+          &lt;span class=&quot;nl&quot;&gt;title:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Previous users: 0&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;body:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+          &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;isAuthenticated&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Authenticated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Unauthenticated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Unauthenticated&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+      &lt;span class=&quot;nl&quot;&gt;mainAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MainAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Detected unauthenticated user!&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;RaisedButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+          &lt;span class=&quot;nl&quot;&gt;onPressed:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+          &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Log in&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Authenticated&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Kamil&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;birthDate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1988&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;skills&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Flutter&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Dart&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+      &lt;span class=&quot;nl&quot;&gt;mainAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MainAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Name: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$name&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Birth date: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$birthDate&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Skills: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$skills&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+          &lt;span class=&quot;nl&quot;&gt;mainAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MainAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;spaceEvenly&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+          &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;RaisedButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+              &lt;span class=&quot;nl&quot;&gt;onPressed:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;addSkill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+              &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;New skill&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;RaisedButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+              &lt;span class=&quot;nl&quot;&gt;onPressed:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+              &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Log out&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;addSkill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+
+  &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Aplikacja się kompiluje i po uruchomieniu prezentowany jest ekran startowy. Przycisk logowania jest na chwilę obecną wydmuszką, więc jedyną możliwością wyświetlenia ekranu zalogowanego użytkownika jest ręczna zmiana flagi w kodzie:&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;isAuthenticated&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Przechodzimy zatem do najważniejszej kwestii, czyli do wprowadzenia stanu aplikacji. Umożliwienie logowania, wylogowania, oddelegowania zarządzania danymi poza drzewo widgetów.&lt;/p&gt;
+
+&lt;h4 id=&quot;model-danych&quot;&gt;Model danych&lt;/h4&gt;
+
+&lt;p&gt;Niezależnie od tego z jaką technologią zarządzania stanem pracujesz, zawsze modeluj swoje dane. &lt;strong&gt;Zawsze&lt;/strong&gt;. Nie trzymaj luźno lewitujących zmiennych, które jasno opisują pewien byt w systemie. W naszym przypadku mamy koncept użytkownika, którego opisują takie cechy jak jego nazwa, data urodzenia, czy lista posiadanych umiejętności. Zaprojektujmy więc dla niego czysty model, inaczej mówiąc &lt;strong&gt;worek na dane&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Tuż obok &lt;em&gt;main.dart&lt;/em&gt; dodamy nowy plik &lt;em&gt;data.dart&lt;/em&gt;, którym zdefiniujemy czym jest użytkownik naszego systemu. Klasa ta może być później śmiało wykorzystywana w innym dowolnym miejscu aplikacji. A najpewniej przeżyje nawet takie turbulencje, jak konieczność całkowitego wymienienia innej warstwy aplikacji.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;birthDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;skills&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;birthDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;skills&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;copyWith&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;skills&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;birthDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;skills&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;observables&quot;&gt;Observables&lt;/h4&gt;
+
+&lt;p&gt;&lt;em&gt;Observable&lt;/em&gt; stanowi reaktywny stan aplikacji. Przez reaktywny mam na myśli taki, który umożliwia reagowanie na to co się z nim dzieje. W szczególności na zachodzące wewnątrz zmiany. Każdy dowolny obiekt możliwy do zdefiniowania w samym Darcie może stać się w łatwy sposób obserwowalny. Nie ważne, czy mamy do czynienia z wartościami prymitywnymi jak &lt;em&gt;String&lt;/em&gt;, czy &lt;em&gt;bool&lt;/em&gt;, czy złożonymi obiektami własnych klas. Wszystko w &lt;em&gt;MobX&lt;/em&gt; może stać się obserwowalne.&lt;/p&gt;
+
+&lt;p&gt;Dodajmy plik &lt;em&gt;store.dart&lt;/em&gt; w którym będziemy przechowywać zarówno stan w postaci &lt;em&gt;Observable&lt;/em&gt;, jak również akcje do manipulowania danymi. Omówienie kodu tuż poniżej.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:flutter_demo_mobx/data.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:mobx/mobx.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;part&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'store.g.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserStore&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UserStoreBase&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_$UserStore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserStoreBase&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Store&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nd&quot;&gt;@observable&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;nd&quot;&gt;@observable&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;ObservableList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;previousUsers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ObservableList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+  &lt;span class=&quot;nd&quot;&gt;@computed&lt;/span&gt;
+  &lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;isAuthenticated&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Trochę się tu dzieje, prawda? Na szczególną uwagę zasługuje część kodu wymagana przez &lt;strong&gt;mobx_codegen&lt;/strong&gt; do wygenerowania za nas całego &lt;em&gt;boilerplate&lt;/em&gt;. Nie jest to coś czym zaprzątasz sobie głowę w codziennej pracy, ale warto wiedzieć jak to ugryźć.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;part&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'store.g.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserStore&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UserStoreBase&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_$UserStore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Te dwie linie to jedyne powtarzalne kawałki kodu, które przewijają się gdy definiujemy nową domenę stanu. Nie jest to specjalnie wygórowana cena za późniejszy minimalizm, zwłaszcza, że im bardziej złożona aplikacja tym większe czerpiemy benefity z samego &lt;em&gt;MobX&lt;/em&gt;. Nazwa &lt;em&gt;store.g.dart&lt;/em&gt; to nic innego jak nazwa pliku głównego z zamienionym rozszerzeniem z &lt;em&gt;.dart&lt;/em&gt; na &lt;em&gt;.g.dart&lt;/em&gt;. Gdy przejdziemy do generowania kodu będziesz mógł do niego nawet zajrzeć.&lt;/p&gt;
+
+&lt;p&gt;Dalej mamy zdefiniowane dwie składowe oznaczone adnotacją (&lt;strong&gt;annotation&lt;/strong&gt;) &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@observable&lt;/code&gt;. W obiekcie &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;me&lt;/code&gt; chcemy przechowywać aktualnie zalogowanego użytkownika, a w &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;previousUsers&lt;/code&gt; listę wszystkich tych, którzy się wylogowali. Warto zwrócić uwagę na wykorzystanie &lt;strong&gt;ObservableList&lt;/strong&gt; zamiast wbudowanego w Darta &lt;em&gt;List&lt;/em&gt;. Oba udostępniają taki sam interfejs, a skorzystanie z &lt;em&gt;ObservableList&lt;/em&gt; zagwarantuje nam to, że jeśli zmienią się elementy wewnątrz listy (np. zostanie dodany nowy wpis) to zostaniemy o tym powiadomieni jak przy każdej innej zmianie.&lt;/p&gt;
+
+&lt;p&gt;Ostatni użyty element stanowi &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isAuthenticated&lt;/code&gt;. Jest to również &lt;em&gt;Observable&lt;/em&gt;, ale w postaci wnioskowej na podstawie innych zdefiniowanych obiektów &lt;em&gt;Observable&lt;/em&gt;. Oznacza to, że nie trzymamy tam zupełnie nowych danych, a jedynie wartość która jest wyliczana na podstawie innych danych w aplikacji. To co daje nam &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@computed&lt;/code&gt; to pełna gwarancja tego, że zawsze będzie posiadał aktualną wartość, która zmieni się natychmiast gdy jakikolwiek nasłuchiwany obiekt zostanie zmieniony. &lt;em&gt;MobX&lt;/em&gt; sam zajmie się ustaleniem jakie &lt;em&gt;Observable&lt;/em&gt; zostały użyte do wyliczeń i będzie pilnował spójności danych w najwydajniejszy możliwy sposób.&lt;/p&gt;
+
+&lt;p&gt;To tyle jeśli chodzi o zdefiniowanie stanu. Zawsze gdy chcesz go rozbudować wystarczy dodać nowy obiekt udekorowany jedną z dostępnych adnotacji: &lt;em&gt;@observable&lt;/em&gt;, lub &lt;em&gt;@computed&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;actions&quot;&gt;Actions&lt;/h4&gt;
+
+&lt;p&gt;Do zarządzania danymi przechowywanymi w &lt;em&gt;Observable&lt;/em&gt; wykorzystywane są akcje (&lt;strong&gt;actions&lt;/strong&gt;). Jeśli chcesz dokonać jakiejkolwiek zmiany w stanie aplikacji, definiujesz po prostu funkcję, która zrobi to co powinna. Bez zbędnych komplikacji w postaci obsługi i mapowania zdarzeń, czy ręcznego powiadamiania reszty aplikacji, że coś się właśnie wydarzało.&lt;/p&gt;
+
+&lt;p&gt;Jak już wspomniałem akcja to najzwyklejsza funkcja i jedyne co ją wyróżnia w kodzie to adnotacja &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@action&lt;/code&gt;. Pełni ona dwie role. Pierwsza czysto semantyczna, wskazuje które funkcje manipulują stanem. Druga, czysto techniczna, gwarantuje transakcyjność. Dzięki niej, wszystkie &lt;em&gt;Observable&lt;/em&gt; zmieniające swoje wartości w trakcie trwania akcji, powiadomią o tym fakcie dopiero po zakończeniu wykonania funkcji. Jeśli zmieniasz w ramach pojedynczej akcji kilka obiektów to reakcja po stronie aplikacji będzie tylko na samym końcu. Dla nas oznacza to w ostatecznym rozrachunku mniejszą ilość rebuildów UI.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserStoreBase&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Store&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+
+  &lt;span class=&quot;nd&quot;&gt;@action&lt;/span&gt;
+  &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+      &lt;span class=&quot;s&quot;&gt;&quot;Kamil #&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${previousUsers.length}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1988&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Dart&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Flutter&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nd&quot;&gt;@action&lt;/span&gt;
+  &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;previousUsers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nd&quot;&gt;@action&lt;/span&gt;
+  &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;addSkill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;copyWith&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;skills:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[...&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;skills&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;new skill&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Dodaliśmy trzy akcje: &lt;em&gt;login&lt;/em&gt;, &lt;em&gt;logout&lt;/em&gt; i &lt;em&gt;addSkill&lt;/em&gt;. Każda dokonuje pewnych zmian na &lt;em&gt;Observable&lt;/em&gt;, a najciekawsza z nich jest ta ostatnia. Chcąc dodać nową umiejętność dla obecnie zalogowanego użytkownika, nie dodajemy jej bezpośrednio do listy posiadanych już umiejętności. Taki zapis nie zadziała.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@action&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addSkill&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;skills&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;new skill&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Lista &lt;em&gt;skills&lt;/em&gt; w klasie &lt;em&gt;User&lt;/em&gt; nie jest &lt;em&gt;Observable&lt;/em&gt;, co skutkuje tym, że &lt;em&gt;MobX&lt;/em&gt; nie dowie się o tej zmianie i nie wyemituje sygnału do zareagowania na nią. Można ten problem rozwiązać na dwa sposoby:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Zaprojektowanie klasy &lt;em&gt;User&lt;/em&gt; w taki sposób, żeby jej część była obserwowalna. Kłóci się to jednak z koncepcją worka danych, którego jedynym zadaniem jest opisanie użytkownika i wystawienie czystego interfejsu. Możesz się z tym kłócić - śmiało. Architektura aplikacji to kwestia elastyczna, a to tylko mój punkt widzenia.&lt;/li&gt;
+  &lt;li&gt;Korzystanie z &lt;em&gt;Immutable objects&lt;/em&gt;, czyli obiektów których stan nie może zostać zmieniony. Jedyną możliwością na dokonanie zmiany jest utworzenie bliźniaczego obiektu i przypisanie jego instancji w miejsce starej referencji. We Flutterze konwencją jest, że obiekty takie implementują funkcję &lt;strong&gt;copyWith&lt;/strong&gt; do której podajemy opcjonalne pola do aktualizacji, a reszta zostanie skopiowana z oryginalnego obiektu. Jeśli nie chcesz implementować podobnej funkcji w każdej jednej klasie która tego wymaga, zainteresuj się proszę biblioteką &lt;a href=&quot;https://pub.dev/packages/freezed&quot;&gt;freezed&lt;/a&gt;. Działa w oparciu o automatyczne generowanie kodu, zupełnie jak &lt;em&gt;mobx_codegen&lt;/em&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;W przykładzie jak widać wybrałem rozwiązanie #2, &lt;em&gt;Immutable objects&lt;/em&gt; to coś co &lt;del&gt;szkaluję&lt;/del&gt; szanuję.&lt;/p&gt;
+
+&lt;h4 id=&quot;generowanie-kodu&quot;&gt;Generowanie kodu&lt;/h4&gt;
+
+&lt;p&gt;Zanim przejdziemy do ostatniego elementu, czyli reakcji, wygenerujmy wspomniany już wcześniej plik &lt;em&gt;store.g.dart&lt;/em&gt;. Jest to proces w pełni automatyczny, a sam nie musisz nawet do niego zaglądać. To trochę tak jakbyś chciał podejrzeć zdjęcie w terminalu, albo kod wynikowy programu (&lt;em&gt;.exe&lt;/em&gt;, &lt;em&gt;.dmg&lt;/em&gt;). W celu jednorazowego wygenerowania pliku uruchom:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;flutter pub run build_runner build &lt;span class=&quot;nt&quot;&gt;--delete-conflicting-outputs&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Istnieje również tryb obserwowania, który przegeneruje niezbędne pliki przy każdorazowej ich zmianie. Możesz go przykładowo włączyć, gdy rozpoczynasz pracę i zapomnieć na cały dzień.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;flutter pub run build_runner watch &lt;span class=&quot;nt&quot;&gt;--delete-conflicting-outputs&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Jeśli postanowisz sprawdzić jak wygląda nowo wygenerowany plik - śmiało. Jest czytelny, a najważniejsza informacja jest zawarta już w pierwszej linii:&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// GENERATED CODE - DO NOT MODIFY BY HAND&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Nigdy, przenigdy nie wprowadzaj zmian w plikach auto-generowanych. Zdarzyło mi się popełnić kilka razy ten błąd w życiu (nie w Darcie) gdzie zamiast na pliku wejściowym operowałem na tym wygenerowanym. Wystarczy wtedy jedno nieumyślne poproszenie o przegenerowanie plików i cała praca zostaje nadpisana przez automat.&lt;/p&gt;
+
+&lt;p&gt;Pytanie co robić z plikami &lt;em&gt;.g.dart&lt;/em&gt; - trzymać je w repozytorium, czy może dodać do ignorowanych? Osobiście nie wysyłam ich do systemu kontroli wersji, bo nie mają same w sobie żadnej wartości. Wystarczy uruchomić skrypt i zostaną automatycznie wygenerowane na nowo na podstawie plików źródłowych. Wybór jednak zostawiam tobie, żadne podejście nie jest grzechem śmiertelnym i zależy od osobistych preferencji.&lt;/p&gt;
+
+&lt;h4 id=&quot;reactions&quot;&gt;Reactions&lt;/h4&gt;
+
+&lt;p&gt;Czas na element, który będzie potrafił zareagować na zmiany w &lt;em&gt;Observable&lt;/em&gt;. Reakcja (&lt;strong&gt;reaction&lt;/strong&gt;) to inaczej &lt;em&gt;Observer&lt;/em&gt;, funkcja zarejestrowana i uruchamiana zawsze gdy powiązany z nią &lt;em&gt;Observable&lt;/em&gt; zmieni swój stan. Nie będziemy pisać reakcji niskopoziomowych, skupimy się wyłącznie na tej, która interesuje nas najbardziej z punktu widzenia aplikacji mobilnej. &lt;strong&gt;Zmiana stanu to zmiana UI.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Tutaj wkracza moja ulubiona część, czyli biblioteka &lt;strong&gt;flutter_mobx&lt;/strong&gt;. Jedyne co dostarcza to pojedynczy widget &lt;strong&gt;Observer&lt;/strong&gt;, który jest swoistą reakcją. Przebuduje się on automatycznie za każdym razem, gdy będzie taka potrzeba.&lt;/p&gt;
+
+&lt;p&gt;Wróćmy zatem do naszego UI (&lt;em&gt;main.dart&lt;/em&gt;) i tchnijmy w niego nieco życia. Na początku warto by było zainicjalizować stan.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;runApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;store&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UserStore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Zainicjalizowałem właśnie zmienną globalną. &lt;strong&gt;GLOBALNĄ&lt;/strong&gt;. W prawdziwej aplikacji zdecydowanie bym tego unikał, ale proste rzeczy są proste, stąd taki wybór do demonstracji. Jeśli chcesz zbudować większą i przede wszystkim testowalną aplikację, polecam użycie &lt;a href=&quot;https://pub.dev/packages/get_it&quot;&gt;get_it&lt;/a&gt;, lub &lt;a href=&quot;https://pub.dev/packages/provider&quot;&gt;provider&lt;/a&gt;, aby dostarczać stan aplikacji w dół drzewa. We własnych projektach korzystam z &lt;em&gt;get_it&lt;/em&gt;, bo robi w tym wypadku to samo co &lt;em&gt;provider&lt;/em&gt;, ale za to mniejszą ilością kodu i bez potrzeby przekazywania kontekstu (&lt;em&gt;context&lt;/em&gt;).&lt;/p&gt;
+
+&lt;p&gt;Co dalej? Wszędzie tam, gdzie chcesz mieć dostęp do zawsze aktualnego stanu użyj widgeta &lt;em&gt;Observer&lt;/em&gt;. Owijamy, więc &lt;em&gt;Scaffold&lt;/em&gt; i dostarczamy do niego stan.&lt;/p&gt;
+
+&lt;p&gt;Przed:&lt;/p&gt;
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Scaffold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;appBar:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AppBar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;nl&quot;&gt;title:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Previous users: 0&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;body:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;isAuthenticated&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;Authenticated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;Unauthenticated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Po:&lt;/p&gt;
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Observer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;builder:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Scaffold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+      &lt;span class=&quot;nl&quot;&gt;appBar:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AppBar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;title:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Previous users: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${store.previousUsers.length}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+      &lt;span class=&quot;nl&quot;&gt;body:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isAuthenticated&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; 
+          &lt;span class=&quot;n&quot;&gt;Authenticated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;Unauthenticated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;},&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Użycie &lt;em&gt;Observera&lt;/em&gt; może wydać ci się delikatnie wybrakowane. Przecież nie powiedzieliśmy mu na jakie zmiany ma nasłuchiwać. Skąd zatem wie, które obiekty ma śledzić?&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Wszystkie zdefiniowane w &lt;em&gt;store.dart&lt;/em&gt;? &lt;strong&gt;Nie&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Żadnego? &lt;strong&gt;Nie&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Tylko te które użyte są wewnątrz &lt;em&gt;buildera&lt;/em&gt;? &lt;strong&gt;Tak!&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;MobX&lt;/em&gt; sam, bez twojego udziału zadba o to, aby &lt;em&gt;rebuild&lt;/em&gt; nastąpił tylko wtedy, gdy zmieni się &lt;em&gt;Observer&lt;/em&gt; użyty wewnątrz wywołania funkcji &lt;em&gt;builder&lt;/em&gt;. Ty się niczym nie przejmuj, zrób sobie kawę i odpocznij. Co więcej - jeśli nie użyjesz żadnego &lt;em&gt;Observera&lt;/em&gt; wewnątrz funkcji to konsola wyświetli ostrzeżenie. Skoro nic nie chcesz obserwować to po co używasz Observera?&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif&quot; alt=&quot;Mind blown&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;integracja-akcji&quot;&gt;Integracja akcji&lt;/h4&gt;
+
+&lt;p&gt;Nie ma nic prostszego niż integracja UI z akcjami. Jedyne co należy zrobić to wywołać odpowiednią akcję i … gotowe. Żadnego dodatkowego wpinania kabelków i dispatcherów.&lt;/p&gt;
+
+&lt;p&gt;Przed:&lt;/p&gt;
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addSkill&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Po:&lt;/p&gt;
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addSkill&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addSkill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Uruchomienie aplikacji w obecnym stanie spowoduje, że można się do niej zalogować i wylogować. Licznik poprzednich użytkowników również poprawnie się odświeża po wylogowaniu. Działa wszystko z wyjątkiem dodawania nowej umiejętności, bo tam ciągle mamy zahardkodowane wartości, nie korzystające ze stanu.&lt;/p&gt;
+
+&lt;p&gt;W tym fragmencie nie ma już nic odkrywczego. Ponownie korzystamy z &lt;em&gt;Observera&lt;/em&gt; i czytamy aktualne dane o użytkowniku. Nie ma tutaj niczego nowego nie dlatego, że jestem leniwy i mi się nie chciało. To już generalnie wszystko co musisz wiedzieć, żeby zacząć budować aplikację w oparciu o &lt;em&gt;MobX&lt;/em&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Authenticated&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Observer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+      &lt;span class=&quot;nl&quot;&gt;builder:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+          &lt;span class=&quot;nl&quot;&gt;mainAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MainAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+          &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Name: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${user.name}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Birth date: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${user.birthDate}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Skills: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${user.skills}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;Row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+              &lt;span class=&quot;nl&quot;&gt;mainAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MainAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;spaceEvenly&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+              &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;RaisedButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+                  &lt;span class=&quot;nl&quot;&gt;onPressed:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;addSkill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+                  &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;New skill&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;RaisedButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+                  &lt;span class=&quot;nl&quot;&gt;onPressed:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+                  &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Log out&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+              &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;addSkill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addSkill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+  &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;podsumowanie&quot;&gt;Podsumowanie&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;MobX&lt;/em&gt; jest świetnym i sprawdzonym w boju rozwiązaniem do zarządzania stanem aplikacji. Nie wymaga dużej ilości kodu, jest wydajny i sporo rzeczy dzieje się bez udziału programisty. Generowanie kodu niemal do zera redukuje ilość &lt;em&gt;boilerplate&lt;/em&gt;, a widget &lt;em&gt;Observer&lt;/em&gt; ze swoim auto przebudowywaniem oszczędza czasu na zastanawianiu się pod które części stanu trzeba się zarejestrować.&lt;/p&gt;
+
+&lt;p&gt;Samo korzystanie z biblioteki ogranicza się do:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;definiowania klas z wyeksponowanymi obiektami &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@observable&lt;/code&gt; i &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@computed&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;implementacji akcji mutujących stan &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@action&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;korzystanie z widgeta &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Observer&lt;/code&gt; na warstwie UI&lt;/li&gt;
+  &lt;li&gt;pamiętaniu o przegenerowaniu kodu po zmianach (lub uruchomienia &lt;em&gt;watcha&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;polubienia &lt;em&gt;immutable objects&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Osobiście &lt;em&gt;MobX&lt;/em&gt; to dla mnie numer #1 jeśli chodzi o dostępne biblioteki do zarządzania stanem. Jest prosty, szybki i przyjemny, a są to cechy, które mocno sobie cenię zwłaszcza w pobocznych projektach robionych po godzinach. Używam go m.in. w developmencie pierwszego RPG online osadzonego w świecie post-apo we Flutterze - &lt;a href=&quot;https://twitter.com/vaultomb&quot;&gt;Vaultomb&lt;/a&gt;. Premiera w dalszej przyszłości :)&lt;/p&gt;</content><author><name></name></author><summary type="html">MobX jest świetnym i sprawdzonym w boju rozwiązaniem do zarządzania stanem aplikacji. Nie wymaga dużej ilości kodu, jest wydajny i sporo rzeczy dzieje się bez udziału programisty.</summary></entry><entry><title type="html">Asynchroniczny Dart - Isolates</title><link href="https://rykowski.dev/blog/async-dart-isolates/" rel="alternate" type="text/html" title="Asynchroniczny Dart - Isolates" /><published>2020-07-05T00:00:00+02:00</published><updated>2020-07-05T00:00:00+02:00</updated><id>https://rykowski.dev/blog/async-dart-isolates</id><content type="html" xml:base="https://rykowski.dev/blog/async-dart-isolates/">&lt;blockquote&gt;
   &lt;p&gt;Jest to drugi wpis z serii o modelu wykonawczym w Darcie i powiązanej z nim asynchroniczności. Aby wyciągnąć maksimum wiedzy z tego wpisu, niezbędna jest wiedza z poprzedniego, który tłumaczy działanie Event Loop, Futures i programowania z użyciem async/await. Znajdziesz go &lt;a href=&quot;/blog/async-dart-event-loop-futures/&quot;&gt;tutaj&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -3847,134 +4275,4 @@ flutter run
 
 &lt;p&gt;Jest to typowy &lt;em&gt;counter&lt;/em&gt; w którym po kliknięciu przycisku, licznik się zwiększa i tak bez końca. Teraz masz już 100% pewność, że Flutter gra i buczy i pozostaje Ci jedynie &lt;em&gt;pure development&lt;/em&gt;, czyli to czym chcesz się zająć na poważnie. Ze swojej strony polecam oficjalny tutorial na &lt;a href=&quot;https://flutter.dev/docs/reference/tutorials&quot;&gt;flutter.dev&lt;/a&gt;, który krok po kroku przedstawia najważniejsze składowe frameworka.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/meme_gratz.gif&quot; alt=&quot;meme_gratz.gif&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Postawienie lokalnego środowiska developerskiego do pisania aplikacji we Flutterze. Instalacja niezbędnych paczek, edytora, aż do zbudowania Swojej pierwszej prostej apki.</summary></entry><entry><title type="html">Nowy gracz aplikacji mobilnych - Flutter</title><link href="https://rykowski.dev/blog/flutter-intro/" rel="alternate" type="text/html" title="Nowy gracz aplikacji mobilnych - Flutter" /><published>2019-06-09T00:00:00+02:00</published><updated>2019-06-09T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-intro</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-intro/">&lt;p&gt;&lt;strong&gt;Flutter&lt;/strong&gt; to nowa technologia od Google służąca do tworzenia aplikacji mobilnych. Nie ma tutaj jednak mowy o stricte natywnym podejściu (od tego jest Kotlin, czy Swift), lecz o cross-platformowym frameworku, w którym kod piszemy raz i robimy release na oba systemy - Android oraz iOS. Brzmi świetnie, prawda? I tak jest w rzeczywistości. Nie utrzymujemy dwóch całkowicie niezależnych bytów natywnych, nie uczymy się dwóch odmiennych od siebie języków programowania, nie poznajemy tak dogłębnie dwóch różnych systemów, czy też środowisk. W naszej kwestii jako programisty pozostaje wytworzenie aplikacji mobilnej, a Flutter zajmie się tym, aby poprawnie działała na obu platformach.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/meme_follow.gif&quot; alt=&quot;meme_follow.gif&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;deja-vu&quot;&gt;Deja-vu&lt;/h2&gt;
-
-&lt;p&gt;Czy Flutter to rewolucja na miarę naszych czasów? Całkowity zwrot świata mobilno-developerskiego w stronę aplikacji którą piszemy raz i uruchamiamy gdziekolwiek chcemy? Bez przesady - rozwiązania tego typu istnieją już od jakiegoś czasu, a mimo to development natywny ma się bardzo dobrze i nigdzie się nie wybiera. Fluttera należy traktować zdecydowanie bardziej jako ewolucję w sposobie w jakim piszemy aplikacje tego typu.&lt;/p&gt;
-
-&lt;p&gt;Na rynku mamy co najmniej kilkanaście innych rozwiązań, które celują w ten sam problem - jak &lt;del&gt;zarobić&lt;/del&gt; zbudować aplikację mobilną która pokryje oba systemy i się nie narobić. Każda technologia rozwiązuje problem na inny sposób, z lepszym bądź gorszym skutkiem, który ostatecznie definiuje jak bardzo przyjmie się na rynku i jak dużą świadomość wywrze na developerach. Oto lista narzędzi z którymi miałem przyjemność mniej-lub-bardziej pracować:&lt;/p&gt;
-
-&lt;h3 id=&quot;ionic&quot;&gt;Ionic&lt;/h3&gt;
-
-&lt;p&gt;Najstarsze z wymienianych tutaj rozwiązań i w moim odczuciu najsłabsze. Pomimo tego że projekt jest aktywnie rozwijany i dostarcza naprawdę fajny ekosystem, to czasy swojej świetności ma już dawno za sobą. Aplikacje pisane są w &lt;em&gt;JavaScript&lt;/em&gt;, &lt;em&gt;HTML&lt;/em&gt; i &lt;em&gt;CSS&lt;/em&gt;. Tak, jest to bardzo znajomy stack technologiczny dla web-developerów, ale nie bez powodu. Aplikacje napisane w Ionicu nie są kompilowane do niczego co choćby przypominałoby kod natywny. Sztuczka budowania polega na tym, że tworzymy naszą aplikację (zupełnie jak stronę internetową), a następnie jest ona pakowana w taki sposób, aby jej uruchomienie na fizycznym urządzeniu odpaliło w tle przeglądarkę, która obsłuży w trybie pełnoekranowym naszą aplikację. Rozwiązanie jest mało wydajne, zwłaszcza gdy operujemy na dużej ilości danych, lub gdy chcemy wprowadzić zaawansowane animacje do projektu. Nie jest jednak tak, że Ionic jest złą opcja gdy wybieramy główne narzędzia do stworzenia aplikacji mobilnej. W przypadku, gdy zależy nam na:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;stworzeniu produktu który będzie działał z pudełka na Android, iOS oraz przeglądarce&lt;/li&gt;
-  &lt;li&gt;szybkim prototypie aby zwalidować pomysł biznesowy&lt;/li&gt;
-  &lt;li&gt;błyskawicznym wykorzystaniu znanych technologii (JS, HTML, CSS)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Warto poważnie rozważyć tę technologię jako dobrego kandydata. Możemy szybko przygotować prototyp, który będzie dostępny dla użytkowników mobilnych (aplikacja pobierana ze sklepu), jak również przez przeglądarkę dla użytkowników desktopowych, czy tych którzy korzystają z innego systemu mobilnego (m.in. Windows Phone).&lt;/p&gt;
-
-&lt;h3 id=&quot;xamarin&quot;&gt;Xamarin&lt;/h3&gt;
-
-&lt;p&gt;Prawdziwka gratka dla programistów platformy .NET i języka C#, którzy chcą stworzyć aplikację mobilną. Właścicielem frameworka jest Microsoft, który w 2016 roku przejął startup i od tego momentu kieruje jego dalszym rozwojem. Jest to jedyna technologia z którą nie mam prawdziwego komercyjnego doświadczenia - jedynie projekty hobbystyczne - głównie za sprawą faktu, że nie pojawiła się między nami chemia (przez “nas” mam na myśli C# i mnie). Po prostu, tak bywa. Warto zaznaczyć, że w przeciwieństwie do Ionica mamy tutaj do czynienia z aplikacją, która kompiluje się do natywnego (w uproszczeniu) kodu. Daje nam to spory skok wydajnościowy, dzięki któremu użytkownicy aplikacji nie są w stanie stwierdzić na podstawie płynności działania, czy korzystają z aplikacją natywnej, czy też nie. A do tego przede wszystkim sprowadza się pisanie oprogramowania typu cross-platform.&lt;/p&gt;
-
-&lt;h3 id=&quot;react-native&quot;&gt;React Native&lt;/h3&gt;
-
-&lt;p&gt;Z jednej strony mój ex-ulubieniec, z drugiej koszmarek który śni się po nocach. Głównym motorem napędowym jest jak w przypadku Ionica - JavaScript. Można ten język kochać, można nienawidzić, a można (to ja!) po prostu traktować go jako kolejne narzędzie wykorzystywane w pracy, które jak wszystko - ma swoje wady i zalety - wystarczy je poznać i zaakceptować. Nie chcę się jednak rozwodzić nad językiem, a nad frameworkiem. Jest to na dzień dzisiejszy czarny koń wyścigu &lt;del&gt;zbrojeń&lt;/del&gt; cross-platformowego. Najpopularniejsze dłuto do rzeźbienia naszych cross-platformowych aplikacji. Posiada ogromny ekosystem (paczki które zrobią za nas 50% projektu) oraz community (stackoverflow, eventy, grupy dyskusyjne). Jeśli mowa o paczkach - te są naprawdę w dużej części dobre. Co to są dobre paczki? A no takie, które są dojrzałe, utrzymywane, aby działały na kolejnych wersjach Androida, czy iOSa, a także wystawiają bogaty interfejs do operowania. Prawdziwa machina open-source. Dodatkowo bardzo często klienci, którzy potrzebują aplikacji mobilnej chcą aby została napisana właśnie w React Native. Skąd klient stricte biznesowy wie o technologii? Dlaczego akurat ta, a nie inna? To proste - marketing, rozpoznawalność, dojrzałość na rynku sprawiły, że gdy myślisz o aplikacji mobilnej ze współdzielonym kodem to mózg automagicznie rysuje wizerunek &lt;em&gt;React Native&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Czy mamy więc rozwiązanie idealne? Oczywiście, że nie - nie ma rozwiązań idealnych, a każde kłuje na swój własny specyficzny sposób. Z projektów nad którymi pracowałem w tej technologii wyłania się zawsze podobny zestaw problemów:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;trudność w aktualizacji w istniejącym projekcie - podbicie wersji React Native niemal zawsze prowadzi do traumy i rozwiązywania mistycznych błędów, które nie powinny mieć miejsca. W skrajnych przypadkach najlepszym wyjściem z sytuacji jest utworzenie czystego projektu z nową wersją React Native i przenoszenie tam naszego kodu projektowego - brzmi źle, ale skoro działa to warto się pochylić&lt;/li&gt;
-  &lt;li&gt;niedeterministyczne działanie aplikacji - nie zliczę sytuacji w których aplikacja budowała się poprawnie w piątek, a w poniedziałek po południu coś było nie tak. A to przestał działać live reload, a to hot reload dostaje czkawki. Aplikacja przestała się budować, lub urządzenie nie widzi bundla developerskiego? Standard. W pewnym momencie po prostu się przyzwyczajasz i masz swój własny zestaw komend defibrylacyjnych, którymi się dzielisz z zespołem projektowym.&lt;/li&gt;
-  &lt;li&gt;jakość zgłaszanych błędów - czerwony ekran który jako developerzy dostajemy co jakiś czas, gdy zepsujemy nasz kod. O ile doskonale rozumiem, że błędy się zdarzają i nikt nie pisze kodu w taki sposób, aby nie był mu potrzebny backspace, to komunikaty które dostajemy wołają o pomstę do debuggera. Tak jak w punkcie wyżej - po jakimś czasie mózg buduje mapę co znaczy dany komunikat i w jakich przypadkach się pojawia (jak choćby błędny import) i z automatu wiemy co nabroiliśmy&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Są również inne mniejsze, bądź większe problemy, jednak bardziej specyficzne dla konkretnego projektu. Mimo wad, szczerze uważam, że React Native jest technologią w którą warto inwestować swój czas - m.in. za sprawą mnogości ofert pracy, niższym progiem wejścia jeśli znasz już JavaScript, a także bogatego ekosystemu.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/meme_cool.gif&quot; alt=&quot;meme_cool.gif&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;inne&quot;&gt;Inne&lt;/h3&gt;
-
-&lt;p&gt;Temat alternatywnych technologii nie jest wyczerpany. Istnieje wiele innych bibliotek, czy frameworków które rozwiązują podobny problem co Flutter, jednak jest to już “drobnica” dla zapaleńców, czy programistów hobbystycznych (bez obrazy). Jeżeli zależy Ci na technologii która będzie rozwijana i wspierana przez najbliższe lata - doświadczenie jasno mi podpowiada, że należy postawić na rozwiązanie za którym stoi dedykowany sztab techniczny dużej firmy (bo tylko taka może sobie na to pozwolić), a nie za frameworkiem krzakiem, który może się pochwalić jedynie ładnym landing-page, a możliwości i jakiekolwiek wsparcie kończy się tuż po zainstalowaniu paczki na naszym lokalnym środowisku. Stwierdzenie brutalne, lecz prawdziwe.&lt;/p&gt;
-
-&lt;h2 id=&quot;flutter&quot;&gt;Flutter&lt;/h2&gt;
-
-&lt;p&gt;Skoro wiemy już czym są aplikacje cross-platformowe i wiemy, że problem został już dawno rozwiązany - to co robi tu Flutter? Jakie karty wnosi do gry i do kogo dokładnie jest skierowany? Mamy już przecież młotek do szybkiego pisania wolnych aplikacji (Ionic), do pisania w ekosystemie typu enterprise (Xamarin), czy do tworzenia niemal natywnych tworów z użyciem języka skryptowego (React Native). Co jeszcze można tutaj ugrać i jakim asem zagrać? Zaczynajmy.&lt;/p&gt;
-
-&lt;h3 id=&quot;język&quot;&gt;Język&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Co napędza Fluttera?&lt;/em&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Dart&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;em&gt;W sensie to taki język programowania?&lt;/em&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Tak&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;…&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Mogłeś nie słyszeć o tym języku, nawet jeśli nie spędziłeś ostatnich miesięcy pod kamieniem. Nie należy do najpopularniejszych narzędzi, zwłaszcza że przed Flutterem nie miał realnego i mainstreamowego zastosowania. Według rankingu TIOBE, który śledzi popularność dostępnych języków, popularniejsze są m.in. Fortran, Scratch, czy nawet COBOL. Zaryzykuję wręcz stwierdzenie że Dart to taki trochę eksperyment developerski, który dojrzewał w piwnicy na swój moment chwały.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/dart_rank_2019.png&quot; alt=&quot;dart_rank_2019.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Składnia języka jest nowoczesna, prawdopodobnie za sprawą tego, że debiutował w 2011 roku - nie miał czasu się zestarzeć. Mógłbym napisać, że to mieszanka Javy i JavaScriptu, ale zdaję sobie sprawę jaka będzie Twoja reakcja na takie porównanie.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/meme_moron.gif&quot; alt=&quot;meme_moron.gif&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Ujmę to więc inaczej:&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keywords&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Rykowski&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;ma&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;keywords&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;psa&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;keywords&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keyword&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keyword&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Lista ma &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${keywords.length}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; elementów&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Wygląda jak zwykły język programowania? Otóż to. Im lepiej poznasz język, tym bardziej docenisz jego prostotę i brak niespójności, a zarazem to że działa w sposób oczekiwany i intuicyjny. Zdaję sobie  sprawę, że trudno oceniać język po kilku linijkach kodu - obiecuję opracować dedykowany wpis samemu językowi.&lt;/p&gt;
-
-&lt;p&gt;Warto wspomnieć, że Dart został zaprojektowany przez tą samą firmę która odpowiada za Fluttera, czyli Google. Co to oznacza, poza tym że mamy tutaj interesujący zbieg okoliczności? Z reguły języki programowania rozwijają się swoim rytmem i planem, wprowadzają zmiany i udogodnienia dla programistów, jednak każda taka zmiana jest mocno ważona i jej wprowadzenie zawsze zajmuje sporo czasu. W naszym przypadku jedna firma steruje zarówno językiem jak i biblioteką która go wykorzystuje - stąd część zmian jest mocno sterowana potrzebami frameworka. Zamknięty ekosystem wzajemnie się napędza i dostarcza wysokiej jakości narzędzie do wykorzystania przez programistów aplikacji.&lt;/p&gt;
-
-&lt;h3 id=&quot;interfejs-użytkownika-ui&quot;&gt;Interfejs użytkownika (UI)&lt;/h3&gt;
-
-&lt;p&gt;Interfejs użytkownika, czyli to co widzi użytkownik naszej aplikacji. Przyciski, przełączniki, formularze, a nawet wyświetlany tekst zawierają się w interfejsie. Flutter wprowadza sporo zamieszania i nowości w tym konkretnym temacie. Wszystko za sprawą własnego silnika renderującego Skia, który w całości odpowiada za to co w danym momencie jest wyświetlane na ekranie. Piksel po pikselu Flutter steruje widocznymi elementami, a także animacją odpowiedzialną za płynne odpowiadanie na interakcje użytkownika.&lt;/p&gt;
-
-&lt;p&gt;Co w praktyce oznacza, że Flutter sam rysuje wszystko co jest widoczne w aplikacji? Czy inne biblioteki nie robią tego samego? &lt;strong&gt;Nie&lt;/strong&gt;. Komponenty w Ionicu rysowane są przez przeglądarkę systemu - co oznacza, że będą wyglądały inaczej w zależności od tego jaka przeglądarka, a nawet wersja jest aktualnie zainstalowana na telefonie. React Native oraz Xamarin rysują natywne komponenty systemowe - z jednej strony dają nam one poczucie korzystania z aplikacji natywnej, z drugiej - trudno jest sprawić aby aplikacja wyglądała identycznie na obu platformach. Flutter sprawia, że każdy komponent będzie wyglądał identycznie na każdym urządzeniu - niezależnie od tego czy pracujemy na Androidzie, iOS-ie, a nawet przeglądarce webowej.&lt;/p&gt;
-
-&lt;p&gt;Kwestia wbudowanych komponentów graficznych które oddane są do naszej dyspozycji robi robotę. Nie będę ich tutaj opisywał, ograniczę się wyłącznie do faktu, że Flutter posiada pełne i oficjalne wsparcie dla Material Design (znowu Google). Wiesz co to znaczy, prawda? Setki prostych i stylowych elementów do wykorzystania, z czego każdy można ostylować do własnych potrzeb poprzez dedykowany obiekt styli. &lt;strong&gt;Wow!&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_ui.gif&quot; alt=&quot;flutter_ui.gif&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;wydajność&quot;&gt;Wydajność&lt;/h3&gt;
-
-&lt;p&gt;Aplikacja podczas budowania jest kompilowana do kodu natywnego, więc nie ma się czym martwić jeśli chodzi o wydajność. Elementy renderowane są błyskawicznie, listy nie lagują podczas szybkiego scrollowania, a animacje są płynne i bez problemów osiągają mityczne 60fps. Nie zdarzyła mi się osobiście jeszcze sytuacja, w której miałbym problem natury “wydolnościowej”. Koniecznie muszę jednak zaznaczyć, że aplikacja działa w pełni płynnie dopiero gdy zbudujemy ją w trybie release - czyli takim w jakim dostanie ją użytkownik końcowy. W przypadku gdy pracujemy w trybie developerskim (hot-reloading), aplikacja działa poprawnie ale bez efektu wow - warto mieć to na uwadze, gdy rozpoczniemy swoją przygodę.&lt;/p&gt;
-
-&lt;h3 id=&quot;ekosystem-i-społeczność&quot;&gt;Ekosystem i społeczność&lt;/h3&gt;
-
-&lt;p&gt;Każda nowa technologia potrzebuje w skrócie dwóch rzeczy aby osiągnąć sukces:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Wysoka jakość&lt;/li&gt;
-  &lt;li&gt;Rozbudowany ekosystem&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;O ile kwestii wysokiej jakości nie ma potrzeby opisywać - słaba technologia się sama nie obroni i umrze śmiercią naturalną, to ekosystem jest rzeczą której warto się przyjrzeć. Jest to cecha nad którą Google nie ma pełnej kontroli - o ile jest w stanie dopieszczać Fluttera o nowe mechanizmy i rozwiązane błędy, to społeczność buduje się kilka kroków dalej - samodzielnie. Rozbudowany ekosystem wymaga czasu - konieczne jest zebranie odpowiedniej masy krytycznej developerów, którzy poświęcą część swojego czasu na ewangelizację technologii. Przyjmuje ona różne formy:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Gotowe biblioteki&lt;/li&gt;
-  &lt;li&gt;Prezentacje i prelekcje&lt;/li&gt;
-  &lt;li&gt;Pomoc w rozwiązywaniu problemów początkującym&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Ekosystem nie jest jeszcze ustabilizowany - technologia jest młoda i nie miała jeszcze czasu tego wypracować. Istnieje co prawda wiele gotowych rozwiązań od community, jednak duża część zdążyła zostać już porzucona przez właścicieli - na próżno więc liczyć na poprawki, a lista zgłaszanych błędów wciąż rośnie. Mimo tego, że nie jest idealnie (w porównaniu choćby z React Native), to z każdym miesiącem sytuacja się polepsza. Osobiście wierzę, że rok 2019 będzie przełomowym i jako programiści będziemy mogli się cieszyć z rozbudowanego ekosystemu.&lt;/p&gt;
-
-&lt;h3 id=&quot;dokumentacja&quot;&gt;Dokumentacja&lt;/h3&gt;
-
-&lt;p&gt;Oficjalne źródło wiedzy, które jest nieocenioną częścią samej technologii. Co z tego, że narzędzie jest świetne i najlepsze na świecie, skoro dokumentacja napisana została byle jak, a dodatkowo brakuje w niej wielu informacji i wytycznych w jaki sposób się nim posługiwać? Na nasze szczęście Google słynie z tego, że jego produkty posiadają świetną i obszerną dokumentację techniczną. Każdy niemal aspekt jest skrupulatnie i dokładnie rozpisany, a poza standardowym &lt;em&gt;API reference&lt;/em&gt;, znajdziemy tutaj m.in:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Najlepsze praktyki dotyczące testowania i debugowania aplikacji&lt;/li&gt;
-  &lt;li&gt;Ścieżki wdrożeniowe dla programistów innych technologii (w tym React Native, czy Web)&lt;/li&gt;
-  &lt;li&gt;Wysokopoziomowe poradniki dotyczące layoutów, interakcji, czy sterowania animacjami&lt;/li&gt;
-  &lt;li&gt;W jaki sposób zbudować aplikację produkcyjną wraz z Continuous Deployment&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Jestem mocno zaskoczony - pozytywnie - że tak młoda technologia jak Flutter posiada tak rozbudowaną i obszerną dokumentację na każdy istotny temat. Jeśli chcesz dogłębnie poznać dowolne zagadnienie z zakresu frameworka, znajdziesz je właśnie w oficjalnej dokumentacji, która dostępna jest pod adresem &lt;a href=&quot;https://flutter.dev/docs&quot;&gt;https://flutter.dev/docs&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;czy-warto&quot;&gt;Czy warto?&lt;/h3&gt;
-
-&lt;p&gt;Przy nowych technologiach pojawia się zawsze to samo pytanie - czy warto się nią zainteresować i czy w długiej perspektywie czas spędzony na nauce się zwróci (mówię rzecz jasna o $$$)? Nie mam jednoznacznej odpowiedzi na to pytanie, nie wezmę odpowiedzialności za to jak inwestujesz swój czas. Wszystko jednak wskazuje na to, że Flutter zostanie na rynku długo i warto wskoczyć już teraz do jego wagonika. &lt;em&gt;Early adopters would be rewarded&lt;/em&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Każda korporacja chce ukroić kawałek z tortu aplikacji x-platform. Microsoft kupił Xamarina, Facebook stworzył React Native, a teraz Google dołącza do wyścigu z Flutterem - nowoczesnym frameworkiem do pisania aplikacji Android oraz iOS.</summary></entry></feed>
+&lt;p&gt;&lt;img src=&quot;/assets/img/blog/meme_gratz.gif&quot; alt=&quot;meme_gratz.gif&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Postawienie lokalnego środowiska developerskiego do pisania aplikacji we Flutterze. Instalacja niezbędnych paczek, edytora, aż do zbudowania Swojej pierwszej prostej apki.</summary></entry></feed>

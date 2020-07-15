@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/flutter-mobx/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics -->
+    
+        <div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.
+</span><a id="cookie-notice-accept" class="button">Approve</a>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  if(readCookie('cookie-notice-dismissed')==='true') {
+    
+      // Google tag manager
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-77793311-12');
+      // Google analytics
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-77793311-12', 'auto');
+      ga('send', 'pageview');
+    
+  } else {
+    document.getElementById('cookie-notice').style.display = 'block';
+  }
+
+  document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+    createCookie('cookie-notice-dismissed','true',31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    location.reload();
+  });
+
+</script>
+
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>MobX i Flutter - automatyczny stan | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="MobX i Flutter - automatyczny stan" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="MobX jest świetnym i sprawdzonym w boju rozwiązaniem do zarządzania stanem aplikacji. Nie wymaga dużej ilości kodu, jest wydajny i sporo rzeczy dzieje się bez udziału programisty." />
+<meta property="og:description" content="MobX jest świetnym i sprawdzonym w boju rozwiązaniem do zarządzania stanem aplikacji. Nie wymaga dużej ilości kodu, jest wydajny i sporo rzeczy dzieje się bez udziału programisty." />
+<link rel="canonical" href="https://rykowski.dev/blog/flutter-mobx/" />
+<meta property="og:url" content="https://rykowski.dev/blog/flutter-mobx/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-15T00:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/flutter-mobx/","headline":"MobX i Flutter - automatyczny stan","dateModified":"2020-07-15T00:00:00+02:00","datePublished":"2020-07-15T00:00:00+02:00","description":"MobX jest świetnym i sprawdzonym w boju rozwiązaniem do zarządzania stanem aplikacji. Nie wymaga dużej ilości kodu, jest wydajny i sporo rzeczy dzieje się bez udziału programisty.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-mobx/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/page.thumbnail " />
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article class="feature-image" >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="MobX+i+Flutter+-+automatyczny+stan" class="title">MobX i Flutter - automatyczny stan</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Lipiec
+        
+      2020
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>Flutter posiada dziesiątki rozwiązań przeznaczonych do zarządzania stanem aplikacji. Bardziej, lub mniej popularne, przekombinowane, proste w użyciu. Generalnie jest pełen wachlarz możliwości i każdy bez problemu znajdzie coś dla siebie i swojego projektu.</p>
+
+<p>Co jednak zrobić, gdy nie masz czasu, ani chęci w testowaniu i porównywaniu mnogości opcji? Postaw na sprawdzony wariant w postaci <strong>MobX</strong>, który w ekosystemie JavaScript już dawno udowodnił, że ma solidne fundamenty, a praca z nim to czysta przyjemność. Warto na niego postawić również w przypadku aplikacji Flutterowych!</p>
+
+<h2 id="mobx">MobX</h2>
+
+<p><strong>MobX</strong> to biblioteka do zarządzania stanem, w której wiele rzeczy dzieje się automatycznie. Sprawia to, że jako programista nie musisz się nimi przejmować. Wszystko za sprawą <em>TFRP</em> (<em>Transparent Functional Reactive Programming</em>) wokół którego wszystko zostało zaprojektowane i zbudowane. Z jednej strony magiczne rozwiązania to zło, bo przecież musisz wiedzieć jak wszystko dokładnie działa, a z drugiej … Czy nie chcesz przestać się martwić o każdy jeden aspekt oprogramowania? W Darcie nie zajmujesz się alokacją pamięci, ani też jej uwalnianiem, i zakładam, że nie chciałbyś robić tego ręcznie. <em>Garbage Collector</em> sam się wszystkim zajmuje. Czasem lepiej zdać się na gotowe i sprawdzone rozwiązanie, a samemu skupić się na rzeczach, które trudniej zautomatyzować narzędziami. Jak chociażby implementacja logiki biznesowej, czy zapierający dech w piersiach UI.</p>
+
+<p>To co finalnie otrzymujesz korzystając z <em>MobX</em> to posiadanie zawsze aktualnego stanu, który wyświetlany jest użytkownikowi. A wszystko to przy niskim nakładzie pracy i prostocie kodu, którą potrafiłbym wytłumaczyć nawet mojej mamie. Oczywiście pod warunkiem że by chciała … a w to szczerze wątpie.</p>
+
+<h3 id="fundamenty-koncepcyjne">Fundamenty koncepcyjne</h3>
+
+<p>Fundamenty <em>MobX</em> składają się z zaledwie trzech podstawowych konceptów. Są to odpowiednio:</p>
+
+<ul>
+  <li><strong>Observable</strong>, przechowujący stan aplikacji w formie obserwowalnej</li>
+  <li>Akcja (<strong>Action</strong>) do manipulowania (zmieniania) stanu</li>
+  <li>Reakcja (<strong>Reaction</strong>), jako obserwator stanu uruchamiany po jego każdorazowej zmianie</li>
+</ul>
+
+<p>Przyjrzymy się każdej ze składowych z bliska już za moment, podczas budowania prostej aplikacji, ale poniższy diagram w prosty sposób prezentuje jakie są zależności między tymi elementami. Uruchomienie akcji (<em>Actions</em>) prowadzi do zmiany stanu (<em>Observables</em>), który powiadamia o tym fakcie powiązane reakcje (<em>Reactions</em>).</p>
+
+<p><img src="/assets/img/blog/mobx/mobx_triad.png" alt="MobX triad" /></p>
+
+<h3 id="przygotowanie-projektu">Przygotowanie projektu</h3>
+
+<p>W celu wykorzystania pełnego potencjału drzemiącego w <em>MobX</em> będziemy potrzebowali kilku zależności. Nie jest to co prawda wymóg, ale im większy projekt budujesz tym bardziej docenisz dostarczoną automatyzację.</p>
+
+<p>Podstawowa paczka to <strong>mobx</strong>. Dostarcza pełne wsparcie biblioteczne do zarządzania stanem i nie jest ograniczona do działania wyłącznie we Flutterze. Możesz jej równie dobrze używać w aplikacjach konsolowych pisanych w czystym Darcie. Jej uzupełnieniem jest <strong>flutter_mobx</strong>, dzięki któremu dostajemy wymieniony wyżej element reakcji w postaci widgeta <em>Observer</em>.</p>
+
+<p>Dwie kolejne biblioteki są umieszczone w sekcji <em>dev_dependencies</em>, bo używamy ich tylko w fazie developmentu. Nie są one częścią zbudowanej już aplikacji, a stanowią ”jedynie” wsparcie programisty w postaci narzędzia. W projekcie wykorzystamy je do automatycznego generowania klas, aby zademonstrować maksymalne ograniczenie powtarzalnego kodu (<em>boilerplate code</em>).</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">dependencies</span><span class="pi">:</span>
+  <span class="c1"># ...</span>
+  <span class="na">mobx</span><span class="pi">:</span>
+  <span class="na">flutter_mobx</span><span class="pi">:</span>
+
+<span class="na">dev_dependencies</span><span class="pi">:</span>
+  <span class="c1"># ...</span>
+  <span class="na">build_runner</span><span class="pi">:</span>
+  <span class="na">mobx_codegen</span><span class="pi">:</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Pamiętaj o zainstalowaniu nowo dodanych zależności przez <code class="language-plaintext highlighter-rouge">flutter pub get</code>.</p>
+</blockquote>
+
+<h4 id="ui-aplikacji">UI aplikacji</h4>
+
+<p>Aplikacja pokazowa ma dwa zasadnicze ekrany i jej celem jest jedynie pokazanie jak wspołgrać z <em>MobXem</em>. Nie doszukuj się w niej przełomowych funkcjonalności, a tym bardziej ładnego UI - to dobry motyw na całkowicie osobny wpis.</p>
+
+<ol>
+  <li>Pierwszy ekran (startowy) informuje użytkownika że musi się zalogować poprzez stuknięcie w przycisk.</li>
+  <li>Drugi ekran wyświetla aktualnie zalogowanego użytkownika. Nazwa, data urodzenia i lista umiejętności, którą można rozszerzać.</li>
+</ol>
+
+<p>Dodatkowo w górnym pasku zawsze prezentowana jest ilość użytkowników, którzy wylogowali się podczas trwania sesji użytkowej.</p>
+
+<div class="row">
+    
+    <div class="column">
+        <img src="/assets/img/blog/mobx/ui_unauthenticated.png" alt="ui_unauthenticated.png" />
+    </div>
+    
+    <div class="column">
+        <img src="/assets/img/blog/mobx/ui_authenticated.png" alt="ui_authenticated.png" />
+    </div>
+    
+</div>
+
+<p>Kod statycznej aplikacji, czysty UI:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">runApp</span><span class="o">(</span><span class="n">MyApp</span><span class="o">());</span>
+
+<span class="kd">class</span> <span class="nc">MyApp</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">isAuthenticated</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="k">return</span> <span class="n">MaterialApp</span><span class="o">(</span>
+      <span class="nl">theme:</span> <span class="n">ThemeData</span><span class="o">(</span>
+        <span class="nl">textTheme:</span> <span class="n">TextTheme</span><span class="o">(</span>
+          <span class="nl">bodyText2:</span> <span class="n">TextStyle</span><span class="o">(</span>
+            <span class="nl">fontSize:</span> <span class="mi">20</span><span class="o">,</span>
+          <span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+      <span class="nl">home:</span> <span class="n">Scaffold</span><span class="o">(</span>
+        <span class="nl">appBar:</span> <span class="n">AppBar</span><span class="o">(</span>
+          <span class="nl">title:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Previous users: 0"</span><span class="o">),</span>
+        <span class="o">),</span>
+        <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+          <span class="nl">child:</span> <span class="n">isAuthenticated</span> <span class="o">?</span> <span class="n">Authenticated</span><span class="o">()</span> <span class="o">:</span> <span class="n">Unauthenticated</span><span class="o">(),</span>
+        <span class="o">),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Unauthenticated</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Column</span><span class="o">(</span>
+      <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+      <span class="nl">children:</span> <span class="o">[</span>
+        <span class="n">Text</span><span class="o">(</span><span class="s">"Detected unauthenticated user!"</span><span class="o">),</span>
+        <span class="n">RaisedButton</span><span class="o">(</span>
+          <span class="nl">onPressed:</span> <span class="n">login</span><span class="o">,</span>
+          <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Log in"</span><span class="o">),</span>
+        <span class="o">),</span>
+      <span class="o">],</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="kt">void</span> <span class="n">login</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Authenticated</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"Kamil"</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="n">birthDate</span> <span class="o">=</span> <span class="n">DateTime</span><span class="o">(</span><span class="mi">1988</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="n">skills</span> <span class="o">=</span> <span class="o">[</span><span class="s">"Flutter"</span><span class="o">,</span> <span class="s">"Dart"</span><span class="o">];</span>
+
+    <span class="k">return</span> <span class="n">Column</span><span class="o">(</span>
+      <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+      <span class="nl">children:</span> <span class="o">[</span>
+        <span class="n">Text</span><span class="o">(</span><span class="s">"Name: </span><span class="si">$name</span><span class="s">"</span><span class="o">),</span>
+        <span class="n">Text</span><span class="o">(</span><span class="s">"Birth date: </span><span class="si">$birthDate</span><span class="s">"</span><span class="o">),</span>
+        <span class="n">Text</span><span class="o">(</span><span class="s">"Skills: </span><span class="si">$skills</span><span class="s">"</span><span class="o">),</span>
+        <span class="n">Row</span><span class="o">(</span>
+          <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceEvenly</span><span class="o">,</span>
+          <span class="nl">children:</span> <span class="o">[</span>
+            <span class="n">RaisedButton</span><span class="o">(</span>
+              <span class="nl">onPressed:</span> <span class="n">addSkill</span><span class="o">,</span>
+              <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"New skill"</span><span class="o">),</span>
+            <span class="o">),</span>
+            <span class="n">RaisedButton</span><span class="o">(</span>
+              <span class="nl">onPressed:</span> <span class="n">logout</span><span class="o">,</span>
+              <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Log out"</span><span class="o">),</span>
+            <span class="o">),</span>
+          <span class="o">],</span>
+        <span class="o">)</span>
+      <span class="o">],</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="kt">void</span> <span class="n">addSkill</span><span class="o">()</span> <span class="o">{}</span>
+
+  <span class="kt">void</span> <span class="n">logout</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Aplikacja się kompiluje i po uruchomieniu prezentowany jest ekran startowy. Przycisk logowania jest na chwilę obecną wydmuszką, więc jedyną możliwością wyświetlenia ekranu zalogowanego użytkownika jest ręczna zmiana flagi w kodzie:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="n">isAuthenticated</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>Przechodzimy zatem do najważniejszej kwestii, czyli do wprowadzenia stanu aplikacji. Umożliwienie logowania, wylogowania, oddelegowania zarządzania danymi poza drzewo widgetów.</p>
+
+<h4 id="model-danych">Model danych</h4>
+
+<p>Niezależnie od tego z jaką technologią zarządzania stanem pracujesz, zawsze modeluj swoje dane. <strong>Zawsze</strong>. Nie trzymaj luźno lewitujących zmiennych, które jasno opisują pewien byt w systemie. W naszym przypadku mamy koncept użytkownika, którego opisują takie cechy jak jego nazwa, data urodzenia, czy lista posiadanych umiejętności. Zaprojektujmy więc dla niego czysty model, inaczej mówiąc <strong>worek na dane</strong>.</p>
+
+<p>Tuż obok <em>main.dart</em> dodamy nowy plik <em>data.dart</em>, którym zdefiniujemy czym jest użytkownik naszego systemu. Klasa ta może być później śmiało wykorzystywana w innym dowolnym miejscu aplikacji. A najpewniej przeżyje nawet takie turbulencje, jak konieczność całkowitego wymienienia innej warstwy aplikacji.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="kt">String</span> <span class="n">name</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">DateTime</span> <span class="n">birthDate</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="n">skills</span><span class="o">;</span>
+
+  <span class="n">User</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">birthDate</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">skills</span><span class="o">);</span>
+
+  <span class="n">User</span> <span class="n">copyWith</span><span class="o">({</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="n">skills</span><span class="o">})</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">User</span><span class="o">(</span>
+      <span class="n">name</span><span class="o">,</span>
+      <span class="n">birthDate</span><span class="o">,</span>
+      <span class="n">skills</span><span class="o">,</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="observables">Observables</h4>
+
+<p><em>Observable</em> stanowi reaktywny stan aplikacji. Przez reaktywny mam na myśli taki, który umożliwia reagowanie na to co się z nim dzieje. W szczególności na zachodzące wewnątrz zmiany. Każdy dowolny obiekt możliwy do zdefiniowania w samym Darcie może stać się w łatwy sposób obserwowalny. Nie ważne, czy mamy do czynienia z wartościami prymitywnymi jak <em>String</em>, czy <em>bool</em>, czy złożonymi obiektami własnych klas. Wszystko w <em>MobX</em> może stać się obserwowalne.</p>
+
+<p>Dodajmy plik <em>store.dart</em> w którym będziemy przechowywać zarówno stan w postaci <em>Observable</em>, jak również akcje do manipulowania danymi. Omówienie kodu tuż poniżej.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter_demo_mobx/data.dart'</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">'package:mobx/mobx.dart'</span><span class="o">;</span>
+
+<span class="kn">part</span> <span class="s">'store.g.dart'</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">UserStore</span> <span class="o">=</span> <span class="n">UserStoreBase</span> <span class="k">with</span> <span class="n">_$UserStore</span><span class="o">;</span>
+
+<span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">UserStoreBase</span> <span class="k">with</span> <span class="n">Store</span> <span class="o">{</span>
+  <span class="nd">@observable</span>
+  <span class="n">User</span> <span class="n">me</span><span class="o">;</span>
+
+  <span class="nd">@observable</span>
+  <span class="n">ObservableList</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">previousUsers</span> <span class="o">=</span> <span class="n">ObservableList</span><span class="o">();</span>
+
+  <span class="nd">@computed</span>
+  <span class="kt">bool</span> <span class="kd">get</span> <span class="n">isAuthenticated</span> <span class="o">=&gt;</span> <span class="n">me</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Trochę się tu dzieje, prawda? Na szczególną uwagę zasługuje część kodu wymagana przez <strong>mobx_codegen</strong> do wygenerowania za nas całego <em>boilerplate</em>. Nie jest to coś czym zaprzątasz sobie głowę w codziennej pracy, ale warto wiedzieć jak to ugryźć.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">part</span> <span class="s">'store.g.dart'</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">UserStore</span> <span class="o">=</span> <span class="n">UserStoreBase</span> <span class="k">with</span> <span class="n">_$UserStore</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>Te dwie linie to jedyne powtarzalne kawałki kodu, które przewijają się gdy definiujemy nową domenę stanu. Nie jest to specjalnie wygórowana cena za późniejszy minimalizm, zwłaszcza, że im bardziej złożona aplikacja tym większe czerpiemy benefity z samego <em>MobX</em>. Nazwa <em>store.g.dart</em> to nic innego jak nazwa pliku głównego z zamienionym rozszerzeniem z <em>.dart</em> na <em>.g.dart</em>. Gdy przejdziemy do generowania kodu będziesz mógł do niego nawet zajrzeć.</p>
+
+<p>Dalej mamy zdefiniowane dwie składowe oznaczone adnotacją (<strong>annotation</strong>) <code class="language-plaintext highlighter-rouge">@observable</code>. W obiekcie <code class="language-plaintext highlighter-rouge">me</code> chcemy przechowywać aktualnie zalogowanego użytkownika, a w <code class="language-plaintext highlighter-rouge">previousUsers</code> listę wszystkich tych, którzy się wylogowali. Warto zwrócić uwagę na wykorzystanie <strong>ObservableList</strong> zamiast wbudowanego w Darta <em>List</em>. Oba udostępniają taki sam interfejs, a skorzystanie z <em>ObservableList</em> zagwarantuje nam to, że jeśli zmienią się elementy wewnątrz listy (np. zostanie dodany nowy wpis) to zostaniemy o tym powiadomieni jak przy każdej innej zmianie.</p>
+
+<p>Ostatni użyty element stanowi <code class="language-plaintext highlighter-rouge">isAuthenticated</code>. Jest to również <em>Observable</em>, ale w postaci wnioskowej na podstawie innych zdefiniowanych obiektów <em>Observable</em>. Oznacza to, że nie trzymamy tam zupełnie nowych danych, a jedynie wartość która jest wyliczana na podstawie innych danych w aplikacji. To co daje nam <code class="language-plaintext highlighter-rouge">@computed</code> to pełna gwarancja tego, że zawsze będzie posiadał aktualną wartość, która zmieni się natychmiast gdy jakikolwiek nasłuchiwany obiekt zostanie zmieniony. <em>MobX</em> sam zajmie się ustaleniem jakie <em>Observable</em> zostały użyte do wyliczeń i będzie pilnował spójności danych w najwydajniejszy możliwy sposób.</p>
+
+<p>To tyle jeśli chodzi o zdefiniowanie stanu. Zawsze gdy chcesz go rozbudować wystarczy dodać nowy obiekt udekorowany jedną z dostępnych adnotacji: <em>@observable</em>, lub <em>@computed</em>.</p>
+
+<h4 id="actions">Actions</h4>
+
+<p>Do zarządzania danymi przechowywanymi w <em>Observable</em> wykorzystywane są akcje (<strong>actions</strong>). Jeśli chcesz dokonać jakiejkolwiek zmiany w stanie aplikacji, definiujesz po prostu funkcję, która zrobi to co powinna. Bez zbędnych komplikacji w postaci obsługi i mapowania zdarzeń, czy ręcznego powiadamiania reszty aplikacji, że coś się właśnie wydarzało.</p>
+
+<p>Jak już wspomniałem akcja to najzwyklejsza funkcja i jedyne co ją wyróżnia w kodzie to adnotacja <code class="language-plaintext highlighter-rouge">@action</code>. Pełni ona dwie role. Pierwsza czysto semantyczna, wskazuje które funkcje manipulują stanem. Druga, czysto techniczna, gwarantuje transakcyjność. Dzięki niej, wszystkie <em>Observable</em> zmieniające swoje wartości w trakcie trwania akcji, powiadomią o tym fakcie dopiero po zakończeniu wykonania funkcji. Jeśli zmieniasz w ramach pojedynczej akcji kilka obiektów to reakcja po stronie aplikacji będzie tylko na samym końcu. Dla nas oznacza to w ostatecznym rozrachunku mniejszą ilość rebuildów UI.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">UserStoreBase</span> <span class="k">with</span> <span class="n">Store</span> <span class="o">{</span>
+  <span class="c1">// ...</span>
+
+  <span class="nd">@action</span>
+  <span class="kt">void</span> <span class="n">login</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">me</span> <span class="o">=</span> <span class="n">User</span><span class="o">(</span>
+      <span class="s">"Kamil #</span><span class="si">${previousUsers.length}</span><span class="s">"</span><span class="o">,</span>
+      <span class="n">DateTime</span><span class="o">(</span><span class="mi">1988</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">1</span><span class="o">),</span>
+      <span class="o">[</span><span class="s">"Dart"</span><span class="o">,</span> <span class="s">"Flutter"</span><span class="o">],</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="nd">@action</span>
+  <span class="kt">void</span> <span class="n">logout</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">previousUsers</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">me</span><span class="o">);</span>
+    <span class="n">me</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nd">@action</span>
+  <span class="kt">void</span> <span class="n">addSkill</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">me</span> <span class="o">=</span> <span class="n">me</span><span class="o">.</span><span class="na">copyWith</span><span class="o">(</span><span class="nl">skills:</span> <span class="o">[...</span><span class="na">me</span><span class="o">.</span><span class="na">skills</span><span class="o">,</span> <span class="s">"new skill"</span><span class="o">]);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Dodaliśmy trzy akcje: <em>login</em>, <em>logout</em> i <em>addSkill</em>. Każda dokonuje pewnych zmian na <em>Observable</em>, a najciekawsza z nich jest ta ostatnia. Chcąc dodać nową umiejętność dla obecnie zalogowanego użytkownika, nie dodajemy jej bezpośrednio do listy posiadanych już umiejętności. Taki zapis nie zadziała.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@action</span>
+<span class="kt">void</span> <span class="nf">addSkill</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">me</span><span class="o">.</span><span class="na">skills</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"new skill"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Lista <em>skills</em> w klasie <em>User</em> nie jest <em>Observable</em>, co skutkuje tym, że <em>MobX</em> nie dowie się o tej zmianie i nie wyemituje sygnału do zareagowania na nią. Można ten problem rozwiązać na dwa sposoby:</p>
+
+<ol>
+  <li>Zaprojektowanie klasy <em>User</em> w taki sposób, żeby jej część była obserwowalna. Kłóci się to jednak z koncepcją worka danych, którego jedynym zadaniem jest opisanie użytkownika i wystawienie czystego interfejsu. Możesz się z tym kłócić - śmiało. Architektura aplikacji to kwestia elastyczna, a to tylko mój punkt widzenia.</li>
+  <li>Korzystanie z <em>Immutable objects</em>, czyli obiektów których stan nie może zostać zmieniony. Jedyną możliwością na dokonanie zmiany jest utworzenie bliźniaczego obiektu i przypisanie jego instancji w miejsce starej referencji. We Flutterze konwencją jest, że obiekty takie implementują funkcję <strong>copyWith</strong> do której podajemy opcjonalne pola do aktualizacji, a reszta zostanie skopiowana z oryginalnego obiektu. Jeśli nie chcesz implementować podobnej funkcji w każdej jednej klasie która tego wymaga, zainteresuj się proszę biblioteką <a href="https://pub.dev/packages/freezed">freezed</a>. Działa w oparciu o automatyczne generowanie kodu, zupełnie jak <em>mobx_codegen</em>.</li>
+</ol>
+
+<p>W przykładzie jak widać wybrałem rozwiązanie #2, <em>Immutable objects</em> to coś co <del>szkaluję</del> szanuję.</p>
+
+<h4 id="generowanie-kodu">Generowanie kodu</h4>
+
+<p>Zanim przejdziemy do ostatniego elementu, czyli reakcji, wygenerujmy wspomniany już wcześniej plik <em>store.g.dart</em>. Jest to proces w pełni automatyczny, a sam nie musisz nawet do niego zaglądać. To trochę tak jakbyś chciał podejrzeć zdjęcie w terminalu, albo kod wynikowy programu (<em>.exe</em>, <em>.dmg</em>). W celu jednorazowego wygenerowania pliku uruchom:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flutter pub run build_runner build <span class="nt">--delete-conflicting-outputs</span>
+</code></pre></div></div>
+
+<p>Istnieje również tryb obserwowania, który przegeneruje niezbędne pliki przy każdorazowej ich zmianie. Możesz go przykładowo włączyć, gdy rozpoczynasz pracę i zapomnieć na cały dzień.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flutter pub run build_runner watch <span class="nt">--delete-conflicting-outputs</span>
+</code></pre></div></div>
+
+<p>Jeśli postanowisz sprawdzić jak wygląda nowo wygenerowany plik - śmiało. Jest czytelny, a najważniejsza informacja jest zawarta już w pierwszej linii:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// GENERATED CODE - DO NOT MODIFY BY HAND</span>
+</code></pre></div></div>
+
+<p>Nigdy, przenigdy nie wprowadzaj zmian w plikach auto-generowanych. Zdarzyło mi się popełnić kilka razy ten błąd w życiu (nie w Darcie) gdzie zamiast na pliku wejściowym operowałem na tym wygenerowanym. Wystarczy wtedy jedno nieumyślne poproszenie o przegenerowanie plików i cała praca zostaje nadpisana przez automat.</p>
+
+<p>Pytanie co robić z plikami <em>.g.dart</em> - trzymać je w repozytorium, czy może dodać do ignorowanych? Osobiście nie wysyłam ich do systemu kontroli wersji, bo nie mają same w sobie żadnej wartości. Wystarczy uruchomić skrypt i zostaną automatycznie wygenerowane na nowo na podstawie plików źródłowych. Wybór jednak zostawiam tobie, żadne podejście nie jest grzechem śmiertelnym i zależy od osobistych preferencji.</p>
+
+<h4 id="reactions">Reactions</h4>
+
+<p>Czas na element, który będzie potrafił zareagować na zmiany w <em>Observable</em>. Reakcja (<strong>reaction</strong>) to inaczej <em>Observer</em>, funkcja zarejestrowana i uruchamiana zawsze gdy powiązany z nią <em>Observable</em> zmieni swój stan. Nie będziemy pisać reakcji niskopoziomowych, skupimy się wyłącznie na tej, która interesuje nas najbardziej z punktu widzenia aplikacji mobilnej. <strong>Zmiana stanu to zmiana UI.</strong></p>
+
+<p>Tutaj wkracza moja ulubiona część, czyli biblioteka <strong>flutter_mobx</strong>. Jedyne co dostarcza to pojedynczy widget <strong>Observer</strong>, który jest swoistą reakcją. Przebuduje się on automatycznie za każdym razem, gdy będzie taka potrzeba.</p>
+
+<p>Wróćmy zatem do naszego UI (<em>main.dart</em>) i tchnijmy w niego nieco życia. Na początku warto by było zainicjalizować stan.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">runApp</span><span class="o">(</span><span class="n">MyApp</span><span class="o">());</span>
+
+<span class="kd">final</span> <span class="n">store</span> <span class="o">=</span> <span class="n">UserStore</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>Zainicjalizowałem właśnie zmienną globalną. <strong>GLOBALNĄ</strong>. W prawdziwej aplikacji zdecydowanie bym tego unikał, ale proste rzeczy są proste, stąd taki wybór do demonstracji. Jeśli chcesz zbudować większą i przede wszystkim testowalną aplikację, polecam użycie <a href="https://pub.dev/packages/get_it">get_it</a>, lub <a href="https://pub.dev/packages/provider">provider</a>, aby dostarczać stan aplikacji w dół drzewa. We własnych projektach korzystam z <em>get_it</em>, bo robi w tym wypadku to samo co <em>provider</em>, ale za to mniejszą ilością kodu i bez potrzeby przekazywania kontekstu (<em>context</em>).</p>
+
+<p>Co dalej? Wszędzie tam, gdzie chcesz mieć dostęp do zawsze aktualnego stanu użyj widgeta <em>Observer</em>. Owijamy, więc <em>Scaffold</em> i dostarczamy do niego stan.</p>
+
+<p>Przed:</p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Scaffold</span><span class="o">(</span>
+  <span class="nl">appBar:</span> <span class="n">AppBar</span><span class="o">(</span>
+    <span class="nl">title:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Previous users: 0"</span><span class="o">),</span>
+  <span class="o">),</span>
+  <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+    <span class="nl">child:</span> <span class="n">isAuthenticated</span> <span class="o">?</span>
+      <span class="n">Authenticated</span><span class="o">()</span> <span class="o">:</span>
+      <span class="n">Unauthenticated</span><span class="o">(),</span>
+  <span class="o">),</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Po:</p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Observer</span><span class="o">(</span>
+  <span class="nl">builder:</span> <span class="o">(</span><span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Scaffold</span><span class="o">(</span>
+      <span class="nl">appBar:</span> <span class="n">AppBar</span><span class="o">(</span>
+        <span class="nl">title:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Previous users: </span><span class="si">${store.previousUsers.length}</span><span class="s">"</span><span class="o">),</span>
+      <span class="o">),</span>
+      <span class="nl">body:</span> <span class="n">Center</span><span class="o">(</span>
+        <span class="nl">child:</span> <span class="n">store</span><span class="o">.</span><span class="na">isAuthenticated</span> <span class="o">?</span> 
+          <span class="n">Authenticated</span><span class="o">()</span> <span class="o">:</span>
+          <span class="n">Unauthenticated</span><span class="o">(),</span>
+      <span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">},</span>
+<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Użycie <em>Observera</em> może wydać ci się delikatnie wybrakowane. Przecież nie powiedzieliśmy mu na jakie zmiany ma nasłuchiwać. Skąd zatem wie, które obiekty ma śledzić?</p>
+
+<ul>
+  <li>Wszystkie zdefiniowane w <em>store.dart</em>? <strong>Nie</strong></li>
+  <li>Żadnego? <strong>Nie</strong></li>
+  <li>Tylko te które użyte są wewnątrz <em>buildera</em>? <strong>Tak!</strong></li>
+</ul>
+
+<p><em>MobX</em> sam, bez twojego udziału zadba o to, aby <em>rebuild</em> nastąpił tylko wtedy, gdy zmieni się <em>Observer</em> użyty wewnątrz wywołania funkcji <em>builder</em>. Ty się niczym nie przejmuj, zrób sobie kawę i odpocznij. Co więcej - jeśli nie użyjesz żadnego <em>Observera</em> wewnątrz funkcji to konsola wyświetli ostrzeżenie. Skoro nic nie chcesz obserwować to po co używasz Observera?</p>
+
+<p><img src="https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif" alt="Mind blown" /></p>
+
+<h4 id="integracja-akcji">Integracja akcji</h4>
+
+<p>Nie ma nic prostszego niż integracja UI z akcjami. Jedyne co należy zrobić to wywołać odpowiednią akcję i … gotowe. Żadnego dodatkowego wpinania kabelków i dispatcherów.</p>
+
+<p>Przed:</p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">login</span><span class="p">(</span><span class="o">)</span> <span class="o">{}</span>
+
+<span class="kt">void</span> <span class="nf">addSkill</span><span class="p">(</span><span class="o">)</span> <span class="o">{}</span>
+
+<span class="kt">void</span> <span class="nf">logout</span><span class="p">(</span><span class="o">)</span> <span class="o">{}</span>
+</code></pre></div></div>
+
+<p>Po:</p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">login</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">store</span><span class="o">.</span><span class="na">login</span><span class="o">();</span>
+
+<span class="kt">void</span> <span class="nf">addSkill</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">store</span><span class="o">.</span><span class="na">addSkill</span><span class="o">();</span>
+
+<span class="kt">void</span> <span class="nf">logout</span><span class="p">(</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">store</span><span class="o">.</span><span class="na">logout</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>Uruchomienie aplikacji w obecnym stanie spowoduje, że można się do niej zalogować i wylogować. Licznik poprzednich użytkowników również poprawnie się odświeża po wylogowaniu. Działa wszystko z wyjątkiem dodawania nowej umiejętności, bo tam ciągle mamy zahardkodowane wartości, nie korzystające ze stanu.</p>
+
+<p>W tym fragmencie nie ma już nic odkrywczego. Ponownie korzystamy z <em>Observera</em> i czytamy aktualne dane o użytkowniku. Nie ma tutaj niczego nowego nie dlatego, że jestem leniwy i mi się nie chciało. To już generalnie wszystko co musisz wiedzieć, żeby zacząć budować aplikację w oparciu o <em>MobX</em>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Authenticated</span> <span class="kd">extends</span> <span class="n">StatelessWidget</span> <span class="o">{</span>
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">Observer</span><span class="o">(</span>
+      <span class="nl">builder:</span> <span class="o">(</span><span class="n">_</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">user</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="na">me</span><span class="o">;</span>
+
+        <span class="k">return</span> <span class="n">Column</span><span class="o">(</span>
+          <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">center</span><span class="o">,</span>
+          <span class="nl">children:</span> <span class="o">[</span>
+            <span class="n">Text</span><span class="o">(</span><span class="s">"Name: </span><span class="si">${user.name}</span><span class="s">"</span><span class="o">),</span>
+            <span class="n">Text</span><span class="o">(</span><span class="s">"Birth date: </span><span class="si">${user.birthDate}</span><span class="s">"</span><span class="o">),</span>
+            <span class="n">Text</span><span class="o">(</span><span class="s">"Skills: </span><span class="si">${user.skills}</span><span class="s">"</span><span class="o">),</span>
+            <span class="n">Row</span><span class="o">(</span>
+              <span class="nl">mainAxisAlignment:</span> <span class="n">MainAxisAlignment</span><span class="o">.</span><span class="na">spaceEvenly</span><span class="o">,</span>
+              <span class="nl">children:</span> <span class="o">[</span>
+                <span class="n">RaisedButton</span><span class="o">(</span>
+                  <span class="nl">onPressed:</span> <span class="n">addSkill</span><span class="o">,</span>
+                  <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"New skill"</span><span class="o">),</span>
+                <span class="o">),</span>
+                <span class="n">RaisedButton</span><span class="o">(</span>
+                  <span class="nl">onPressed:</span> <span class="n">logout</span><span class="o">,</span>
+                  <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">"Log out"</span><span class="o">),</span>
+                <span class="o">),</span>
+              <span class="o">],</span>
+            <span class="o">)</span>
+          <span class="o">],</span>
+        <span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="kt">void</span> <span class="n">addSkill</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="n">store</span><span class="o">.</span><span class="na">addSkill</span><span class="o">();</span>
+
+  <span class="kt">void</span> <span class="n">logout</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="n">store</span><span class="o">.</span><span class="na">logout</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="podsumowanie">Podsumowanie</h3>
+
+<p><em>MobX</em> jest świetnym i sprawdzonym w boju rozwiązaniem do zarządzania stanem aplikacji. Nie wymaga dużej ilości kodu, jest wydajny i sporo rzeczy dzieje się bez udziału programisty. Generowanie kodu niemal do zera redukuje ilość <em>boilerplate</em>, a widget <em>Observer</em> ze swoim auto przebudowywaniem oszczędza czasu na zastanawianiu się pod które części stanu trzeba się zarejestrować.</p>
+
+<p>Samo korzystanie z biblioteki ogranicza się do:</p>
+<ul>
+  <li>definiowania klas z wyeksponowanymi obiektami <code class="language-plaintext highlighter-rouge">@observable</code> i <code class="language-plaintext highlighter-rouge">@computed</code></li>
+  <li>implementacji akcji mutujących stan <code class="language-plaintext highlighter-rouge">@action</code></li>
+  <li>korzystanie z widgeta <code class="language-plaintext highlighter-rouge">Observer</code> na warstwie UI</li>
+  <li>pamiętaniu o przegenerowaniu kodu po zmianach (lub uruchomienia <em>watcha</em>)</li>
+  <li>polubienia <em>immutable objects</em></li>
+</ul>
+
+<p>Osobiście <em>MobX</em> to dla mnie numer #1 jeśli chodzi o dostępne biblioteki do zarządzania stanem. Jest prosty, szybki i przyjemny, a są to cechy, które mocno sobie cenię zwłaszcza w pobocznych projektach robionych po godzinach. Używam go m.in. w developmencie pierwszego RPG online osadzonego w świecie post-apo we Flutterze - <a href="https://twitter.com/vaultomb">Vaultomb</a>. Premiera w dalszej przyszłości :)</p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-mobx%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=MobX+i+Flutter+-+automatyczny+stan%20https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-mobx%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/flutter-mobx/&title=MobX+i+Flutter+-+automatyczny+stan%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=MobX+i+Flutter+-+automatyczny+stan%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/flutter-mobx/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+
+    
+    <div id="next-post">
+        <a alt="Asynchroniczny Dart - Isolates" href="/blog/async-dart-isolates/">
+            <p>Następny wpis</p>
+            Asynchroniczny Dart - Isolates
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+
+  header#main {
+    background-repeat:no-repeat;
+   background-image: url('/assets/img/blog/mobx/header.png');
+  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>
