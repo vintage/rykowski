@@ -67,14 +67,14 @@
 {"url":"https://rykowski.dev/blog/async-dart-event-loop-futures/","headline":"Asynchroniczny Dart - Event Loop, Futures, async/await","dateModified":"2020-06-27T00:00:00+02:00","datePublished":"2020-06-27T00:00:00+02:00","description":"Dart jako język jednowątkowy jest w stanie wykonywać tylko jedną operację w danym czasie. Jedna za drugą. Brzmi powolnie? Nic z tych rzeczy! Dowiedz się jak działa Event Loop i kod asynchroniczny.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/async-dart-event-loop-futures/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
-    <meta property="og:image" content="https://rykowski.dev/">
+    <meta property="og:image" content="https://rykowski.dev/assets/img/blog/async/thumbnail.png">
 
     <!-- Twitter Cards -->
     <meta name="twitter:title" content="Asynchroniczny Dart - Event Loop, Futures, async/await">
     <meta name="twitter:description" content="Pisząc dowolną aplikację we Flutterze posługujesz się językiem Dart. Wszystkie ograniczenia i subtelności zdefiniowane w samym języku, będą ci również towarz...">
     
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://rykowski.dev/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://rykowski.dev/assets/img/blog/async/thumbnail.png">
 </head>
 
   <body>
@@ -160,7 +160,7 @@
 </header>
 
     <div class="content">
-      <article >
+      <article class="feature-image" >
   <header id="main" style="">
     <div class="title-padder">
       
@@ -186,8 +186,6 @@
       <p>Pisząc dowolną aplikację we Flutterze posługujesz się językiem Dart. Wszystkie ograniczenia i subtelności zdefiniowane w samym języku, będą ci również towarzyszyły we Flutterze. Nie da się inaczej. Flutter stoi na Darcie, koniec i kropka. Czy to dobrze? Jasne, czemu nie. Lubię ten język i mam do niego pewnego rodzaju słabość, ale warto poznać go czasem nieco głębiej poza samą jego składnią.</p>
 
 <p>Nie będziemy jednak wertować całego języka od podstaw, od tego jest oficjalna dokumentacja. Skupimy się jedynie na tym <strong>skąd Dart wie który kod uruchomić w jakim czasie</strong> oraz na czym opiera się cała magia asynchroniczności. Temat jest bardzo szeroki i wymaga zrozumienia kilku podstawowych konceptów od których rozpoczniemy dzisiejszy wpis.</p>
-
-<p><img src="/assets/img/blog/async/logo.png" alt="logo.png" /></p>
 
 <h1 id="jednowątkowy-dart">Jednowątkowy Dart</h1>
 
@@ -845,10 +843,16 @@ micro2
 <!-- To change color of links in the page -->
 <style>
   
+  .feature-image a { color: rgb(69,190,247) !important; }
+  div#post-nav a { color: rgb(69,190,247) !important; }
+  footer a { color: rgb(69,190,247) !important; }
+  .site-header nav a:hover {  color: rgb(69,190,247) !important; }
+  header#main { background-color: rgb(69,190,247) !important; }
+  
 
   header#main {
     background-repeat:no-repeat;
-  
+  background-image: url('/assets/img/lineart.png');  
   }
 </style>
 
