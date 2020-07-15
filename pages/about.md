@@ -2,7 +2,6 @@
 layout: page
 title: O mnie
 permalink: /about/
-#feature-img: "assets/img/about.jpeg"
 ---
 
 Cześć, nazywam się **Kamil Rykowski**. Jestem Software Developerem, **programistą** - zajmuję się pracą z kodem i oprogramowaniem.
