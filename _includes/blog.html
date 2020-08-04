@@ -1,6 +1,7 @@
 <div class="posts">
     {% for post in paginator.posts %}
     <div class="post-teaser">
+        {% comment %}
         {% if post.thumbnail %}
         <div class="post-img">
             <a aria-label="{{ post.title }}" href="{{ post.url | relative_url }}">
@@ -8,6 +9,7 @@
             </a>
         </div>
         {% endif %}
+        {% endcomment %}
         <span>
           <header>
             <h1>

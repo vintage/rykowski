@@ -1,6 +1,6 @@
 ---
 color: rgb(69,190,247)
-title: Zarabianie i monetyzacja - Reklamy AdMob
+title: Monetyzacja aplikacji z reklamami AdMob
 date: "2019-07-17"
 layout: "post"
 slug: "flutter-monetization-admob"

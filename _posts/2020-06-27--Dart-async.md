@@ -1,6 +1,6 @@
 ---
 color: rgb(69,190,247)
-title: Asynchroniczny Dart - Event Loop, Futures, async/await
+title: Event Loop, Futures, async/await
 date: "2020-06-27"
 layout: "post"
 slug: "async-dart-event-loop-futures"

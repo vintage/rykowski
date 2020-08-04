@@ -1,6 +1,6 @@
 ---
 color: rgb(69,190,247)
-title: MobX i Flutter - automatyczny stan
+title: Automatyczny stan aplikacji z MobX
 date: "2020-07-15"
 layout: "post"
 slug: "flutter-mobx"

@@ -1,6 +1,6 @@
 ---
 color: rgb(69,190,247)
-title: Pozycjonowanie elementów w gridzie - Row i Column
+title: Pozycjonowanie elementów na ekranie
 date: "2019-06-23"
 layout: "post"
 slug: "flutter-layout-grid"
