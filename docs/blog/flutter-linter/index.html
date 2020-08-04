@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/flutter-linter/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics / Cookie Consent -->
+    <script>
+      const cookieName = 'cookie-notice-dismissed-https://rykowski.dev';
+      const isCookieConsent = 'true';
+      const analyticsName = 'UA-77793311-12';
+    </script>
+
+    
+        <div id="cookie-notice"><span>Strona wykorzystuje pliki cookies. Zgadzasz się na nie?
+          </span><a id="cookie-notice-accept" class="button">OK</a>
+        </div>
+    
+    
+        <!-- Global site tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+        <!-- Page analysis (analytics.js) -->
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Schludny i czysty kod | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Schludny i czysty kod" />
+<meta property="og:locale" content="pl_PL" />
+<meta name="description" content="Trzymanie się restrykcyjnych zasad zapewniających spójność kodu to podstawa udanego projektu. Dowiedz się jak skonfigurować lintera, aby trzymał wszystko w ryzach." />
+<meta property="og:description" content="Trzymanie się restrykcyjnych zasad zapewniających spójność kodu to podstawa udanego projektu. Dowiedz się jak skonfigurować lintera, aby trzymał wszystko w ryzach." />
+<link rel="canonical" href="https://rykowski.dev/blog/flutter-linter/" />
+<meta property="og:url" content="https://rykowski.dev/blog/flutter-linter/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-04T00:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/flutter-linter/","headline":"Schludny i czysty kod","dateModified":"2020-08-04T00:00:00+02:00","datePublished":"2020-08-04T00:00:00+02:00","description":"Trzymanie się restrykcyjnych zasad zapewniających spójność kodu to podstawa udanego projektu. Dowiedz się jak skonfigurować lintera, aby trzymał wszystko w ryzach.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-linter/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/blog/linter/thumbnail.png">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:title" content="Schludny i czysty kod">
+    <meta name="twitter:description" content="Prawdopodobnie często spotykasz się z publicznie udostępnianym kodem. Biblioteki open-source, gotowe snippety, czy kod prezentowany w formie zrzutów ekranu. ...">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://rykowski.dev/assets/img/blog/linter/thumbnail.png">
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article class="feature-image" >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Schludny+i+czysty+kod" class="title">Schludny i czysty kod</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Sierpień
+        
+      2020
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>Prawdopodobnie często spotykasz się z publicznie udostępnianym kodem. Biblioteki open-source, gotowe snippety, czy kod prezentowany w formie zrzutów ekranu. To może być nawet kod prywatny, wewnątrzzespołowy, gdzie wkład ma więcej niż jeden programista. Można go (kod, nie programistę) najprościej skategoryzować jako <strong>ładny</strong> oraz <strong>brzydki</strong>.</p>
+
+<p><strong>Ładny kod</strong> jest po prostu ładny. Napisany zgodnie z wytyczonymi standardami i konwencjami języka, dobrze sformatowany, trzymający się spójnej formy. Nie budzi negatywnego pierwszego wrażenia. <strong>Brzydki kod</strong> natomiast czuć z daleka. Puste linie niewiadomego pochodzenia, dziwne wcięcia, nieużywane importy, polskie nazwy zmiennych i dziesiątki innych rzeczy od których metaforycznie krwawią oczy miłośnikom estetyki.</p>
+
+<p>Jak sprawić zatem, aby brzydki kod stał się ładny, albo chociaż względnie przyzwoity na dobry początek? Narzędziowo.</p>
+
+<h2 id="dartfmt">dartfmt</h2>
+
+<p>Najłatwiejszą i najmniej czasochłonną rzeczą jaką możesz zrobić dla swojego projektu jest korzystanie z narzędzia do automatycznego formatowania kodu. Wskazujesz w nim jedynie jakie pliki powinny zostać doprowadzone do ładu, a skrypt zajmie się całą resztą. Weźmy dla przykładu kod:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+  <span class="kt">String</span> <span class="n">name</span><span class="o">;</span> <span class="n">User</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">user</span> <span class="o">=</span>     <span class="k">new</span> <span class="n">User</span><span class="o">(</span><span class="s">'Kamil'</span><span class="o">);</span>
+
+
+  <span class="n">print</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">name</span><span class="o">)</span>  <span class="o">;</span>
+
+
+
+  <span class="k">if</span> <span class="o">(</span> <span class="mi">1</span>  <span class="o">+</span><span class="mi">1</span><span class="o">==</span><span class="mi">2</span><span class="o">)</span> <span class="o">{</span> <span class="n">print</span><span class="o">(</span><span class="s">"Super!"</span><span class="o">);}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Dużo pustych linii, spacji raz za dużo, raz za mało, zbędne słowo kluczowe <em>new</em>. Dość groteskowo, ale zbliżone jakościowo patalogie można trafić również w prawdziwym świecie. Jak temu zaradzić? Wystarczy uruchomić <em>dartfmt</em>!</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dartfmt my_file.dart <span class="nt">--fix</span> <span class="nt">-w</span>
+</code></pre></div></div>
+
+<p>Wynikiem jest kod przeformatowany na który można już patrzeć bez zbędnego obrzydzenia.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+  <span class="kt">String</span> <span class="n">name</span><span class="o">;</span>
+  <span class="n">User</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">(</span><span class="s">'Kamil'</span><span class="o">);</span>
+
+  <span class="n">print</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>
+
+  <span class="k">if</span> <span class="o">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">"Super!"</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Flaga <code class="language-plaintext highlighter-rouge">--fix</code> określa, że chcemy sformatować plik wszystkimi wspieranymi regułami. Bez niej formatowane są jedynie znaki niedrukowane (<em>whitespace characters</em>), czyli spacje, nowe linie i tym podobne. <code class="language-plaintext highlighter-rouge">-w</code> nanosi sformatowane zmiany bezpośrednio na pliku, zamiast pokazywać je wyłącznie na konsoli. Wygodne.</p>
+
+<p>A wiesz co jest jeszcze wygodniejsze? Formatowanie bezpośrednio z <em>IDE</em>, niezależnie od tego czy korzystasz z <em>Android Studio</em>, czy <em>Visual Studio Code</em>. Zawsze masz pod ręką opcję <em>Reformat Code with dartfmt</em> / <em>Format Document</em> dostępną w menu kontekstowym (prawy przycisk myszy). Przy takiej prostocie grzechem jest wrzucanie wersji nieobrobionej w świat. Pamiętaj o tym i formatuj na potęgę. Zwłaszcza, gdy ktoś poza tobą ma szanse spojrzeć do kodu.</p>
+
+<p>Formatowanie kodu to podstawa, ale duże projekty potrzebują czegoś znacznie większego. Listy reguł jasno definiujących co jest dozwolone, a co nie. W jaki sposób pisać kod aplikacji, aby wszędzie był spójny i trzymał się utartego szlaku. Jest to szczególnie ważne w projektach wieloosowobych, aby “spłaszczyć” różnice w kodzie pisanym przez każdego z programistów. Nie oszukujmy się, każdy ma swój własny styl pisania. Dla projektu lepiej jednak będzie, gdy nie jesteś w stanie na podstawie kilku linii kodu określić kto dokładnie je wyrzeźbił.</p>
+
+<h2 id="linter">linter</h2>
+
+<p>Uzupełnieniem dla formatowania kodu, są poprawnie skonfigurowane reguły dla <strong>lintera</strong>, czyli narzędzia analizującego kod aplikacji pod kątem błędów stylistycznych, czy niepoprawnych konstrukcji. Programista (zespół) określa wytyczne których chce się trzymać, aby projekt był spójny, a kod przyjemny w utrzymywaniu. Narzędzie dopilnuje, aby reguły te były przestrzegane przez wszystkich uczestników.</p>
+
+<h3 id="przygotowanie">Przygotowanie</h3>
+
+<p>Konfigurację <em>lintera</em> zacznę od tego, że nie będzie to projekt Flutterowy, a jedynie Dartowy. Wszystkie przedstawione zasady przenoszą się oczywiście 1:1, ale nie chcę zaciemniać obrazu analizy dodatkową składową w postaci frameworka.</p>
+
+<p>W nowym katalogu <em>dart_side</em> tworzymy plik <em>my_file.dart</em>. Plik sam w sobie został już sformatowany i <em>dartfmt</em> nie może nic więcej dla nas zrobić.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">user</span> <span class="o">{}</span>
+
+<span class="n">main</span><span class="o">()</span> <span class="o">{</span>
+  <span class="kt">String</span> <span class="n">me</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+  <span class="k">if</span> <span class="o">(</span><span class="n">me</span> <span class="o">==</span> <span class="s">'Kamil'</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">"Hi"</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="uruchomienie">Uruchomienie</h3>
+
+<p>Sprawdźmy co <em>linter</em> myśli o powyższym pliku. Mam do niego trochę osobistych obiekcji, ale zdajmy się na fachowe narzędzie, zamiast na omylne oko programisty.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dartanalyzer <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>Wynik?</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Analyzing linter...
+No issues found!
+</code></pre></div></div>
+
+<p><em>Linter lubi to</em>. W gruncie rzeczy to co ma mu się nie podobać? Kod się kompiluje, działa. Niczego więcej do szczęścia nie potrzeba. A jednak …</p>
+
+<h3 id="ustalenie-reguł">Ustalenie reguł</h3>
+
+<p>Domyślnie <em>linter</em> jest łagodny i wszystko traktuje zbyt optymistycznie. Nie ma reguł na dobro i zło. Czego byś mu nie dał do sprawdzenia i tak dostaniesz najwyższą notę. To tak jakbyś oddał dyktanto do sprawdzenia przez dysortografa - przeczyta, a na koniec powie, że jemu to się generalnie wszystko podoba.</p>
+
+<p>Sterowanie regułami dotyczącymi kodu odbywa się poprzez plik konfiguracyjny <strong>analysis_options.yaml</strong> umieszczany w głównym katalogu projektu, na tym samym poziomie co np. <em>pubspec.yaml</em>. Definiujemy w nim listę zasad których chcemy trzymać się w projekcie, takich jak:</p>
+<ul>
+  <li>podwójne, czy pojedyncze apostrofy dla stringów</li>
+  <li>nie inicjalizowanie zmiennych <em>nullem</em></li>
+  <li>nie korzystanie z funkcji <em>print</em></li>
+  <li>…</li>
+</ul>
+
+<p>Samych wytycznych, czyli potencjalnych reguł do podążania jest całkiem sporo, a wszystkie wraz z opisem znajdziesz na <a href="https://dart-lang.github.io/linter/lints/">Linter for Dart</a>. My użyjemy tylko kilku, żeby zobaczyć jak to ugryźć. Dodawanie kolejnych nie stanowi już żadnego problemu i odbywa się w analogiczny sposób.</p>
+
+<p>W pliku <em>analysis_options.yaml</em> zdefiniujemy cztery reguły dla <em>lintera</em>, aby był w stanie stwierdzić czego w kodzie należy unikać:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">linter</span><span class="pi">:</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">prefer_double_quotes</span>
+    <span class="pi">-</span> <span class="s">avoid_init_to_null</span>
+    <span class="pi">-</span> <span class="s">avoid_print</span>
+    <span class="pi">-</span> <span class="s">camel_case_types</span>
+</code></pre></div></div>
+
+<p>Ponowne uruchomienia analizy na pliku wskaże już realne problemy, które należy zaadresować. Przedstawiona jest informacja o tym jaka reguła została naruszona oraz w którym dokładnie miejscu w aplikacji należy ją poprawić.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Analyzing linter...
+  lint • Name types using UpperCamelCase. • my_file.dart:1:7 • camel_case_types
+  lint • Don't explicitly initialize variables to null. • my_file.dart:4:10 • avoid_init_to_null
+  lint • Prefer double quotes where they won't require escape sequences. • my_file.dart:6:13 • prefer_double_quotes
+  lint • Avoid `print` calls in production code. • my_file.dart:7:5 • avoid_print
+4 lints found.
+</code></pre></div></div>
+
+<h3 id="gotowy-szablon">Gotowy szablon</h3>
+
+<p>Czy przeglądanie wszystkich dostępnych reguł i podejmowanie decyzji o ich słuszności to coś co chciałbyś robić? Ja na pewno nie. Jest dużo ciekawszych rzeczy na ktore mam ochotę i chęci, więc to zadanie najlepiej jest oddelegować. Z pomocą przychodzą gotowe biblioteki, których jedynym zadaniem jest dostarczenie predefiniowanego zestawu reguł, aby kod był po pierwsze schludny, a po drugie trzymał się reguł uznawanych przez inne projekty w ekosystemie Darta, czy Fluttera.</p>
+
+<p>Użycie gotowego szablonu sprowadza się do dwóch rzeczy. Pierwszą jest dodanie zależności w <em>pubspec.yaml</em>, a drugą użycie wzorca w <em>analysis_options.yaml</em>. Dwie najpopularniejsze paczki to <a href="https://pub.dev/packages/pedantic">pedantic</a> i <a href="https://pub.dev/packages/lint/score">lint</a>, gdzie ja jestem zwolennikiem tej drugiej. Jest bardziej restrykcyjna (wymusza więcej reguł), a tego z reguły oczekujemy korzystając z <em>lintera</em>.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># pubspec.yaml</span>
+<span class="na">dev_dependencies</span><span class="pi">:</span>
+  <span class="na">lint</span><span class="pi">:</span> <span class="s">^1.2.0</span>
+</code></pre></div></div>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># analysis_options.yaml</span>
+<span class="na">include</span><span class="pi">:</span> <span class="s">package:lint/analysis_options.yaml</span>
+</code></pre></div></div>
+
+<p>Nie ma tutaj żadnej magii, a jedyne co się dzieje to zaimportowanie reguł z <a href="https://github.com/passsy/dart-lint/blob/master/lib/analysis_options.yaml">analysis_options.yaml</a>.</p>
+
+<p>Jeśli nie podoba ci się jakakolwiek reguła użyta w szablonie, lub masz własne preferencje co do niektórych z nich, możesz je bez problemu dostosować do własnych potrzeb. Też to robię, bo zawsze zostaje kilka reguł co do których mam odmienne zdanie niż <em>lint</em>, czy <em>pedantic</em>. W takim wypadku wystarczy nadpisać jedynie reguły które chcemy dostosować pod własne potrzeby.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">include</span><span class="pi">:</span> <span class="s">package:lint/analysis_options.yaml</span>
+
+<span class="na">linter</span><span class="pi">:</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="na">public_member_api_docs</span><span class="pi">:</span> <span class="no">false</span>
+    <span class="na">lines_longer_than_80_chars</span><span class="pi">:</span> <span class="no">false</span>
+    <span class="na">sort_constructors_first</span><span class="pi">:</span> <span class="no">true</span>
+</code></pre></div></div>
+
+<h3 id="wyjątki-od-reguły">Wyjątki od reguły</h3>
+
+<p>Jak mówi polskie powiedzenie <em>“Wyjątek potwierdza regułę”</em> i ta sama zasada dotyczy reguł <em>lintera</em>. Pomimo posiadania zestawu restrkcyjnych reguł dla projektu, mamy możliwość wyłączania pojedynczych z nich dla konkretnej linii, bądź nawet całego pliku. Po co to jednak robić? Przecież nie po to wdrażamy <em>lintera</em>, żeby teraz ignorować jego sugestie. Otóż to, nie chcemy ich ignorować, ale czasami po prostu musimy.</p>
+
+<p>Weźmy taką regułę jak <em>avoid_print</em>, która nie pozwala wstawiać <em>printów</em> w kodzie. Ma sens, przecież nikt nie lubi śmietnika w kodzie i spamu w konsoli uruchomieniowej. Tylko co zrobić, gdy na prawdę w kilku miejscach chcemy takiego printa wstawić? Chociażby po to, żeby wypisać token użytkownika po zalogowaniu, w celu wykorzystania go poza aplikacją podczas developmentu.</p>
+
+<p>Plik w którym łamiesz zasadę lintera (rób to w pełni świadomie!) wystarczy opisać komentarzem na samej jego górze:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ignore_for_file: avoid_print</span>
+</code></pre></div></div>
+
+<p>Szczerze to nigdy nie korzystam z tego dobrodziejstwa. Kończy się na tym, że regułę musiałem złamać wyjątkowo raz, a <em>linter</em> przestaje jej już pilnować dla całego pliku. Z czasem reguła ta będzie omyłkowo łamana coraz częściej, co doprowadzi do niepotrzebnych zgrzytów.</p>
+
+<p>Drugi sposób jest bardziej subtelny i mniej inwazyjny. Również polega na użyciu komentarza, ale jego zasięg to nie cały plik, a jedynie pojedyncza linia. Zapobiega to nadużyciom i jasno widać gdzie i dlaczego reguła musiała zostać pominięta.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ignore: avoid_print</span>
+<span class="n">print</span><span class="o">(</span><span class="s">"Need to print, sorry"</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h3 id="wsparcie-ide">Wsparcie IDE</h3>
+
+<p>Trudno oczekiwać od programisty, żeby w prawdziwym świecie co chwila przechodził do terminala i uruchamiał lintera w poszukiwaniu błędów. Komendy konsolowe są oczywiście przydatne, bo można je uruchamiać na poziomie <em>CI/CD</em> podczas automatycznego budowania, ale jako człowiek mamy coś lepszego.</p>
+
+<p>Wsparcie z poziomu <em>IDE</em>, które również rozpoznaje zdefiniowane zasady w <em>analysis_optioms.yaml</em>. Potrafi w trybie graficznym wskazać problemy w czasie rzeczywistym. Żółte podkreślenia, czerwone, żarówki, w zależności od tego jak jest to zdefiniowane w twoim edytorze, takie wskazówki otrzymasz w codziennej pracy. Jest to pierwsza linia rozwiązywania problemów, bo zawsze widoczna - problemy pojawiają się tylko wtedy gdy dodajesz, lub usuwasz kod, więc i tak jesteś w danym pliku i masz szansę od razu zareagować na błędy.</p>
+
+<h2 id="flutter-way">Flutter way</h2>
+
+<p>Pracując nad aplikacją Flutterową nie musisz pamiętać o polecaniach <em>dartfmt</em>, czy <em>dartanalyzer</em>. Są one odpowiednio opakowane w:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Format all files in current directory</span>
+<span class="n">flutter</span> <span class="n">format</span> <span class="o">.</span>
+</code></pre></div></div>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">flutter</span> <span class="n">analyze</span>
+</code></pre></div></div>
+
+<p>Jest to delikatnie wygodniejsze, bo w razie problemów z pamięcią wystarczy uruchomić <code class="language-plaintext highlighter-rouge">flutter --help</code> i odnaleźć zapomnianą komendę.</p>
+
+<h2 id="podsumowanie">Podsumowanie</h2>
+
+<p>Dbanie o jakość kodu jest procesem żłożonym. Wpływa na niego wiele czynników, gdzie jednym z nich jest kwestia stylistyczna i zachowanie spójności w obrębie projektu. Warto poświęcić chwilę czasu na początku, aby określić czego oczekujemy i trzymać się zdefiniowanych zasad. Ułatwia to dalszy rozwój i utrzymanie kodu, a także najzwyczajniej w świecie programista ma łatwiejsze życie. Nie myśli przy pisaniu o tym jak sformatować kod - problem ten spada na narzędzie. Nawet sam proces <em>code review</em> staje się mniej stresujący, bo nikt nie będzie wspominał o tym, że wolałby jednak tu widzieć podwójne, a nie pojedyncze apostrofy.</p>
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-linter%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Schludny+i+czysty+kod%20https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-linter%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/flutter-linter/&title=Schludny+i+czysty+kod%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Schludny+i+czysty+kod%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/flutter-linter/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+
+    
+    <div id="next-post">
+        <a alt="Automatyczny stan aplikacji z MobX" href="/blog/flutter-mobx/">
+            <p>Następny wpis</p>
+            Automatyczny stan aplikacji z MobX
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+  .feature-image a { color: rgb(69,190,247) !important; }
+  div#post-nav a { color: rgb(69,190,247) !important; }
+  footer a { color: rgb(69,190,247) !important; }
+  .site-header nav a:hover {  color: rgb(69,190,247) !important; }
+  header#main { background-color: rgb(69,190,247) !important; }
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  background-image: url('/assets/img/lineart.png');  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>

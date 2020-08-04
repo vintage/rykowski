@@ -1,4 +1,197 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="pl_PL"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://rykowski.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rykowski.dev/" rel="alternate" type="text/html" hreflang="pl_PL" /><updated>2020-07-16T10:44:44+02:00</updated><id>https://rykowski.dev/feed.xml</id><title type="html">rykowski.dev</title><subtitle>Flutter | Blog o programowaniu aplikacji mobilnych</subtitle><entry><title type="html">MobX i Flutter - automatyczny stan</title><link href="https://rykowski.dev/blog/flutter-mobx/" rel="alternate" type="text/html" title="MobX i Flutter - automatyczny stan" /><published>2020-07-15T00:00:00+02:00</published><updated>2020-07-15T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-mobx</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-mobx/">&lt;p&gt;Flutter posiada dziesiątki rozwiązań przeznaczonych do zarządzania stanem aplikacji. Bardziej, lub mniej popularne, przekombinowane, proste w użyciu. Generalnie jest pełen wachlarz możliwości i każdy bez problemu znajdzie coś dla siebie i swojego projektu.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="pl_PL"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://rykowski.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rykowski.dev/" rel="alternate" type="text/html" hreflang="pl_PL" /><updated>2020-08-04T20:21:52+02:00</updated><id>https://rykowski.dev/feed.xml</id><title type="html">rykowski.dev</title><subtitle>Flutter | Blog o programowaniu aplikacji mobilnych</subtitle><entry><title type="html">Schludny i czysty kod</title><link href="https://rykowski.dev/blog/flutter-linter/" rel="alternate" type="text/html" title="Schludny i czysty kod" /><published>2020-08-04T00:00:00+02:00</published><updated>2020-08-04T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-linter</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-linter/">&lt;p&gt;Prawdopodobnie często spotykasz się z publicznie udostępnianym kodem. Biblioteki open-source, gotowe snippety, czy kod prezentowany w formie zrzutów ekranu. To może być nawet kod prywatny, wewnątrzzespołowy, gdzie wkład ma więcej niż jeden programista. Można go (kod, nie programistę) najprościej skategoryzować jako &lt;strong&gt;ładny&lt;/strong&gt; oraz &lt;strong&gt;brzydki&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Ładny kod&lt;/strong&gt; jest po prostu ładny. Napisany zgodnie z wytyczonymi standardami i konwencjami języka, dobrze sformatowany, trzymający się spójnej formy. Nie budzi negatywnego pierwszego wrażenia. &lt;strong&gt;Brzydki kod&lt;/strong&gt; natomiast czuć z daleka. Puste linie niewiadomego pochodzenia, dziwne wcięcia, nieużywane importy, polskie nazwy zmiennych i dziesiątki innych rzeczy od których metaforycznie krwawią oczy miłośnikom estetyki.&lt;/p&gt;
+
+&lt;p&gt;Jak sprawić zatem, aby brzydki kod stał się ładny, albo chociaż względnie przyzwoity na dobry początek? Narzędziowo.&lt;/p&gt;
+
+&lt;h2 id=&quot;dartfmt&quot;&gt;dartfmt&lt;/h2&gt;
+
+&lt;p&gt;Najłatwiejszą i najmniej czasochłonną rzeczą jaką możesz zrobić dla swojego projektu jest korzystanie z narzędzia do automatycznego formatowania kodu. Wskazujesz w nim jedynie jakie pliki powinny zostać doprowadzone do ładu, a skrypt zajmie się całą resztą. Weźmy dla przykładu kod:&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;     &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Kamil'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+
+  &lt;span class=&quot;n&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+
+
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Super!&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Dużo pustych linii, spacji raz za dużo, raz za mało, zbędne słowo kluczowe &lt;em&gt;new&lt;/em&gt;. Dość groteskowo, ale zbliżone jakościowo patalogie można trafić również w prawdziwym świecie. Jak temu zaradzić? Wystarczy uruchomić &lt;em&gt;dartfmt&lt;/em&gt;!&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dartfmt my_file.dart &lt;span class=&quot;nt&quot;&gt;--fix&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-w&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Wynikiem jest kod przeformatowany na który można już patrzeć bez zbędnego obrzydzenia.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Kamil'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Super!&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Flaga &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--fix&lt;/code&gt; określa, że chcemy sformatować plik wszystkimi wspieranymi regułami. Bez niej formatowane są jedynie znaki niedrukowane (&lt;em&gt;whitespace characters&lt;/em&gt;), czyli spacje, nowe linie i tym podobne. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-w&lt;/code&gt; nanosi sformatowane zmiany bezpośrednio na pliku, zamiast pokazywać je wyłącznie na konsoli. Wygodne.&lt;/p&gt;
+
+&lt;p&gt;A wiesz co jest jeszcze wygodniejsze? Formatowanie bezpośrednio z &lt;em&gt;IDE&lt;/em&gt;, niezależnie od tego czy korzystasz z &lt;em&gt;Android Studio&lt;/em&gt;, czy &lt;em&gt;Visual Studio Code&lt;/em&gt;. Zawsze masz pod ręką opcję &lt;em&gt;Reformat Code with dartfmt&lt;/em&gt; / &lt;em&gt;Format Document&lt;/em&gt; dostępną w menu kontekstowym (prawy przycisk myszy). Przy takiej prostocie grzechem jest wrzucanie wersji nieobrobionej w świat. Pamiętaj o tym i formatuj na potęgę. Zwłaszcza, gdy ktoś poza tobą ma szanse spojrzeć do kodu.&lt;/p&gt;
+
+&lt;p&gt;Formatowanie kodu to podstawa, ale duże projekty potrzebują czegoś znacznie większego. Listy reguł jasno definiujących co jest dozwolone, a co nie. W jaki sposób pisać kod aplikacji, aby wszędzie był spójny i trzymał się utartego szlaku. Jest to szczególnie ważne w projektach wieloosowobych, aby “spłaszczyć” różnice w kodzie pisanym przez każdego z programistów. Nie oszukujmy się, każdy ma swój własny styl pisania. Dla projektu lepiej jednak będzie, gdy nie jesteś w stanie na podstawie kilku linii kodu określić kto dokładnie je wyrzeźbił.&lt;/p&gt;
+
+&lt;h2 id=&quot;linter&quot;&gt;linter&lt;/h2&gt;
+
+&lt;p&gt;Uzupełnieniem dla formatowania kodu, są poprawnie skonfigurowane reguły dla &lt;strong&gt;lintera&lt;/strong&gt;, czyli narzędzia analizującego kod aplikacji pod kątem błędów stylistycznych, czy niepoprawnych konstrukcji. Programista (zespół) określa wytyczne których chce się trzymać, aby projekt był spójny, a kod przyjemny w utrzymywaniu. Narzędzie dopilnuje, aby reguły te były przestrzegane przez wszystkich uczestników.&lt;/p&gt;
+
+&lt;h3 id=&quot;przygotowanie&quot;&gt;Przygotowanie&lt;/h3&gt;
+
+&lt;p&gt;Konfigurację &lt;em&gt;lintera&lt;/em&gt; zacznę od tego, że nie będzie to projekt Flutterowy, a jedynie Dartowy. Wszystkie przedstawione zasady przenoszą się oczywiście 1:1, ale nie chcę zaciemniać obrazu analizy dodatkową składową w postaci frameworka.&lt;/p&gt;
+
+&lt;p&gt;W nowym katalogu &lt;em&gt;dart_side&lt;/em&gt; tworzymy plik &lt;em&gt;my_file.dart&lt;/em&gt;. Plik sam w sobie został już sformatowany i &lt;em&gt;dartfmt&lt;/em&gt; nie może nic więcej dla nas zrobić.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;me&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'Kamil'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hi&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;uruchomienie&quot;&gt;Uruchomienie&lt;/h3&gt;
+
+&lt;p&gt;Sprawdźmy co &lt;em&gt;linter&lt;/em&gt; myśli o powyższym pliku. Mam do niego trochę osobistych obiekcji, ale zdajmy się na fachowe narzędzie, zamiast na omylne oko programisty.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dartanalyzer &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Wynik?&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Analyzing linter...
+No issues found!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Linter lubi to&lt;/em&gt;. W gruncie rzeczy to co ma mu się nie podobać? Kod się kompiluje, działa. Niczego więcej do szczęścia nie potrzeba. A jednak …&lt;/p&gt;
+
+&lt;h3 id=&quot;ustalenie-reguł&quot;&gt;Ustalenie reguł&lt;/h3&gt;
+
+&lt;p&gt;Domyślnie &lt;em&gt;linter&lt;/em&gt; jest łagodny i wszystko traktuje zbyt optymistycznie. Nie ma reguł na dobro i zło. Czego byś mu nie dał do sprawdzenia i tak dostaniesz najwyższą notę. To tak jakbyś oddał dyktanto do sprawdzenia przez dysortografa - przeczyta, a na koniec powie, że jemu to się generalnie wszystko podoba.&lt;/p&gt;
+
+&lt;p&gt;Sterowanie regułami dotyczącymi kodu odbywa się poprzez plik konfiguracyjny &lt;strong&gt;analysis_options.yaml&lt;/strong&gt; umieszczany w głównym katalogu projektu, na tym samym poziomie co np. &lt;em&gt;pubspec.yaml&lt;/em&gt;. Definiujemy w nim listę zasad których chcemy trzymać się w projekcie, takich jak:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;podwójne, czy pojedyncze apostrofy dla stringów&lt;/li&gt;
+  &lt;li&gt;nie inicjalizowanie zmiennych &lt;em&gt;nullem&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;nie korzystanie z funkcji &lt;em&gt;print&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;…&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Samych wytycznych, czyli potencjalnych reguł do podążania jest całkiem sporo, a wszystkie wraz z opisem znajdziesz na &lt;a href=&quot;https://dart-lang.github.io/linter/lints/&quot;&gt;Linter for Dart&lt;/a&gt;. My użyjemy tylko kilku, żeby zobaczyć jak to ugryźć. Dodawanie kolejnych nie stanowi już żadnego problemu i odbywa się w analogiczny sposób.&lt;/p&gt;
+
+&lt;p&gt;W pliku &lt;em&gt;analysis_options.yaml&lt;/em&gt; zdefiniujemy cztery reguły dla &lt;em&gt;lintera&lt;/em&gt;, aby był w stanie stwierdzić czego w kodzie należy unikać:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;linter&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;rules&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;prefer_double_quotes&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;avoid_init_to_null&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;avoid_print&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;camel_case_types&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Ponowne uruchomienia analizy na pliku wskaże już realne problemy, które należy zaadresować. Przedstawiona jest informacja o tym jaka reguła została naruszona oraz w którym dokładnie miejscu w aplikacji należy ją poprawić.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Analyzing linter...
+  lint • Name types using UpperCamelCase. • my_file.dart:1:7 • camel_case_types
+  lint • Don't explicitly initialize variables to null. • my_file.dart:4:10 • avoid_init_to_null
+  lint • Prefer double quotes where they won't require escape sequences. • my_file.dart:6:13 • prefer_double_quotes
+  lint • Avoid `print` calls in production code. • my_file.dart:7:5 • avoid_print
+4 lints found.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;gotowy-szablon&quot;&gt;Gotowy szablon&lt;/h3&gt;
+
+&lt;p&gt;Czy przeglądanie wszystkich dostępnych reguł i podejmowanie decyzji o ich słuszności to coś co chciałbyś robić? Ja na pewno nie. Jest dużo ciekawszych rzeczy na ktore mam ochotę i chęci, więc to zadanie najlepiej jest oddelegować. Z pomocą przychodzą gotowe biblioteki, których jedynym zadaniem jest dostarczenie predefiniowanego zestawu reguł, aby kod był po pierwsze schludny, a po drugie trzymał się reguł uznawanych przez inne projekty w ekosystemie Darta, czy Fluttera.&lt;/p&gt;
+
+&lt;p&gt;Użycie gotowego szablonu sprowadza się do dwóch rzeczy. Pierwszą jest dodanie zależności w &lt;em&gt;pubspec.yaml&lt;/em&gt;, a drugą użycie wzorca w &lt;em&gt;analysis_options.yaml&lt;/em&gt;. Dwie najpopularniejsze paczki to &lt;a href=&quot;https://pub.dev/packages/pedantic&quot;&gt;pedantic&lt;/a&gt; i &lt;a href=&quot;https://pub.dev/packages/lint/score&quot;&gt;lint&lt;/a&gt;, gdzie ja jestem zwolennikiem tej drugiej. Jest bardziej restrykcyjna (wymusza więcej reguł), a tego z reguły oczekujemy korzystając z &lt;em&gt;lintera&lt;/em&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# pubspec.yaml&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;dev_dependencies&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;lint&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;^1.2.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# analysis_options.yaml&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;package:lint/analysis_options.yaml&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Nie ma tutaj żadnej magii, a jedyne co się dzieje to zaimportowanie reguł z &lt;a href=&quot;https://github.com/passsy/dart-lint/blob/master/lib/analysis_options.yaml&quot;&gt;analysis_options.yaml&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Jeśli nie podoba ci się jakakolwiek reguła użyta w szablonie, lub masz własne preferencje co do niektórych z nich, możesz je bez problemu dostosować do własnych potrzeb. Też to robię, bo zawsze zostaje kilka reguł co do których mam odmienne zdanie niż &lt;em&gt;lint&lt;/em&gt;, czy &lt;em&gt;pedantic&lt;/em&gt;. W takim wypadku wystarczy nadpisać jedynie reguły które chcemy dostosować pod własne potrzeby.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;package:lint/analysis_options.yaml&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;linter&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;rules&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;public_member_api_docs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;lines_longer_than_80_chars&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;sort_constructors_first&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;wyjątki-od-reguły&quot;&gt;Wyjątki od reguły&lt;/h3&gt;
+
+&lt;p&gt;Jak mówi polskie powiedzenie &lt;em&gt;“Wyjątek potwierdza regułę”&lt;/em&gt; i ta sama zasada dotyczy reguł &lt;em&gt;lintera&lt;/em&gt;. Pomimo posiadania zestawu restrkcyjnych reguł dla projektu, mamy możliwość wyłączania pojedynczych z nich dla konkretnej linii, bądź nawet całego pliku. Po co to jednak robić? Przecież nie po to wdrażamy &lt;em&gt;lintera&lt;/em&gt;, żeby teraz ignorować jego sugestie. Otóż to, nie chcemy ich ignorować, ale czasami po prostu musimy.&lt;/p&gt;
+
+&lt;p&gt;Weźmy taką regułę jak &lt;em&gt;avoid_print&lt;/em&gt;, która nie pozwala wstawiać &lt;em&gt;printów&lt;/em&gt; w kodzie. Ma sens, przecież nikt nie lubi śmietnika w kodzie i spamu w konsoli uruchomieniowej. Tylko co zrobić, gdy na prawdę w kilku miejscach chcemy takiego printa wstawić? Chociażby po to, żeby wypisać token użytkownika po zalogowaniu, w celu wykorzystania go poza aplikacją podczas developmentu.&lt;/p&gt;
+
+&lt;p&gt;Plik w którym łamiesz zasadę lintera (rób to w pełni świadomie!) wystarczy opisać komentarzem na samej jego górze:&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// ignore_for_file: avoid_print&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Szczerze to nigdy nie korzystam z tego dobrodziejstwa. Kończy się na tym, że regułę musiałem złamać wyjątkowo raz, a &lt;em&gt;linter&lt;/em&gt; przestaje jej już pilnować dla całego pliku. Z czasem reguła ta będzie omyłkowo łamana coraz częściej, co doprowadzi do niepotrzebnych zgrzytów.&lt;/p&gt;
+
+&lt;p&gt;Drugi sposób jest bardziej subtelny i mniej inwazyjny. Również polega na użyciu komentarza, ale jego zasięg to nie cały plik, a jedynie pojedyncza linia. Zapobiega to nadużyciom i jasno widać gdzie i dlaczego reguła musiała zostać pominięta.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// ignore: avoid_print&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Need to print, sorry&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;wsparcie-ide&quot;&gt;Wsparcie IDE&lt;/h3&gt;
+
+&lt;p&gt;Trudno oczekiwać od programisty, żeby w prawdziwym świecie co chwila przechodził do terminala i uruchamiał lintera w poszukiwaniu błędów. Komendy konsolowe są oczywiście przydatne, bo można je uruchamiać na poziomie &lt;em&gt;CI/CD&lt;/em&gt; podczas automatycznego budowania, ale jako człowiek mamy coś lepszego.&lt;/p&gt;
+
+&lt;p&gt;Wsparcie z poziomu &lt;em&gt;IDE&lt;/em&gt;, które również rozpoznaje zdefiniowane zasady w &lt;em&gt;analysis_optioms.yaml&lt;/em&gt;. Potrafi w trybie graficznym wskazać problemy w czasie rzeczywistym. Żółte podkreślenia, czerwone, żarówki, w zależności od tego jak jest to zdefiniowane w twoim edytorze, takie wskazówki otrzymasz w codziennej pracy. Jest to pierwsza linia rozwiązywania problemów, bo zawsze widoczna - problemy pojawiają się tylko wtedy gdy dodajesz, lub usuwasz kod, więc i tak jesteś w danym pliku i masz szansę od razu zareagować na błędy.&lt;/p&gt;
+
+&lt;h2 id=&quot;flutter-way&quot;&gt;Flutter way&lt;/h2&gt;
+
+&lt;p&gt;Pracując nad aplikacją Flutterową nie musisz pamiętać o polecaniach &lt;em&gt;dartfmt&lt;/em&gt;, czy &lt;em&gt;dartanalyzer&lt;/em&gt;. Są one odpowiednio opakowane w:&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// Format all files in current directory&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;flutter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;format&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;flutter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;analyze&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Jest to delikatnie wygodniejsze, bo w razie problemów z pamięcią wystarczy uruchomić &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;flutter --help&lt;/code&gt; i odnaleźć zapomnianą komendę.&lt;/p&gt;
+
+&lt;h2 id=&quot;podsumowanie&quot;&gt;Podsumowanie&lt;/h2&gt;
+
+&lt;p&gt;Dbanie o jakość kodu jest procesem żłożonym. Wpływa na niego wiele czynników, gdzie jednym z nich jest kwestia stylistyczna i zachowanie spójności w obrębie projektu. Warto poświęcić chwilę czasu na początku, aby określić czego oczekujemy i trzymać się zdefiniowanych zasad. Ułatwia to dalszy rozwój i utrzymanie kodu, a także najzwyczajniej w świecie programista ma łatwiejsze życie. Nie myśli przy pisaniu o tym jak sformatować kod - problem ten spada na narzędzie. Nawet sam proces &lt;em&gt;code review&lt;/em&gt; staje się mniej stresujący, bo nikt nie będzie wspominał o tym, że wolałby jednak tu widzieć podwójne, a nie pojedyncze apostrofy.&lt;/p&gt;</content><author><name></name></author><summary type="html">Trzymanie się restrykcyjnych zasad zapewniających spójność kodu to podstawa udanego projektu. Dowiedz się jak skonfigurować lintera, aby trzymał wszystko w ryzach.</summary></entry><entry><title type="html">Automatyczny stan aplikacji z MobX</title><link href="https://rykowski.dev/blog/flutter-mobx/" rel="alternate" type="text/html" title="Automatyczny stan aplikacji z MobX" /><published>2020-07-15T00:00:00+02:00</published><updated>2020-07-15T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-mobx</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-mobx/">&lt;p&gt;Flutter posiada dziesiątki rozwiązań przeznaczonych do zarządzania stanem aplikacji. Bardziej, lub mniej popularne, przekombinowane, proste w użyciu. Generalnie jest pełen wachlarz możliwości i każdy bez problemu znajdzie coś dla siebie i swojego projektu.&lt;/p&gt;
 
 &lt;p&gt;Co jednak zrobić, gdy nie masz czasu, ani chęci w testowaniu i porównywaniu mnogości opcji? Postaw na sprawdzony wariant w postaci &lt;strong&gt;MobX&lt;/strong&gt;, który w ekosystemie JavaScript już dawno udowodnił, że ma solidne fundamenty, a praca z nim to czysta przyjemność. Warto na niego postawić również w przypadku aplikacji Flutterowych!&lt;/p&gt;
 
@@ -426,7 +619,7 @@
   &lt;li&gt;polubienia &lt;em&gt;immutable objects&lt;/em&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Osobiście &lt;em&gt;MobX&lt;/em&gt; to dla mnie numer #1 jeśli chodzi o dostępne biblioteki do zarządzania stanem. Jest prosty, szybki i przyjemny, a są to cechy, które mocno sobie cenię zwłaszcza w pobocznych projektach robionych po godzinach. Używam go m.in. w developmencie pierwszego RPG online osadzonego w świecie post-apo we Flutterze - &lt;a href=&quot;https://twitter.com/vaultomb&quot;&gt;Vaultomb&lt;/a&gt;. Premiera w dalszej przyszłości :)&lt;/p&gt;</content><author><name></name></author><summary type="html">MobX jest świetnym i sprawdzonym w boju rozwiązaniem do zarządzania stanem aplikacji. Nie wymaga dużej ilości kodu, jest wydajny i sporo rzeczy dzieje się bez udziału programisty.</summary></entry><entry><title type="html">Asynchroniczny Dart - Isolates</title><link href="https://rykowski.dev/blog/async-dart-isolates/" rel="alternate" type="text/html" title="Asynchroniczny Dart - Isolates" /><published>2020-07-05T00:00:00+02:00</published><updated>2020-07-05T00:00:00+02:00</updated><id>https://rykowski.dev/blog/async-dart-isolates</id><content type="html" xml:base="https://rykowski.dev/blog/async-dart-isolates/">&lt;blockquote&gt;
+&lt;p&gt;Osobiście &lt;em&gt;MobX&lt;/em&gt; to dla mnie numer #1 jeśli chodzi o dostępne biblioteki do zarządzania stanem. Jest prosty, szybki i przyjemny, a są to cechy, które mocno sobie cenię zwłaszcza w pobocznych projektach robionych po godzinach. Używam go m.in. w developmencie pierwszego RPG online osadzonego w świecie post-apo we Flutterze - &lt;a href=&quot;https://twitter.com/vaultomb&quot;&gt;Vaultomb&lt;/a&gt;. Premiera w dalszej przyszłości :)&lt;/p&gt;</content><author><name></name></author><summary type="html">MobX jest świetnym i sprawdzonym w boju rozwiązaniem do zarządzania stanem aplikacji. Nie wymaga dużej ilości kodu, jest wydajny i sporo rzeczy dzieje się bez udziału programisty.</summary></entry><entry><title type="html">Ciężkie obliczenia z Isolate</title><link href="https://rykowski.dev/blog/async-dart-isolates/" rel="alternate" type="text/html" title="Ciężkie obliczenia z Isolate" /><published>2020-07-05T00:00:00+02:00</published><updated>2020-07-05T00:00:00+02:00</updated><id>https://rykowski.dev/blog/async-dart-isolates</id><content type="html" xml:base="https://rykowski.dev/blog/async-dart-isolates/">&lt;blockquote&gt;
   &lt;p&gt;Jest to drugi wpis z serii o modelu wykonawczym w Darcie i powiązanej z nim asynchroniczności. Aby wyciągnąć maksimum wiedzy z tego wpisu, niezbędna jest wiedza z poprzedniego, który tłumaczy działanie Event Loop, Futures i programowania z użyciem async/await. Znajdziesz go &lt;a href=&quot;/blog/async-dart-event-loop-futures/&quot;&gt;tutaj&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -863,7 +1056,7 @@ Isolate says: Hi
 
 &lt;p&gt;Jest to drugi wpis z serii dotyczącej przetwarzanie instrukcji w aplikacjach Flutterowych. W planach jest jeszcze jeden, traktujący o strumieniach i jemu pochodnych. Do następnego!&lt;/p&gt;
 
-&lt;p&gt;Kod pełnej aplikacji Sortownik znajdziesz na &lt;a href=&quot;https://github.com/vintage/flutter_demo_isolates&quot;&gt;GitHubie&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Równoległe przetwarzania w Darcie? Jak najbardziej możliwe! Rozbijmy skorupę jednowątkowości dzięki dodatkowej mocy dostarczanej przez izolaty. Jednowątkowość z wieloma wątkami.</summary></entry><entry><title type="html">Asynchroniczny Dart - Event Loop, Futures, async/await</title><link href="https://rykowski.dev/blog/async-dart-event-loop-futures/" rel="alternate" type="text/html" title="Asynchroniczny Dart - Event Loop, Futures, async/await" /><published>2020-06-27T00:00:00+02:00</published><updated>2020-06-27T00:00:00+02:00</updated><id>https://rykowski.dev/blog/async-dart-event-loop-futures</id><content type="html" xml:base="https://rykowski.dev/blog/async-dart-event-loop-futures/">&lt;p&gt;Pisząc dowolną aplikację we Flutterze posługujesz się językiem Dart. Wszystkie ograniczenia i subtelności zdefiniowane w samym języku, będą ci również towarzyszyły we Flutterze. Nie da się inaczej. Flutter stoi na Darcie, koniec i kropka. Czy to dobrze? Jasne, czemu nie. Lubię ten język i mam do niego pewnego rodzaju słabość, ale warto poznać go czasem nieco głębiej poza samą jego składnią.&lt;/p&gt;
+&lt;p&gt;Kod pełnej aplikacji Sortownik znajdziesz na &lt;a href=&quot;https://github.com/vintage/flutter_demo_isolates&quot;&gt;GitHubie&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Równoległe przetwarzania w Darcie? Jak najbardziej możliwe! Rozbijmy skorupę jednowątkowości dzięki dodatkowej mocy dostarczanej przez izolaty. Jednowątkowość z wieloma wątkami.</summary></entry><entry><title type="html">Event Loop, Futures, async/await</title><link href="https://rykowski.dev/blog/async-dart-event-loop-futures/" rel="alternate" type="text/html" title="Event Loop, Futures, async/await" /><published>2020-06-27T00:00:00+02:00</published><updated>2020-06-27T00:00:00+02:00</updated><id>https://rykowski.dev/blog/async-dart-event-loop-futures</id><content type="html" xml:base="https://rykowski.dev/blog/async-dart-event-loop-futures/">&lt;p&gt;Pisząc dowolną aplikację we Flutterze posługujesz się językiem Dart. Wszystkie ograniczenia i subtelności zdefiniowane w samym języku, będą ci również towarzyszyły we Flutterze. Nie da się inaczej. Flutter stoi na Darcie, koniec i kropka. Czy to dobrze? Jasne, czemu nie. Lubię ten język i mam do niego pewnego rodzaju słabość, ale warto poznać go czasem nieco głębiej poza samą jego składnią.&lt;/p&gt;
 
 &lt;p&gt;Nie będziemy jednak wertować całego języka od podstaw, od tego jest oficjalna dokumentacja. Skupimy się jedynie na tym &lt;strong&gt;skąd Dart wie który kod uruchomić w jakim czasie&lt;/strong&gt; oraz na czym opiera się cała magia asynchroniczności. Temat jest bardzo szeroki i wymaga zrozumienia kilku podstawowych konceptów od których rozpoczniemy dzisiejszy wpis.&lt;/p&gt;
 
@@ -2778,7 +2971,7 @@ micro2
   &lt;li&gt;… i wiele więcej - ogranicza Cię tylko wyobraźnia (i ograniczenia sprzętowe).&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/state_provider/colorek_final.gif&quot; alt=&quot;colorek_final.gif&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Każda średnia i duża aplikacja we Flutterze wymaga narzędzia do zarządzania stanem globalnym. Kiedy go potrzebujesz i dlaczego stan lokalny to za mało? Poznaj Providera - bibliotekę, która ułatwia proces do granic możliwości.</summary></entry><entry><title type="html">Zarabianie i monetyzacja - Reklamy AdMob</title><link href="https://rykowski.dev/blog/flutter-monetization-admob/" rel="alternate" type="text/html" title="Zarabianie i monetyzacja - Reklamy AdMob" /><published>2019-07-17T00:00:00+02:00</published><updated>2019-07-17T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-monetization-admob</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-monetization-admob/">&lt;p&gt;Pisanie aplikacji mobilnych to świetna zabawa. Tworzenie czegoś z myślą, że będzie używane przez setki, tysiace, a nawet miliony ludzi pobierajacych naszą apkę ze sklepów to mieszanka dumy, ekscytacji i czystego fun-u. Tak to wygląda przynajmiej z naszej strony - czysto technicznej. Wypuszczamy aplikację, dopieszczamy ją o nowe funkcjonalności i rozwiązujemy najbardziej krytyczne, lub uciążliwe błędy. Zastanawiałeś się jednak czy jest coś więcej? Coś ważniejszego?&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/blog/state_provider/colorek_final.gif&quot; alt=&quot;colorek_final.gif&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Każda średnia i duża aplikacja we Flutterze wymaga narzędzia do zarządzania stanem globalnym. Kiedy go potrzebujesz i dlaczego stan lokalny to za mało? Poznaj Providera - bibliotekę, która ułatwia proces do granic możliwości.</summary></entry><entry><title type="html">Monetyzacja aplikacji z reklamami AdMob</title><link href="https://rykowski.dev/blog/flutter-monetization-admob/" rel="alternate" type="text/html" title="Monetyzacja aplikacji z reklamami AdMob" /><published>2019-07-17T00:00:00+02:00</published><updated>2019-07-17T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-monetization-admob</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-monetization-admob/">&lt;p&gt;Pisanie aplikacji mobilnych to świetna zabawa. Tworzenie czegoś z myślą, że będzie używane przez setki, tysiace, a nawet miliony ludzi pobierajacych naszą apkę ze sklepów to mieszanka dumy, ekscytacji i czystego fun-u. Tak to wygląda przynajmiej z naszej strony - czysto technicznej. Wypuszczamy aplikację, dopieszczamy ją o nowe funkcjonalności i rozwiązujemy najbardziej krytyczne, lub uciążliwe błędy. Zastanawiałeś się jednak czy jest coś więcej? Coś ważniejszego?&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Druga strona medalu - strona biznesowa.&lt;/p&gt;
@@ -3825,7 +4018,7 @@ micro2
 
 &lt;p&gt;Mamy to - &lt;strong&gt;w pełni działająca gra&lt;/strong&gt; typu clicker, bez żadnych udziwnień. Możesz je rzecz jasna dodać i rozszerzyć koncept, a ostatecznie nawet wydać na Android i iOSa. Wierzę, że wszystko okazało się jasne i potrafisz zarządzać stanem swojej Flutterowej aplikacji. Skomentuj wpis jeśli chciałbyś się czymś podzielić, lub masz dowolne pytanie. Wyszeruj dalej, aby więcej Flutter devów dowiedziało się co i jak. Do następnego wpisu!&lt;/p&gt;
 
-&lt;p&gt;Pełny kod aplikacji PokeTap znajdziesz na &lt;a href=&quot;https://github.com/vintage/rykowski.dev/blob/master/samples/poketap.dart&quot;&gt;GitHubie&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Interakcja użytkownika często wymaga aktualizacji wyświetlanych danych na ekranie - m.in. zmiana języka w sekcji ustawień, czy żonglowanie ulubionym elementem. Zarządzaj stanem aplikacji dzięki wbudowanemu rozwiązaniu StatefulWidget.</summary></entry><entry><title type="html">Pozycjonowanie elementów w gridzie - Row i Column</title><link href="https://rykowski.dev/blog/flutter-layout-grid/" rel="alternate" type="text/html" title="Pozycjonowanie elementów w gridzie - Row i Column" /><published>2019-06-23T00:00:00+02:00</published><updated>2019-06-23T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-layout-grid</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-layout-grid/">&lt;p&gt;Ogromną rolę przy tworzeniu aplikacji mobilnych odgrywa część wizualna, czyli User Interface (&lt;strong&gt;UI&lt;/strong&gt;). Możemy tutaj wyodrębnić kilka składowych elementów, które w połączeniu wygenerują nam to co użytkownik zobaczy na ekranie po odpaleniu naszej apki:&lt;/p&gt;
+&lt;p&gt;Pełny kod aplikacji PokeTap znajdziesz na &lt;a href=&quot;https://github.com/vintage/rykowski.dev/blob/master/samples/poketap.dart&quot;&gt;GitHubie&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Interakcja użytkownika często wymaga aktualizacji wyświetlanych danych na ekranie - m.in. zmiana języka w sekcji ustawień, czy żonglowanie ulubionym elementem. Zarządzaj stanem aplikacji dzięki wbudowanemu rozwiązaniu StatefulWidget.</summary></entry><entry><title type="html">Pozycjonowanie elementów na ekranie</title><link href="https://rykowski.dev/blog/flutter-layout-grid/" rel="alternate" type="text/html" title="Pozycjonowanie elementów na ekranie" /><published>2019-06-23T00:00:00+02:00</published><updated>2019-06-23T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-layout-grid</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-layout-grid/">&lt;p&gt;Ogromną rolę przy tworzeniu aplikacji mobilnych odgrywa część wizualna, czyli User Interface (&lt;strong&gt;UI&lt;/strong&gt;). Możemy tutaj wyodrębnić kilka składowych elementów, które w połączeniu wygenerują nam to co użytkownik zobaczy na ekranie po odpaleniu naszej apki:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;wygląd komponentów (&lt;em&gt;design&lt;/em&gt;)&lt;/li&gt;
@@ -4130,143 +4323,4 @@ micro2
     &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">Jedną z głównych zalet Fluttera jest jego niemal doskonały mechanizm do tworzenia layoutów. Dowiedz się w jaki sposób powiązać ze sobą elementy, aby wyświetlały się dokładnie tam, gdzie im każesz.</summary></entry><entry><title type="html">Flutter - konfiguracja i rozpoczęcie przygody</title><link href="https://rykowski.dev/blog/flutter-getting-started/" rel="alternate" type="text/html" title="Flutter - konfiguracja i rozpoczęcie przygody" /><published>2019-06-12T00:00:00+02:00</published><updated>2019-06-12T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-getting-started</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-getting-started/">&lt;p&gt;Czym jest Flutter możesz dowiedzieć się z &lt;a href=&quot;/blog/flutter-intro/&quot;&gt;poprzedniego wpisu&lt;/a&gt;, pora na praktykę. Konfiguracja środowiska,
-instalacja niezbędnych zależności, podrasowanie edytora i ostatecznie zbudowanie pierwszej apki pod Androida lub iOSa (exclusive dla posiadaczy macOS). Zacznijmy kodzić!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/meme_lets_do_this.gif&quot; alt=&quot;meme_lets_do_this.gif&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;flutter-sdk&quot;&gt;Flutter SDK&lt;/h2&gt;
-
-&lt;p&gt;Do rozpoczęcia naszej przygody z Flutterem potrzebujemy … Fluttera. Da się zrobić! SDK dostępne jest do pobrania bezpośrednio z serwerów Google:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_1.17.5-stable.tar.xz&quot;&gt;Wersja Linux&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.17.5-stable.zip&quot;&gt;Wersja macOS&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Po ściągnięciu paczki należy ją rozpakować, a następnie przenieść katalog w sensowne miejsce. Jak odróżnić sensowne, od bezsensownego? Nie wiem, ale rzeczy tego typu osobiście trzymam w &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/usr/local/opt/&lt;/code&gt; dlatego Tobie też to polecam (chyba, że masz wyrobione własne preferencje, wtedy śmiało zrób tak, abyś czuł że masz nad tym kontrolę). Otwórz konsolę i przenieś świeżo rozpakowane archiwum do miejsca docelowego:&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; &amp;lt;KATALOG_GDZIE_ROZPAKOWAŁEŚ_ARCHIWUM&amp;gt;
-&lt;span class=&quot;nb&quot;&gt;mv &lt;/span&gt;flutter /usr/local/opt/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Gotowe. Pozostaje nam tylko powiadomić system, że w &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/usr/local/opt/flutter/bin/&lt;/code&gt; znajdują się pliki wykonywalne, które będziemy uruchamiać z poziomu konsoli. Chcemy w terminalu wpisać &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;flutter&lt;/code&gt; i zobaczyć inny output niż “&lt;strong&gt;Command not found&lt;/strong&gt;”. Do osiągnięcia celu zaktualizujemy zmienną środowiskową &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$PATH&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;echo export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'$PATH:/usr/local/opt/flutter/bin'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; ~/.bash_profile
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Zrestartuj konsolę i voilà - po wpisaniu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;flutter --version&lt;/code&gt; otrzymasz informację o aktualnie zainstalowanej wersji Fluttera. &lt;strong&gt;Yay!&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;środowisko-android&quot;&gt;Środowisko Android&lt;/h2&gt;
-
-&lt;p&gt;Budowanie aplikacji na urządzenia z Androidem wymaga pobrania i zainstalowania &lt;a href=&quot;https://developer.android.com/studio&quot;&gt;Android Studio&lt;/a&gt;. Gdy zainstalujesz już program, uruchom go i przejdź przez sugerowany proces pobierający Android SDK wraz z platform-tools i build-tools (narzędzia wykorzystywane m.in. do budowania plików &lt;strong&gt;*.apk&lt;/strong&gt;).&lt;/p&gt;
-
-&lt;p&gt;Jako że główne narzędzie masz już zainstalowane, pozostało przygotować urządzenie na którym będziesz testował aplikację. Generalnie opcje są dwie - telefon, albo emulator. Oba rozwiązania są dobre, jednak czasem konieczne jest przetestowanie na fizycznym urządzeniu - bo jak sprawdzisz, że emulator wibruje? Ograniczenia technologiczne :)&lt;/p&gt;
-
-&lt;h3 id=&quot;konfiguracja-urządzenia&quot;&gt;Konfiguracja urządzenia&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Weź telefon do ręki.&lt;/li&gt;
-  &lt;li&gt;Przejdź do ustawień i aktywuj opcje programistyczne &lt;strong&gt;Ustawienia &amp;gt; Informacje o telefonie &amp;gt; Numer kompilacji/wersji&lt;/strong&gt;.  Uderz kilkanaście razy w tą opcję póki nie dostaniesz informacji o tym, że zostałeś programistą. Jeśli monit o byciu programistą się nie pojawi - spróbuj uderzać palcem w inną opcję, lub sprawdź w internecie jak dokładnie wygląda to na Twoim urządzeniu.&lt;/li&gt;
-  &lt;li&gt;W ustawieniach odblokowana została nowa sekcja &lt;strong&gt;Opcje programistyczne&lt;/strong&gt;. Przejdź do niej i włącz opcję &lt;strong&gt;Debugowanie USB&lt;/strong&gt; oraz &lt;strong&gt;Zezwalaj na instalację USB&lt;/strong&gt; (nie we wszystkich telefonach jest dostępna).&lt;/li&gt;
-  &lt;li&gt;Podłącz kablem telefon do komputera.&lt;/li&gt;
-  &lt;li&gt;Na telefonie potwierdź, że ufasz komputerowi do którego się właśnie podłączyłeś (bo ufasz prawda?).&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;konfiguracja-emulatora&quot;&gt;Konfiguracja emulatora&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Uruchom &lt;strong&gt;Android Studio&lt;/strong&gt; i z menu wybierz &lt;strong&gt;Tools &amp;gt; AVD Manager&lt;/strong&gt;.&lt;/li&gt;
-  &lt;li&gt;Kliknij w przycisk na dole ekranu &lt;strong&gt;Create virtual device&lt;/strong&gt;.&lt;/li&gt;
-  &lt;li&gt;W &lt;strong&gt;Category&lt;/strong&gt; zaznacz &lt;strong&gt;Phone&lt;/strong&gt;, wybierz dowolne urządzenie i kliknij w &lt;strong&gt;Next&lt;/strong&gt;.&lt;/li&gt;
-  &lt;li&gt;Wybierz wersję Androida do zainstalowana na emulatorze (polecam jedną z nowszych). Jeśli nie ściągałeś jeszcze żadnej to przy obrazach dostępny jest przycisk &lt;strong&gt;Download&lt;/strong&gt;, który pobierze potrzebne pliki.&lt;/li&gt;
-  &lt;li&gt;Kliknij w &lt;strong&gt;Next&lt;/strong&gt;, a następnie &lt;strong&gt;Finish&lt;/strong&gt;.&lt;/li&gt;
-  &lt;li&gt;Wróć do &lt;strong&gt;Tools &amp;gt; AVD Manager&lt;/strong&gt; i kliknij w ikonę &lt;strong&gt;▶️&lt;/strong&gt; przy nowo utworzonym emulatorze.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Zwieńczeniem procesu - bez znaczenia czy konfigurujesz urządzenie czy emulator - jest wpisanie z poziomu konsoli &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;flutter devices&lt;/code&gt; i upewnienie się że zwrócona lista nie jest pusta. Powinieneś otrzymać wynik zbliżony do:&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;flutter devices
-1 connected device:
-
-Android SDK built &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;x86 • emulator-5554 • android-x86 • Android 9 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;API 28&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;emulator&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;środowisko-ios&quot;&gt;Środowisko iOS*&lt;/h2&gt;
-
-&lt;p&gt;&lt;em&gt;Wyłącznie dla posiadaczy macOS - nie jest możliwe budowanie aplikacji iOS na innym systemie operacyjnym niż ten od Apple.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Jeśli jesteś zainteresowany budowaniem aplikacji pod iOS, potrzebujesz narzędzia &lt;a href=&quot;https://itunes.apple.com/us/app/xcode/id497799835&quot;&gt;Xcode&lt;/a&gt;. Po poprawnej instalacji (może chwilę zająć) wykonaj dodatkowo poniższe polecenia:&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;xcode-select &lt;span class=&quot;nt&quot;&gt;--switch&lt;/span&gt; /Applications/Xcode.app/Contents/Developer
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;xcodebuild &lt;span class=&quot;nt&quot;&gt;-license&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Odpowiadają one za konfigurację &lt;em&gt;CLI&lt;/em&gt; oraz akceptację umowy licencyjnej (bez jej czytania, &lt;strong&gt;Wow&lt;/strong&gt;!).&lt;/p&gt;
-
-&lt;h3 id=&quot;konfiguracja-emulatora-1&quot;&gt;Konfiguracja emulatora&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Z konsoli wpisz &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;open -a Simulator&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;W przypadku gdy chcesz sprecyzować jakie urządzenie ma zostać uruchomione (np. wolisz iPhone SE niż iPhone X):&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Uruchom &lt;strong&gt;Xcode&lt;/strong&gt;.&lt;/li&gt;
-  &lt;li&gt;Utwórz nowy projekt przez &lt;strong&gt;File &amp;gt; New &amp;gt; Project&lt;/strong&gt; (&lt;em&gt;⇧⌘N&lt;/em&gt;).&lt;/li&gt;
-  &lt;li&gt;Jako szablonu użyj &lt;strong&gt;Single View App&lt;/strong&gt;.&lt;/li&gt;
-  &lt;li&gt;Patrz obrazek: &lt;img src=&quot;/assets/img/blog/xcode_start_simulator.png&quot; alt=&quot;xcode_start_simulator.png&quot; /&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;em&gt;Upewnij się, że opcja&lt;/em&gt; &lt;strong&gt;Debug &amp;gt; Slow animations&lt;/strong&gt; &lt;em&gt;jest wyłączona. Lubi czasem spłatać figla i się włączyć po cichu.&lt;/em&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;punkt-kontrolny&quot;&gt;Punkt kontrolny&lt;/h2&gt;
-
-&lt;p&gt;Czas się zatrzymać i zweryfikować, że wszystko zostało poprawnie zainstalowane i skonfigurowane. Flutter posiada do tego wbudowane polecenie, które upewni się że wszystko jest w jak najlepszym porządku.&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;flutter doctor
-
-Doctor summary &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;to see all details, run flutter doctor &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;✓] Flutter &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Channel stable, v1.5.4-hotfix.2, on Mac OS X 10.14.5 18F132, locale pl-PL&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;✓] Android toolchain - develop &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;Android devices &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Android SDK version 28.0.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;✓] iOS toolchain - develop &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;iOS devices &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Xcode 10.2.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;✓] Android Studio &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;version 3.4&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;✓] VS Code &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;version 1.35.0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;✓] Connected device &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1 available&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-
-• No issues found!
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Wypis zawiera informację o:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Flutter - w jakiej wersji zainstalowany jest sam framework&lt;/li&gt;
-  &lt;li&gt;Android toolchain - narzędzia do budowania aplikacji pod Androida&lt;/li&gt;
-  &lt;li&gt;iOS toolchain - narzędzia do budowania aplikacji pod iOSa (dostępne wyłącznie na macOS)&lt;/li&gt;
-  &lt;li&gt;Android Studio - IDE do tworzenia aplikacji&lt;/li&gt;
-  &lt;li&gt;VS Code - nie-IDE (edytor tekstu) do tworzenia aplikacji&lt;/li&gt;
-  &lt;li&gt;Connected devices - suma podłączonych urządzeń+uruchomionych emulatorów&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Nie przejmuj się jeśli przy części opcji masz krzyżyk (chyba, że przy wszystkich) - możesz przykładowo nie chcieć instalować &lt;strong&gt;VS Code&lt;/strong&gt;, czy też na początku chcesz pisać aplikację wyłącznie pod Androida.&lt;/p&gt;
-
-&lt;h2 id=&quot;uruchomienie-aplikacji&quot;&gt;Uruchomienie aplikacji&lt;/h2&gt;
-
-&lt;p&gt;Najłatwiejszym sposobem na uruchomienie czystej aplikacji we Flutterze jest utworzenie nowego projektu i jego odpalenie.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/meme_dont_say.jpg&quot; alt=&quot;meme_dont_say.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Także to też zrobimy. Wsiadaj do konsoli i wpisuj razem ze mną:&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;flutter create my_app
-&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;my_app
-flutter run
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Twoim oczom powinna ukazać się następująca aplikacja startowa:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_first_app.png&quot; alt=&quot;flutter_first_app.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Jest to typowy &lt;em&gt;counter&lt;/em&gt; w którym po kliknięciu przycisku, licznik się zwiększa i tak bez końca. Teraz masz już 100% pewność, że Flutter gra i buczy i pozostaje Ci jedynie &lt;em&gt;pure development&lt;/em&gt;, czyli to czym chcesz się zająć na poważnie. Ze swojej strony polecam oficjalny tutorial na &lt;a href=&quot;https://flutter.dev/docs/reference/tutorials&quot;&gt;flutter.dev&lt;/a&gt;, który krok po kroku przedstawia najważniejsze składowe frameworka.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/meme_gratz.gif&quot; alt=&quot;meme_gratz.gif&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Postawienie lokalnego środowiska developerskiego do pisania aplikacji we Flutterze. Instalacja niezbędnych paczek, edytora, aż do zbudowania Swojej pierwszej prostej apki.</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">Jedną z głównych zalet Fluttera jest jego niemal doskonały mechanizm do tworzenia layoutów. Dowiedz się w jaki sposób powiązać ze sobą elementy, aby wyświetlały się dokładnie tam, gdzie im każesz.</summary></entry></feed>
