@@ -233,4 +233,4 @@ Pisanie testów nie jest procesem skomplikowanym. Powtarzalnym? Owszem. Trzeba s
 
 Kod pełnej aplikacji znajdziesz na [GitHubie](https://github.com/vintage/flutter_demo_unit_tests).
 
-**A jak pisanie testów wygląda w twoim projekcie? Napisałeś, dopiero zaczynasz, czy może nie wierzysz w ich pozytywny wpływ na życie projektu? Daj znać!**
+A jak pisanie testów wygląda w twoim projekcie? Napisałeś, dopiero zaczynasz, czy może nie wierzysz w ich pozytywny wpływ na życie projektu? **Daj znać!**

@@ -10,7 +10,7 @@ excerpt: "Postawienie lokalnego środowiska developerskiego do pisania aplikacji
 Czym jest Flutter możesz dowiedzieć się z [poprzedniego wpisu](/blog/flutter-intro/), pora na praktykę. Konfiguracja środowiska,
 instalacja niezbędnych zależności, podrasowanie edytora i ostatecznie zbudowanie pierwszej apki pod Androida lub iOSa (exclusive dla posiadaczy macOS). Zacznijmy kodzić!
 
-![meme_lets_do_this.gif](/assets/img/blog/meme_lets_do_this.gif)
+![meme_lets_do_this.gif](/assets/img/blog/getting_started/meme_lets_do_this.gif)
 
 ## Flutter SDK
 
@@ -88,7 +88,7 @@ W przypadku gdy chcesz sprecyzować jakie urządzenie ma zostać uruchomione (np
 1. Uruchom **Xcode**.
 2. Utwórz nowy projekt przez **File > New > Project** (*⇧⌘N*).
 3. Jako szablonu użyj **Single View App**.
-4. Patrz obrazek: ![xcode_start_simulator.png](/assets/img/blog/xcode_start_simulator.png)
+4. Patrz obrazek: ![xcode_start_simulator.png](/assets/img/blog/getting_started/xcode_start_simulator.png)
 
 *Upewnij się, że opcja* **Debug > Slow animations** *jest wyłączona. Lubi czasem spłatać figla i się włączyć po cichu.*
 
@@ -124,7 +124,7 @@ Nie przejmuj się jeśli przy części opcji masz krzyżyk (chyba, że przy wszy
 
 Najłatwiejszym sposobem na uruchomienie czystej aplikacji we Flutterze jest utworzenie nowego projektu i jego odpalenie.
 
-![meme_dont_say.jpg](/assets/img/blog/meme_dont_say.jpg)
+![meme_dont_say.jpg](/assets/img/blog/getting_started/meme_dont_say.jpg)
 
 Także to też zrobimy. Wsiadaj do konsoli i wpisuj razem ze mną:
 
@@ -136,8 +136,8 @@ flutter run
 
 Twoim oczom powinna ukazać się następująca aplikacja startowa:
 
-![flutter_first_app.png](/assets/img/blog/flutter_first_app.png)
+![flutter_first_app.png](/assets/img/blog/getting_started/flutter_first_app.png)
 
 Jest to typowy *counter* w którym po kliknięciu przycisku, licznik się zwiększa i tak bez końca. Teraz masz już 100% pewność, że Flutter gra i buczy i pozostaje Ci jedynie *pure development*, czyli to czym chcesz się zająć na poważnie. Ze swojej strony polecam oficjalny tutorial na [flutter.dev](https://flutter.dev/docs/reference/tutorials), który krok po kroku przedstawia najważniejsze składowe frameworka. 
 
-![meme_gratz.gif](/assets/img/blog/meme_gratz.gif)
+![meme_gratz.gif](/assets/img/blog/getting_started/meme_gratz.gif)

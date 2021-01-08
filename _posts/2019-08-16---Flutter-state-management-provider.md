@@ -5,13 +5,12 @@ date: "2019-08-16"
 layout: "post"
 slug: "flutter-state-management-provider"
 excerpt: "Każda średnia i duża aplikacja we Flutterze wymaga narzędzia do zarządzania stanem globalnym. Kiedy go potrzebujesz i dlaczego stan lokalny to za mało? Poznaj Providera - bibliotekę, która ułatwia proces do granic możliwości."
+thumbnail: "assets/img/blog/state_provider/thumbnail.png"
 ---
 
 Jest to druga część serii o zarządzaniu stanem aplikacji we Flutterze. W [poprzednim wpisie](/blog/flutter-state-management-stateful/) rozmawialiśmy o tym czym dokładnie jest stan i w jaki sposób odbywa się jego zarządzanie (**state management**). Stworzyliśmy prostą grę typu clicker, która korzysta ze stanu, aby móc prezentować wciąż aktualne dane graczowi. Wszystko odbywało się w **formie lokalnej**, czyli takiej która jest ograniczona wyłącznie do widgetu w którym stan został zadeklarowany.
 
 W dzisiejszym wpisie poznasz zagadnienie nieco bardziej złożone, lecz niezbędne z punktu widzenia średnich i dużych aplikacji. **Stan globalny**, nazywany również **współdzielonym**. Cała wiedza którą posiadasz na temat stanu lokalnego (czym jest, jak nim zarządzać) jest jak najbardziej nadal aktualna! Co więcej - jest niezbędna w przyswojeniu nowego konceptu. Jeśli jej nie posiadasz - zapraszam Cię do pierwszej części serii. Zmienia się wyłącznie zakres w obrębie którego mamy dostęp do naszego stanu. Przechodzimy z zasięgu **per widget** na **per drzewo**.
-
-![logo.png](/assets/img/blog/state_provider/logo.png)
 
 ## Stan lokalny vs stan globalny
 

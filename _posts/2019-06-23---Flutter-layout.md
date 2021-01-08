@@ -53,11 +53,11 @@ class App extends StatelessWidget {
 
 Na urządzeniu zobaczysz czarne tło na całej powierzchni, a na środku ekranu napis "Witaj świecie" - tak jak na załączonym poniżej zrzucie. Nie jest to co prawda przykład zbyt złożony, ale od czegoś trzeba zacząć - teraz będzie tylko ~~trudniej~~ lepiej.
 
-![layout_center.png](/assets/img/blog/layout_center.png)
+![layout_center.png](/assets/img/blog/layout/layout_center.png)
 
 *Czy taki layout ma realne zastosowanie w produkcyjnej aplikacji?* Oczywiście! W jednej ze swoich gier wyświetlam ekran informujący gracza o poprawnej odpowiedzi. Jest to prosty ekran z tłem i zadowoloną buźką w środku. Rozwiązanie proste i dające efekt który chciałem osiągnąć:
 
-![zgadula_correct.png](/assets/img/blog/zgadula_correct.png)
+![zgadula_correct.png](/assets/img/blog/layout/zgadula_correct.png)
 
 ## Grid
 
@@ -115,13 +115,13 @@ class App extends StatelessWidget {
 
 Po uruchomieniu aplikacji powinieneś zobaczyć następujący zrzut:
 
-![layout_row.png](/assets/img/blog/layout_row.png)
+![layout_row.png](/assets/img/blog/layout/layout_row.png)
 
 O to dokładnie nam chodziło! Czarne tło pochodzi z `Scaffold`, który zawsze okupuje pełny rozmiar ekranu. Na górze widzimy zieloną część o wysokości 300 jednostek z kontenera `Container`. Dlaczego ustawiliśmy sztywną wysokość? Widget ten domyślnie zajmie tyle miejsca na ekranie, ile miejsca potrzebuje jego dziecko - w tym wypadku `Row`. W celu demonstracyjnym konfiguracji tego ostatniego - narzuciliśmy mu wymiar umożliwiający swobodną zmianę dostępnych parametrów pozycjonowania.
 
 #### mainAxisAlignment
 
-![flutter_row_axis_main.png](/assets/img/blog/flutter_row_axis_main.png)
+![flutter_row_axis_main.png](/assets/img/blog/layout/flutter_row_axis_main.png)
 
 Główna oś na której rozmieszczone są elementy. Jeśli pamiętasz ze szkoły oś współrzędnych **X Y** to mamy tutaj naszego **X**. W przykładzie wykorzystaliśmy wartość `spaceAround`, jednak dostępne są również inne  warianty konfiguracyjne.
 
@@ -132,11 +132,11 @@ Główna oś na której rozmieszczone są elementy. Jeśli pamiętasz ze szkoły
 - **center** - elementy przylegają do siebie i ustawiane są na środku osi.
 - **end** - analogicznie jak **start** z tym, że elementy stłoczone są na końcu osi (prawa strona).
 
-![flutter_row_axis_main_table.png](/assets/img/blog/flutter_row_axis_main_table.png)
+![flutter_row_axis_main_table.png](/assets/img/blog/layout/flutter_row_axis_main_table.png)
 
 #### crossAxisAlignment
 
-![flutter_row_axis_cross.png](/assets/img/blog/flutter_row_axis_cross.png)
+![flutter_row_axis_cross.png](/assets/img/blog/layout/flutter_row_axis_cross.png)
 
 Dodatkowa oś, która odpowiada za pionowe rozmieszczenie elementów (**Y**). Nasz przykład używa wartości `center`, jednak dostępnych wariantów jest więcej i wszystko zależy od tego jaki efekt chcesz uzyskać.
 
@@ -146,7 +146,7 @@ Dodatkowa oś, która odpowiada za pionowe rozmieszczenie elementów (**Y**). Na
 - **stretch** - służy do rozciągnięcia elementów w taki sposób, aby zapełniły całą dostępną wysokość.
 - **baseline** - opcja przydatna jedynie gdy elementami składowymi wiersza jest bezpośrednio tekst, który chcemy wyrównać względem siebie. Parametr do poprawnego działania wymaga ustawienia dodatkowego parametru `textBaseline` na rodzicu `Row`.
 
-![flutter_row_axis_cross_table.png](/assets/img/blog/flutter_row_axis_cross_table.png)
+![flutter_row_axis_cross_table.png](/assets/img/blog/layout/flutter_row_axis_cross_table.png)
 
 ### Column
 
@@ -203,25 +203,25 @@ class App extends StatelessWidget {
 
 Uruchomienie aplikacji spowoduje wyświetlenie poniższego ekranu:
 
-![layout_column.png](/assets/img/blog/layout_column.png)
+![layout_column.png](/assets/img/blog/layout/layout_column.png)
 
 Ponownie uzyskujemy spodziewany wynik! Elementy narysowane są jeden pod drugim, a czarny pas po prawej stronie to nic innego jak `Scaffold` umieszczony pod spodem naszego layoutu. Na koniec przyjrzyjmy się opcjom konfiguracyjnym - jest to czysta formalność, gdyż ustawienia przekładają się 1:1 z tym co widzieliśmy w `Row`.
 
 #### mainAxisAlignment
 
-![flutter_column_axis_main.png](/assets/img/blog/flutter_column_axis_main.png)
+![flutter_column_axis_main.png](/assets/img/blog/layout/flutter_column_axis_main.png)
 
 Jako, że widget służy do układania komponentów w pionie to jego główną osią nie jest **X**, lecz **Y**. Trzeba o tym pamiętać - mi do tej pory zdarza się sporadycznie ustawić parametry nie tak jak powinienem. Konfiguracja jest identyczna jak w `Row`, pozwól, więc że nie będę jej tutaj ponownie wklejał. 
 
-![flutter_column_axis_main_table.png](/assets/img/blog/flutter_column_axis_main_table.png)
+![flutter_column_axis_main_table.png](/assets/img/blog/layout/flutter_column_axis_main_table.png)
 
 #### crossAxisAlignment
 
-![flutter_column_axis_cross.png](/assets/img/blog/flutter_column_axis_cross.png)
+![flutter_column_axis_cross.png](/assets/img/blog/layout/flutter_column_axis_cross.png)
 
 Druga z osi, która rozmieszcza elementy w poziomie **X**. Ponownie opcje konfiguracyjne możesz podejrzeć w sekcji w której omawialiśmy widget `Row`.
 
-![flutter_column_axis_cross_table.png](/assets/img/blog/flutter_column_axis_cross_table.png)
+![flutter_column_axis_cross_table.png](/assets/img/blog/layout/flutter_column_axis_cross_table.png)
 
 ## Synteza
 
@@ -229,7 +229,7 @@ Przeszliśmy przez pozycjonowanie poziome i pionowe - jest to mocny fundament pr
 
 Na zakończenie spójrz jeszcze na bardziej złożony (ale nieskomplikowany!) ekran, który posiada wiele różnych elementów i demonstruje w jaki sposób uzyskać pożądany efekt:
 
-![flutter_layout_complex.png](/assets/img/blog/flutter_layout_complex.png)
+![flutter_layout_complex.png](/assets/img/blog/layout/flutter_layout_complex.png)
 
 ```dart
 import 'package:flutter/material.dart';

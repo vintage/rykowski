@@ -9,7 +9,7 @@ excerpt: "Każda korporacja chce ukroić kawałek z tortu aplikacji x-platform. 
 
 **Flutter** to nowa technologia od Google służąca do tworzenia aplikacji mobilnych. Nie ma tutaj jednak mowy o stricte natywnym podejściu (od tego jest Kotlin, czy Swift), lecz o cross-platformowym frameworku, w którym kod piszemy raz i robimy release na oba systemy - Android oraz iOS. Brzmi świetnie, prawda? I tak jest w rzeczywistości. Nie utrzymujemy dwóch całkowicie niezależnych bytów natywnych, nie uczymy się dwóch odmiennych od siebie języków programowania, nie poznajemy tak dogłębnie dwóch różnych systemów, czy też środowisk. W naszej kwestii jako programisty pozostaje wytworzenie aplikacji mobilnej, a Flutter zajmie się tym, aby poprawnie działała na obu platformach. 
 
-![meme_follow.gif](/assets/img/blog/meme_follow.gif)
+![meme_follow.gif](/assets/img/blog/intro/meme_follow.gif)
 
 ## Deja-vu
 
@@ -43,7 +43,7 @@ Czy mamy więc rozwiązanie idealne? Oczywiście, że nie - nie ma rozwiązań i
 
 Są również inne mniejsze, bądź większe problemy, jednak bardziej specyficzne dla konkretnego projektu. Mimo wad, szczerze uważam, że React Native jest technologią w którą warto inwestować swój czas - m.in. za sprawą mnogości ofert pracy, niższym progiem wejścia jeśli znasz już JavaScript, a także bogatego ekosystemu.
 
-![meme_cool.gif](/assets/img/blog/meme_cool.gif)
+![meme_cool.gif](/assets/img/blog/intro/meme_cool.gif)
 
 ### Inne
 
@@ -63,12 +63,12 @@ Skoro wiemy już czym są aplikacje cross-platformowe i wiemy, że problem zosta
 
 Mogłeś nie słyszeć o tym języku, nawet jeśli nie spędziłeś ostatnich miesięcy pod kamieniem. Nie należy do najpopularniejszych narzędzi, zwłaszcza że przed Flutterem nie miał realnego i mainstreamowego zastosowania. Według rankingu TIOBE, który śledzi popularność dostępnych języków, popularniejsze są m.in. Fortran, Scratch, czy nawet COBOL. Zaryzykuję wręcz stwierdzenie że Dart to taki trochę eksperyment developerski, który dojrzewał w piwnicy na swój moment chwały.
 
-![dart_rank_2019.png](/assets/img/blog/dart_rank_2019.png)
+![dart_rank_2019.png](/assets/img/blog/intro/dart_rank_2019.png)
 
 
 Składnia języka jest nowoczesna, prawdopodobnie za sprawą tego, że debiutował w 2011 roku - nie miał czasu się zestarzeć. Mógłbym napisać, że to mieszanka Javy i JavaScriptu, ale zdaję sobie sprawę jaka będzie Twoja reakcja na takie porównanie. 
 
-![meme_moron.gif](/assets/img/blog/meme_moron.gif)
+![meme_moron.gif](/assets/img/blog/intro/meme_moron.gif)
 
 Ujmę to więc inaczej:
 
@@ -93,7 +93,7 @@ Co w praktyce oznacza, że Flutter sam rysuje wszystko co jest widoczne w aplika
 
 Kwestia wbudowanych komponentów graficznych które oddane są do naszej dyspozycji robi robotę. Nie będę ich tutaj opisywał, ograniczę się wyłącznie do faktu, że Flutter posiada pełne i oficjalne wsparcie dla Material Design (znowu Google). Wiesz co to znaczy, prawda? Setki prostych i stylowych elementów do wykorzystania, z czego każdy można ostylować do własnych potrzeb poprzez dedykowany obiekt styli. **Wow!**
 
-![flutter_ui.gif](/assets/img/blog/flutter_ui.gif)
+![flutter_ui.gif](/assets/img/blog/intro/flutter_ui.gif)
 
 ### Wydajność
 

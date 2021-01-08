@@ -67,14 +67,14 @@
 {"url":"https://rykowski.dev/blog/flutter-state-management-provider/","headline":"Zarządzanie stanem aplikacji - Provider","dateModified":"2019-08-16T00:00:00+02:00","datePublished":"2019-08-16T00:00:00+02:00","description":"Każda średnia i duża aplikacja we Flutterze wymaga narzędzia do zarządzania stanem globalnym. Kiedy go potrzebujesz i dlaczego stan lokalny to za mało? Poznaj Providera - bibliotekę, która ułatwia proces do granic możliwości.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-state-management-provider/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
-    <meta property="og:image" content="https://rykowski.dev/">
+    <meta property="og:image" content="https://rykowski.dev/assets/img/blog/state_provider/thumbnail.png">
 
     <!-- Twitter Cards -->
     <meta name="twitter:title" content="Zarządzanie stanem aplikacji - Provider">
     <meta name="twitter:description" content="Jest to druga część serii o zarządzaniu stanem aplikacji we Flutterze. W poprzednim wpisie rozmawialiśmy o tym czym dokładnie jest stan i w jaki sposób odbyw...">
     
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://rykowski.dev/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://rykowski.dev/assets/img/blog/state_provider/thumbnail.png">
 </head>
 
   <body>
@@ -186,8 +186,6 @@
       <p>Jest to druga część serii o zarządzaniu stanem aplikacji we Flutterze. W <a href="/blog/flutter-state-management-stateful/">poprzednim wpisie</a> rozmawialiśmy o tym czym dokładnie jest stan i w jaki sposób odbywa się jego zarządzanie (<strong>state management</strong>). Stworzyliśmy prostą grę typu clicker, która korzysta ze stanu, aby móc prezentować wciąż aktualne dane graczowi. Wszystko odbywało się w <strong>formie lokalnej</strong>, czyli takiej która jest ograniczona wyłącznie do widgetu w którym stan został zadeklarowany.</p>
 
 <p>W dzisiejszym wpisie poznasz zagadnienie nieco bardziej złożone, lecz niezbędne z punktu widzenia średnich i dużych aplikacji. <strong>Stan globalny</strong>, nazywany również <strong>współdzielonym</strong>. Cała wiedza którą posiadasz na temat stanu lokalnego (czym jest, jak nim zarządzać) jest jak najbardziej nadal aktualna! Co więcej - jest niezbędna w przyswojeniu nowego konceptu. Jeśli jej nie posiadasz - zapraszam Cię do pierwszej części serii. Zmienia się wyłącznie zakres w obrębie którego mamy dostęp do naszego stanu. Przechodzimy z zasięgu <strong>per widget</strong> na <strong>per drzewo</strong>.</p>
-
-<p><img src="/assets/img/blog/state_provider/logo.png" alt="logo.png" /></p>
 
 <h2 id="stan-lokalny-vs-stan-globalny">Stan lokalny vs stan globalny</h2>
 

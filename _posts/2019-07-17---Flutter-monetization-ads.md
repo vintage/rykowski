@@ -5,6 +5,7 @@ date: "2019-07-17"
 layout: "post"
 slug: "flutter-monetization-admob"
 excerpt: "Darmowe aplikacje mobilne również na siebie zarabiają. W jaki sposób? Istnieje wiele strategii monetyzacyjnych, a jedną z nich są reklamy AdMob w różnych wariantach. Pierwszy krok w zarabianiu na aplikacji pisanej we Flutter."
+thumbnail: "assets/img/blog/admob/thumbnail.png"
 ---
 
 Pisanie aplikacji mobilnych to świetna zabawa. Tworzenie czegoś z myślą, że będzie używane przez setki, tysiace, a nawet miliony ludzi pobierajacych naszą apkę ze sklepów to mieszanka dumy, ekscytacji i czystego fun-u. Tak to wygląda przynajmiej z naszej strony - czysto technicznej. Wypuszczamy aplikację, dopieszczamy ją o nowe funkcjonalności i rozwiązujemy najbardziej krytyczne, lub uciążliwe błędy. Zastanawiałeś się jednak czy jest coś więcej? Coś ważniejszego?
@@ -36,8 +37,6 @@ Najłatwiejszym jednak środkiem zarabiania, jeśli przyjmiemy że głównym kry
 3. Mikropłatości uważam za świetną strategię monetyzacyjną, jednak wpierw trzeba mieć na tyle dobry produkt, aby móc przekonać użytkownika do barteru **twarda waluta -> wirtualne dobro**. Myślisz że Twój aktualny produkt jest na tyle dobry, aby sprzedawać wirtualne złote monety komuś innemu niż mamie i tacie?
 
 Mamy pełną jasność - zaczynamy od reklam. Reklama reklamie jednak nierówna, o czym przekonasz się w nieco dalszej części wpisu.
-
-![logo.png](/assets/img/blog/admob/logo.png)
 
 ## Zrozumieć reklamy
 

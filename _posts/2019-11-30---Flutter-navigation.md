@@ -5,6 +5,7 @@ date: "2019-11-30"
 layout: "post"
 slug: "flutter-navigation"
 excerpt: "Niemal każda aplikacja mobilna składa się z wielu ekranów po których wędruje użytkownik w trakcie jej używania. Ekran startowy, lista z przedmiotami, czy detal prezentujący szczegółowe dane o wybranym obiekcie. Dzięki Flutterowi nawigacja jest prosta i przyjazna - wszystko za sprawą wbudowanego Navigatora."
+thumbnail: "assets/img/blog/navigator/thumbnail.png"
 ---
 
 Myśląc o aplikacji mobilnej wyobrażasz sobie najprawdopodobniej kafelek na wyświetlaczu telefonu, który możesz stuknąć w celu uruchomienia programu na pełnym ekranie. W zależności od szybkości urządzenia już po chwili widzisz to czego się spodziewasz, czyli aplikację. A właściwie to jej **ekran startowy (początkowy)**.
@@ -19,15 +20,13 @@ Co jednak zrobisz, gdy powiem Ci, że aplikacja składa się z reguły z wielu e
 
 Wzruszysz ramionami, lub weźmiesz mnie za durnia, bo przecież **KAŻDA** aplikacja udostępnia możliwość nawigowania między różnymi sekcjami i nie trzeba o tym pisać wstępu. Dobrze się składa, przejdźmy do działania!
 
-![logo.png](/assets/img/blog/navigator/logo.png)
-
 ## Navigator
 
 Skoro nawigacja między ekranami jest tak kluczowa dla każdej aplikacji mobilnej, to czy Flutter ułatwia developerem zmierzenie się z tym problemem? Czy może potrzebujemy doinstalować zewnętrzną zależność, która ogra za nas wszelkie trudy? Zamknij **pubspec.yaml**, nie potrzebujemy niczego ponad sam framework, który z pudełka dostarcza widget (a jakże) `Navigator` upraszający cały proces do granic możliwości.
 
 Czym tak właściwie jest `Navigator`? Najprościej mówiąc, jest to widget, który wewnątrz siebie zarządza listą dzieci (widgetów) w formie tzw. **stosu** oraz udostępnia spójny interfejs do wkładania i zdejmowania elementów właśnie poprzez stos. A ten cały stos? To popularna struktura danych (spokojnie!) polegająca na tym, że zaczynamy z "pustym stołem" na który wykładamy (**push**) karty w sposób jedna na drugą, przykrywając je w całości. Gdy stos będzie zawierał kilka kart, jako jego użytkownik mamy dostęp tylko do karty na samym wierzchu. W przypadku gdy chcemy dostać się głębiej - musimy najpierw zrzucić (**pop**) karty powyżej. Ot i cała filozofia stosu.
 
-![logo.png](/assets/img/blog/navigator/stack.png)
+![stack.png](/assets/img/blog/navigator/stack.png)
 
 > Screen 1 jest na samym dole stosu, a Screen 4 na samej górze co gwarantuje mu to, że jest aktualnie widocznym ekranem. Wkładając nowy ekran znajdzie się on na górze stosu, a jeśli chcielibyśmy ponownie wyświetlić Screen 1 to musimy najpierw pozrzucać w nicość ekrany ponad nim (zaczynając od samej góry).
 

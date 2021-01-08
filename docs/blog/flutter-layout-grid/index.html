@@ -230,11 +230,11 @@
 
 <p>Na urządzeniu zobaczysz czarne tło na całej powierzchni, a na środku ekranu napis “Witaj świecie” - tak jak na załączonym poniżej zrzucie. Nie jest to co prawda przykład zbyt złożony, ale od czegoś trzeba zacząć - teraz będzie tylko <del>trudniej</del> lepiej.</p>
 
-<p><img src="/assets/img/blog/layout_center.png" alt="layout_center.png" /></p>
+<p><img src="/assets/img/blog/layout/layout_center.png" alt="layout_center.png" /></p>
 
 <p><em>Czy taki layout ma realne zastosowanie w produkcyjnej aplikacji?</em> Oczywiście! W jednej ze swoich gier wyświetlam ekran informujący gracza o poprawnej odpowiedzi. Jest to prosty ekran z tłem i zadowoloną buźką w środku. Rozwiązanie proste i dające efekt który chciałem osiągnąć:</p>
 
-<p><img src="/assets/img/blog/zgadula_correct.png" alt="zgadula_correct.png" /></p>
+<p><img src="/assets/img/blog/layout/zgadula_correct.png" alt="zgadula_correct.png" /></p>
 
 <h2 id="grid">Grid</h2>
 
@@ -291,13 +291,13 @@
 
 <p>Po uruchomieniu aplikacji powinieneś zobaczyć następujący zrzut:</p>
 
-<p><img src="/assets/img/blog/layout_row.png" alt="layout_row.png" /></p>
+<p><img src="/assets/img/blog/layout/layout_row.png" alt="layout_row.png" /></p>
 
 <p>O to dokładnie nam chodziło! Czarne tło pochodzi z <code class="language-plaintext highlighter-rouge">Scaffold</code>, który zawsze okupuje pełny rozmiar ekranu. Na górze widzimy zieloną część o wysokości 300 jednostek z kontenera <code class="language-plaintext highlighter-rouge">Container</code>. Dlaczego ustawiliśmy sztywną wysokość? Widget ten domyślnie zajmie tyle miejsca na ekranie, ile miejsca potrzebuje jego dziecko - w tym wypadku <code class="language-plaintext highlighter-rouge">Row</code>. W celu demonstracyjnym konfiguracji tego ostatniego - narzuciliśmy mu wymiar umożliwiający swobodną zmianę dostępnych parametrów pozycjonowania.</p>
 
 <h4 id="mainaxisalignment">mainAxisAlignment</h4>
 
-<p><img src="/assets/img/blog/flutter_row_axis_main.png" alt="flutter_row_axis_main.png" /></p>
+<p><img src="/assets/img/blog/layout/flutter_row_axis_main.png" alt="flutter_row_axis_main.png" /></p>
 
 <p>Główna oś na której rozmieszczone są elementy. Jeśli pamiętasz ze szkoły oś współrzędnych <strong>X Y</strong> to mamy tutaj naszego <strong>X</strong>. W przykładzie wykorzystaliśmy wartość <code class="language-plaintext highlighter-rouge">spaceAround</code>, jednak dostępne są również inne  warianty konfiguracyjne.</p>
 
@@ -310,11 +310,11 @@
   <li><strong>end</strong> - analogicznie jak <strong>start</strong> z tym, że elementy stłoczone są na końcu osi (prawa strona).</li>
 </ul>
 
-<p><img src="/assets/img/blog/flutter_row_axis_main_table.png" alt="flutter_row_axis_main_table.png" /></p>
+<p><img src="/assets/img/blog/layout/flutter_row_axis_main_table.png" alt="flutter_row_axis_main_table.png" /></p>
 
 <h4 id="crossaxisalignment">crossAxisAlignment</h4>
 
-<p><img src="/assets/img/blog/flutter_row_axis_cross.png" alt="flutter_row_axis_cross.png" /></p>
+<p><img src="/assets/img/blog/layout/flutter_row_axis_cross.png" alt="flutter_row_axis_cross.png" /></p>
 
 <p>Dodatkowa oś, która odpowiada za pionowe rozmieszczenie elementów (<strong>Y</strong>). Nasz przykład używa wartości <code class="language-plaintext highlighter-rouge">center</code>, jednak dostępnych wariantów jest więcej i wszystko zależy od tego jaki efekt chcesz uzyskać.</p>
 
@@ -326,7 +326,7 @@
   <li><strong>baseline</strong> - opcja przydatna jedynie gdy elementami składowymi wiersza jest bezpośrednio tekst, który chcemy wyrównać względem siebie. Parametr do poprawnego działania wymaga ustawienia dodatkowego parametru <code class="language-plaintext highlighter-rouge">textBaseline</code> na rodzicu <code class="language-plaintext highlighter-rouge">Row</code>.</li>
 </ul>
 
-<p><img src="/assets/img/blog/flutter_row_axis_cross_table.png" alt="flutter_row_axis_cross_table.png" /></p>
+<p><img src="/assets/img/blog/layout/flutter_row_axis_cross_table.png" alt="flutter_row_axis_cross_table.png" /></p>
 
 <h3 id="column">Column</h3>
 
@@ -384,25 +384,25 @@
 
 <p>Uruchomienie aplikacji spowoduje wyświetlenie poniższego ekranu:</p>
 
-<p><img src="/assets/img/blog/layout_column.png" alt="layout_column.png" /></p>
+<p><img src="/assets/img/blog/layout/layout_column.png" alt="layout_column.png" /></p>
 
 <p>Ponownie uzyskujemy spodziewany wynik! Elementy narysowane są jeden pod drugim, a czarny pas po prawej stronie to nic innego jak <code class="language-plaintext highlighter-rouge">Scaffold</code> umieszczony pod spodem naszego layoutu. Na koniec przyjrzyjmy się opcjom konfiguracyjnym - jest to czysta formalność, gdyż ustawienia przekładają się 1:1 z tym co widzieliśmy w <code class="language-plaintext highlighter-rouge">Row</code>.</p>
 
 <h4 id="mainaxisalignment-1">mainAxisAlignment</h4>
 
-<p><img src="/assets/img/blog/flutter_column_axis_main.png" alt="flutter_column_axis_main.png" /></p>
+<p><img src="/assets/img/blog/layout/flutter_column_axis_main.png" alt="flutter_column_axis_main.png" /></p>
 
 <p>Jako, że widget służy do układania komponentów w pionie to jego główną osią nie jest <strong>X</strong>, lecz <strong>Y</strong>. Trzeba o tym pamiętać - mi do tej pory zdarza się sporadycznie ustawić parametry nie tak jak powinienem. Konfiguracja jest identyczna jak w <code class="language-plaintext highlighter-rouge">Row</code>, pozwól, więc że nie będę jej tutaj ponownie wklejał.</p>
 
-<p><img src="/assets/img/blog/flutter_column_axis_main_table.png" alt="flutter_column_axis_main_table.png" /></p>
+<p><img src="/assets/img/blog/layout/flutter_column_axis_main_table.png" alt="flutter_column_axis_main_table.png" /></p>
 
 <h4 id="crossaxisalignment-1">crossAxisAlignment</h4>
 
-<p><img src="/assets/img/blog/flutter_column_axis_cross.png" alt="flutter_column_axis_cross.png" /></p>
+<p><img src="/assets/img/blog/layout/flutter_column_axis_cross.png" alt="flutter_column_axis_cross.png" /></p>
 
 <p>Druga z osi, która rozmieszcza elementy w poziomie <strong>X</strong>. Ponownie opcje konfiguracyjne możesz podejrzeć w sekcji w której omawialiśmy widget <code class="language-plaintext highlighter-rouge">Row</code>.</p>
 
-<p><img src="/assets/img/blog/flutter_column_axis_cross_table.png" alt="flutter_column_axis_cross_table.png" /></p>
+<p><img src="/assets/img/blog/layout/flutter_column_axis_cross_table.png" alt="flutter_column_axis_cross_table.png" /></p>
 
 <h2 id="synteza">Synteza</h2>
 
@@ -410,7 +410,7 @@
 
 <p>Na zakończenie spójrz jeszcze na bardziej złożony (ale nieskomplikowany!) ekran, który posiada wiele różnych elementów i demonstruje w jaki sposób uzyskać pożądany efekt:</p>
 
-<p><img src="/assets/img/blog/flutter_layout_complex.png" alt="flutter_layout_complex.png" /></p>
+<p><img src="/assets/img/blog/layout/flutter_layout_complex.png" alt="flutter_layout_complex.png" /></p>
 
 <div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter/material.dart'</span><span class="o">;</span>
 

@@ -5,6 +5,7 @@ date: "2019-07-05"
 layout: "post"
 slug: "flutter-state-management-stateful"
 excerpt: "Interakcja użytkownika często wymaga aktualizacji wyświetlanych danych na ekranie - m.in. zmiana języka w sekcji ustawień, czy żonglowanie ulubionym elementem. Zarządzaj stanem aplikacji dzięki wbudowanemu rozwiązaniu StatefulWidget."
+thumbnail: "assets/img/blog/state_stateful/thumbnail.png"
 ---
 
 **Aplikacje mobilne** - a także webowe, czy desktopowe - nie opierają się wyłącznie na statycznych kontrolkach, które widzi nasz użytkownik. Aplikacja to nie tylko zbiór obrazków, przycisków i list, zawsze jest coś więcej. W przeciwnym wypadku zbudowaliśmy wydmuszkę której jedynym zadaniem jest jej podziwianie - dzieło sztuki, nieprawdaż?
@@ -16,8 +17,6 @@ Nie ma znaczenia na jaką platformę budujemy nasz program - zawsze potrzebujemy
 - stuknięcie w ikonkę koszyka
 
 Każda z tych akcji, wymaga odpowiedniej reakcji po stronie naszego kodu. Musimy przykładowo zaprezentować użytkownikowi co ma w koszyku, ale żeby tego dokonać potrzebujemy ... tak - informacji o stanie koszyka (co w nim właściwie jest). Możemy także żonglować ulubionymi produktami, aby łatwiej móc je odnaleźć w przyszłości. Wszystkie wymienione funkcjonalności łączy część wspólna - **operują na danych (stanie) aplikacji** w trakcie jej działania.
-
-![logo.png](/assets/img/blog/state_stateful/logo.png)
 
 ## Stan aplikacji
 
