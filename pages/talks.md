@@ -7,6 +7,9 @@ permalink: /talks/
 
 Możesz mnie spotkać na różnych eventach technologicznych. Dzielę się wiedzą głównie z **Fluttera** i **Darta**.
 
+### 2020
+
+- **Async way of Flutter** 🇬🇧 - *17.09.2020* - [Flutter Cracow](https://www.youtube.com/watch?v=8RqmWg6i-0c&ab_channel=FlutterCracow)
 - **Async way of Flutter** 🇬🇧 - *09.06.2020* - [GDG 3City](https://www.youtube.com/watch?v=KkIO5RVDMQ8&feature=youtu.be&t=90)
 - **Flutter State Management with Provider** 🇬🇧 - *25.02.2020* - [Flutter Warsaw](https://www.youtube.com/watch?v=Vcjn6SGyfVU)
 - **Flutter State Management with Provider** 🇵🇱 - *29.01.2020* - [Flutter Tricity](https://www.meetup.com/pl-PL/Flutter-Tricity/events/267815126/)
