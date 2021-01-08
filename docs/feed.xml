@@ -1,4 +1,228 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="pl_PL"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://rykowski.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rykowski.dev/" rel="alternate" type="text/html" hreflang="pl_PL" /><updated>2020-08-04T20:21:52+02:00</updated><id>https://rykowski.dev/feed.xml</id><title type="html">rykowski.dev</title><subtitle>Flutter | Blog o programowaniu aplikacji mobilnych</subtitle><entry><title type="html">Schludny i czysty kod</title><link href="https://rykowski.dev/blog/flutter-linter/" rel="alternate" type="text/html" title="Schludny i czysty kod" /><published>2020-08-04T00:00:00+02:00</published><updated>2020-08-04T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-linter</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-linter/">&lt;p&gt;Prawdopodobnie często spotykasz się z publicznie udostępnianym kodem. Biblioteki open-source, gotowe snippety, czy kod prezentowany w formie zrzutów ekranu. To może być nawet kod prywatny, wewnątrzzespołowy, gdzie wkład ma więcej niż jeden programista. Można go (kod, nie programistę) najprościej skategoryzować jako &lt;strong&gt;ładny&lt;/strong&gt; oraz &lt;strong&gt;brzydki&lt;/strong&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="pl_PL"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://rykowski.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rykowski.dev/" rel="alternate" type="text/html" hreflang="pl_PL" /><updated>2021-01-08T14:50:09+01:00</updated><id>https://rykowski.dev/feed.xml</id><title type="html">rykowski.dev</title><subtitle>Flutter | Blog o programowaniu aplikacji mobilnych</subtitle><entry><title type="html">Testowanie aplikacji - testy jednostkowe</title><link href="https://rykowski.dev/blog/flutter-unit-tests/" rel="alternate" type="text/html" title="Testowanie aplikacji - testy jednostkowe" /><published>2021-01-08T00:00:00+01:00</published><updated>2021-01-08T00:00:00+01:00</updated><id>https://rykowski.dev/blog/flutter-unit-tests</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-unit-tests/">&lt;p&gt;Gdybym w eter rzucił hasło &lt;em&gt;“Pisanie kodu”&lt;/em&gt; to pierwszą myślą przychodzącą ci do głowy jest zapewne zakodowanie nowej funkcjonalności. Ewentualnie naprawa błędu zgłoszonego przez &lt;del&gt;ten upierdliwy&lt;/del&gt; dział QA, mimo tego, że z kodu jasno wynika, że aplikacja nie może się tutaj crashować! Istnieje jednak jeszcze jeden aspekt pisania kodu, a mianowicie pisanie &lt;strong&gt;testów&lt;/strong&gt;. To ten mityczny twór typu &lt;em&gt;każdy wie że trzeba to robić, nikt nie ma czasu na głupoty&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Czym tak właściwie są te testy?&lt;/strong&gt; Niezależną częścią aplikacji (w postaci kodu), która powstaje z boku i sama w sobie nie ma specjalnej wartości dla użytkownika końcowego. Na prawdę nie da się powiedzieć, że testy są integralną częścią aplikacji, nawet jeśli skacze ci teraz ciśnienie z powodu testo-dyskryminacji. Można je pisać, można nie, możesz nawet wyrzucić wszystkie istniejące testy z projektu, a aplikacja nadal będzie działała tak samo. Tak to już jest.&lt;/p&gt;
+
+&lt;p&gt;W takim razie po co wkładać jakikolwiek wysiłek w coś czego nie zauważy nikt poza zespołem technicznym? No właśnie po to. Zespół developerski jest głównym beneficjentem istnienia testów. Gwarantują one (nigdy w 100%), że aplikacja działa poprawnie, nawet bez konieczności jej uruchamiania i ręcznego przeklikiwania. Wszystkim zajmuje się automat stwierdzający zero-jedynkowo, czy masz kod pod kontrolą, czy właśnie coś skopałeś dodając nową funkcjonalność, lub refaktorując istniejące już rozwiązanie.&lt;/p&gt;
+
+&lt;h2 id=&quot;ogólnie-o-testach&quot;&gt;Ogólnie o testach&lt;/h2&gt;
+
+&lt;p&gt;Pisanie testów jest łatwe i trudne zarazem. Zależy od której strony na nie spojrzeć i jakimi standardami podążąmy w firmie w której budujemy aplikacje. Pracowałem w projektach betonowych, gdzie pisanie testów nie było mile widziane. Nie mają przecież żadnej wartości, klient nie będzie za nie płacił. Poza tym testy są dla programistów niepewnych swojego kodu, czyli słabych. &lt;em&gt;Biznesowy beton&lt;/em&gt;. Może być on twoim największym przeciwnikiem w pisaniu testów. Mam jednak dobrą wiadomość! Podejście to mocno odeszło do lamusa w ostatnich latach i nie spotykam się już ze szlabanem na testy. Wzrosła ogólna świadomość odnośnie wytwarzania oprogramowania. Sukces!&lt;/p&gt;
+
+&lt;p&gt;Łatwą stroną pisania testów jest natomiast część techniczna. Wystarczy poznać podstawy, a cała reszta idzie dosłownie z górki. Nie ma tutaj dużego pola do manewru, czy nauki. Ot napisać trochę kodu, który jest mocno uniwersalny między wszystkimi dostępnymi technologiami. Zaufaj mi, łatwizna. Zresztą za chwilę będziesz miał okazję zobaczyć sam wszystko w akcji.&lt;/p&gt;
+
+&lt;h3 id=&quot;korzyści-z-posiadania-testów&quot;&gt;Korzyści z posiadania testów&lt;/h3&gt;
+
+&lt;p&gt;Dlaczego tak na prawdę programiści chcą pisać testy? Nie dość im kodu w samej aplikacji i mają wymyślną fanaberię na klepanie czegoś z boku? &lt;em&gt;Otóż nie tym razem&lt;/em&gt;. Korzyści są i to namacalne, nawet jeśli nie przekładające się wprost na samo działanie aplikacji.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Testowanie różnych scenariuszy bez konieczności ręcznego przeklikiwania&lt;/strong&gt;. Bo co zrobić, gdy funkcja którą chcesz sprawdzić, jest uruchamiana gdzieś głęboko w aplikacji, a zmiana parametrów z którymi jest wywoływana to minuty stukania po różnych ekranach?&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Raz napisany test pozostaje z projektem na zawsze&lt;/strong&gt;, a przynajmniej do momentu w którym nie zostanie usunięty podczas większego refaktoringu. Dzięki temu wystarczy jednorazowo napisać test, a wyniku używać do woli.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Możliwość konfiguracji &lt;em&gt;CI&lt;/em&gt;&lt;/strong&gt;, aby automatycznie uruchamiał testy podczas zmian w kodzie. Wykryje to potencjalne regresje w aplikacji, nawet gdy bezpośrednio nie dotykałeś danej funkcji.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Spokój ducha i dobry sen&lt;/strong&gt;. Nie czujesz przerażenia przed wypuszczaniem aplikacji w świat, bo może nie działać. Na pewno działa, bo testy pilnują cię 24/7. Raczej na &lt;em&gt;prawie pewno&lt;/em&gt;, bo i tak zawsze znajdą się mniejsze lub większe błędy. Grunt to minimalizacja ryzyka.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Taka porcja zalet chyba wystarczy? Poza tym - zapytaj dowolnego doświadczonego programistę, czy pisanie testów ma sens. Nie ma innej opcji niż odpowiedź twierdząca, nawet jeśli z różnych powodów piszemy ich mniej niż byśmy chcieli. &lt;em&gt;Życie to nie bajka, ale nie róbmy z niego koszmaru&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;typy-testów&quot;&gt;Typy testów&lt;/h3&gt;
+
+&lt;p&gt;Test testowi nierówny. Nie będę się zagłębiał w zbędny wywód teoretyczny i opisywał całej rodziny gatunków testów, bo … nie umiem. Zabawne jest to, ile różnych rodzajów testów istnieje i które trudno jest sklasyfikować programiście nawet z wieloletnim stażem. Najbardziej znanymi i uskutecznianymi w większości firm są &lt;strong&gt;testy jednostkowe&lt;/strong&gt; oraz &lt;strong&gt;testy integracyjne&lt;/strong&gt;. Generalnie to do szczęśliwości na poziomie 90% wystarczą jedynie te dwa, a resztę pozostawiam purysto-fanatykom.&lt;/p&gt;
+
+&lt;h4 id=&quot;testy-jednostkowe&quot;&gt;Testy jednostkowe&lt;/h4&gt;
+
+&lt;p&gt;Najprostsze. Najłatwiejsze. Produkowane w ilościach hurtowych. Trzon i fundament testów każdej aplikacji. &lt;strong&gt;Polegają na pokryciu pojedynczego fragmentu kodu&lt;/strong&gt; - klasy, czy funkcji - przypadkami testowymi. Jak wygląda to w realnym świecie? Przyjmijmy, że masz już własny projekt. Kompiluje się, działa. Robi różne rzeczy. Nagle postanawiasz, że pora dodać trochę testów. Generalnie to lepiej jakby były pisane na bieżąco, ale jest jak jest. Co zrobić? Jak zacząć?&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Otwórz losowy plik&lt;/li&gt;
+  &lt;li&gt;Znajdź w nim funkcję&lt;/li&gt;
+  &lt;li&gt;Napisz testy sprawdzające czy funkcja działa zgodnie z oczekiwaniami&lt;/li&gt;
+  &lt;li&gt;Powtarzaj do skutku&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;W wyimaginowanym projekcie natrafiamy na niepozorną funkcję, która zwraca nazwę miesiąca na podstawie dostarczonej daty. Przemilczmy fakt, że istnieją gotowe rozwiązania tego typu i skupmy się na przykładzie.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;switch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;month&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;styczeń&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;luty&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;marzec&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;kwiecień&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;maj&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;lipiec&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;sierpień&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;wrzesień&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;paźdzeirnik&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;listopad&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;grudzień&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Nie ma testów, bo po co? &lt;strong&gt;Błąd.&lt;/strong&gt; Problemy czychają wszędzie, zwłaszcza w najmniej spodziewanych fragmentach kodu. Napiszmy więc testy, aby upewnić się, że wszystko działa jak należy. Bułka z masłem.&lt;/p&gt;
+
+&lt;p&gt;Zanim to jednak zrobimy, warto odpowiedzieć sobie na zasadnicze pytanie - gdzie przechowywać pliki z testami? Warto trzymać się domyślnej konwencji, w której każdy nowo utworzony projekt we Flutterze posiada katalog &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test&lt;/code&gt;. Osobiście odzwierciedlam niemal 1:1 strukturę plików i katalogów z głównej aplikacji, w taki sposób, że jeśli mam przykładowo plik &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lib/ui/routes/home.dart&lt;/code&gt; do wyświetlania ekranu głównego, to mam również jego lustrzane odbicie które przechowuje testy w &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test/ui/routes/home_test.dart&lt;/code&gt;. Druga zasada dotyczy nazewnictwa pliku. &lt;strong&gt;Nazwa musi kończyć się na &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_test.dart&lt;/code&gt;.&lt;/strong&gt; Bez wyjątku. Pamiętaj o tej zasadzie i przypomnij ją sobie, gdy pewnego dnia napiszesz kolejne testy i okaże się, że polecenie do ich uruchamiania całkowicie ignoruje wszystkie przypadki testowe.&lt;/p&gt;
+
+&lt;p&gt;Formalności za nami, pora utworzyć plik z testami dla funkcji określającej nazwę miesiąca. Załóżmy, że znajduje się ona w pliku &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lib/utils.dart&lt;/code&gt;, więc testy najlepiej zaprogramować w &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test/utils_test.dart&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:flutter_tests/utils.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:test/test.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'getMonthName'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'returns correct name for january'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2020&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;styczeń&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'returns correct name for february'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2020&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;luty&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Przyjrzyjmy się strukturze testów. Po pierwsze importowana jest oficjalna paczka &lt;a href=&quot;https://pub.dev/packages/test&quot; target=&quot;_blank&quot;&gt;test&lt;/a&gt;, będąca podstawowym i niezbędnym narzędziem w pisaniu testów. Tak jak do napisania aplikacji mobilnej wymagany jest &lt;em&gt;Flutter&lt;/em&gt;, tak do testów potrzebna jest paczka &lt;em&gt;test&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Druga istotna rzecz to fakt, że każdy plik z testami jest samodzielnym zestawem i wymaga punktu wejściowego w postaci funkcji &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt;. Uruchamiając testy to właśnie ta funkcja jest wywoływana, aby ustalić co należy wykonać w następnych krokach. Zupełnie tak jak &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; głównej aplikacji.&lt;/p&gt;
+
+&lt;p&gt;Trzeci aspekt to już stricte składnia pisania testów. Funkcja &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;group&lt;/code&gt; służy jedynie do logicznego zgrupowania wielu pojedynczych testów, które sprawdzają ten sam element systemu, ale pod różnym kątem. Osobiście najczęściej wpisuję tutaj po prostu nazwę klasy, lub funkcji którą będę za chwilę testował. Sprawdza się, zwłaszcza że nic nie stoi na przeszkodzie, aby grupy dowolnie zagnieżdzać w razie potrzeby. W ten sposób łatwo jest zdefiniować grupę nadrzędną dla klasy oraz podgrupy reprezentujące jej pojedyncze metody.&lt;/p&gt;
+
+&lt;p&gt;Zdecydowanie ciekawszym elementem są funkcje &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test&lt;/code&gt;, odpowiadające za konkretne przypadki testowe. Otrzymują bardziej opisową nazwę, mówiącą co dokładnie dany test sprawdza. Jeśli nie potrafisz zmieścić się w jednej linii z opisem takiego testu - znaczy, że robi za dużo i należy go rozbić na kilka mniejszych! Pamiętaj, że rozmawiamy o testach jednostkowych, a ich zadaniem jest testowanie pojedynczej jednostki, a nie całego układu. Zbyt obszerne testy jednostkowe, mimo że nadal gwarantują działanie systemu to są diabelnie czasochłonne w utrzymywaniu i podatne na częste zmiany. &lt;strong&gt;Unikaj zbyt złożonych testów jednostkowych jak ognia!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A co siedzi w środku pojedynczego testu? W naszym przypadku są to testy banalne, jednolinijkowe. Nic nie stoi jednak na przeszkodzie, aby linii było więcej - tak się dzieje w prawdziwym świecie oprogramowania. Oczekujemy (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;expect&lt;/code&gt;), że wynik zwrócony przez funkcję &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;getMonthName&lt;/code&gt;, będzie równy (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;equals&lt;/code&gt;) określonej wartości. I tak w pierwszym teście wywołujemy naszą funkcję podając jej jako parametr &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DateTime(2020, 1, 15)&lt;/code&gt; i oczekujemy że zwrócony zostanie napis &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;styczeń&lt;/code&gt;. Tylko skąd wziąłem tą datę? Z głowy! Równie dobrze mógłbym podać rok &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1988&lt;/code&gt;, albo &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2018&lt;/code&gt; - nie ma to znaczenia. Najważniejsze, żeby miesiąc się zgadzał, bo to on jest istotny dla funkcji &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;getMonthName&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;W ten sposób otrzymujemy 12 testów i z jednej strony jest to super, bo są małe, a z drugiej mocno zahacza o przerost formy nad treścią. Wybór należy do ciebie, ale zdecydowanie wolę mniej kodu niż więcej i chętnie zbiorę to wszystko w pojedynczy test:&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:flutter_tests/utils.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:test/test.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'getMonthName'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'returns correct names'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;month&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2020&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;month&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;styczeń&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;luty&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;marzec&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;kwiecień&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;maj&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;czerwiec&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;lipiec&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sierpień&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;wrzesień&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;październik&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;listopad&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;grudzień&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Pokrycie przypadków jest identyczne, sprawdzone zostały wszystkie możliwe miesiące. Skoro nie widać różnicy i test nadal pozostaje czytelny w swojej nowej formie - warto się pochylić nad takim ułatwieniem. Jedyną ceną takiego rozwiązania jest fakt, że przy ewentualnych błędach funkcji &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;getMonthName&lt;/code&gt; test zostanie przerwany w momencie odnalezienia pierwszego problemu. Nie wykona wszystkich dostępnych instrukcji, więc jeśli funkcja zwracałaby błędny wynik dla lutego i grudnia to test poinformuje nas o błędzie w lutym, a dopiero po jego naprawieniu pojawi się informacja, że grudzień również działa niepoprawnie. W prostych funkcjach jest to kompromis na który można sobie pozwolić, lecz przy bardziej złożonych warto postawić na rozbicie. Tak czy inaczej - życie weryfikuje, które podejścia działa najlepiej dla danego przypadku. Kwestia wprawy.&lt;/p&gt;
+
+&lt;h4 id=&quot;uruchamianie-testów&quot;&gt;Uruchamianie testów&lt;/h4&gt;
+
+&lt;p&gt;Testy mamy przygotowane, pora je uruchomić i zweryfikować, czy funkcja &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;getMonthName&lt;/code&gt; działa zgodnie z założeniami. &lt;em&gt;Flutter&lt;/em&gt; udostępnia własną komendę do uruchamiania testów, której zadaniem jest uruchomienie wszystkich dostępnych plików z testami (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*_test.dart&lt;/code&gt;) znajdujących się w katalogu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test/&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;flutter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Po dosłownie sekundzie otrzymujemy wynik … negatywny. Testy się wysypały z odpowiednimi informacjami dla programisty.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;❯ flutter &lt;span class=&quot;nb&quot;&gt;test
+&lt;/span&gt;00:01 +0 &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;: getMonthName returns correct names &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;E]
+  Expected: &lt;span class=&quot;s1&quot;&gt;'czerwiec'&lt;/span&gt;
+    Actual: &amp;lt;null&amp;gt;
+     Which: not an &amp;lt;Instance of &lt;span class=&quot;s1&quot;&gt;'String'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+
+  package:test_api      expect
+  utils_test.dart 14:7  main.&amp;lt;fn&amp;gt;.&amp;lt;fn&amp;gt;
+
+00:01 +0 &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;: Some tests failed.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Czytanie logów tego typu to codzienność. Wygląda to analogicznie jak wertowanie stosu aplikacji w momencie wystąpienia nieoczekiwanego wyjątku (&lt;em&gt;stack trace&lt;/em&gt;). Należy przejrzeć komunikat i znaleźć w nim istotne informacje, które naprowadzą nas do naprawienia testu, bądź kodu który właśnie testujemy.&lt;/p&gt;
+
+&lt;p&gt;Na samej górze mamy wskaźnik na test, który zakończył się niepowodzeniem. Grupa &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;getMonthName&lt;/code&gt;, test &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;returns correct names&lt;/code&gt;. Nie jest to może najistotniejsza informacja w momencie, gdy mamy tylko jeden test na całą aplikację, ale zyskuje na wartości gdy testów powstaje coraz więcej i więcej. Oczywiste.&lt;/p&gt;
+
+&lt;p&gt;Sam test twierdzi, że oczekiwał napisu &lt;strong&gt;czerwiec&lt;/strong&gt;, a zamiast niego otrzymał bezczelny obiekt &lt;strong&gt;null&lt;/strong&gt;. Ma sens, w końcu &lt;em&gt;czerwiec ≠ null&lt;/em&gt;. Dodatkowo pojawia się informacja, że błąd wystąpił w pliku &lt;em&gt;utils_test.dart&lt;/em&gt; w linii 14. Spójrzmy, co podejrzanego robi wskazany fragment!&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// ok&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;maj&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// not ok&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;czerwiec&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Nie ma tutaj nic podejrzanego. Żadnego kandydata na błąd w teście. Szczególnie, że przypadki dla poprzednich miesięcy zadziałały prawidłowo. Skoro tak - trzeba spojrzeć na właściwą implementację funkcji &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;getMonthName&lt;/code&gt;, aby dowiedzieć się, dlaczego błędnie obsługuje miesiąc czerwiec.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getMonthName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;switch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;month&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;maj&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;lipiec&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Bingo! Zabrakło obsługi na &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;case 6&lt;/code&gt;. Czyli jednak prawdziwy błąd, który wyłapał za nas test! A teraz wyobraź sobie sytuację, w której napisałeś powyższy kod i używasz go do zaprezentowania obecnej daty użytkownikowi. Jest styczeń - wszystko działa poprawnie. Funkcjonalność trafia na produkcję. Wszyscy o niej zapominają w kolejnych miesiącach. Nagle w nocy z 31 maja na 1 czerwca aplikacja wybucha, przestaje działać stabilnie. W oczach łzy, a myśl tylko jedna.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Sef nie ksycy, ja nie panimaju.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Sama historia jest nieco podkoloryzowana (ziarno prawdy zasiane na bazie własnych doświadczeń), ale jestem pewien że rozumiesz do czego zmierzam. Po naprawieniu funkcji rzucamy raz jeszcze okiem, czy nie brakuje może dodatkowego &lt;em&gt;case&lt;/em&gt; i ponownie uruchamiamy testy.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;❯ flutter &lt;span class=&quot;nb&quot;&gt;test
+&lt;/span&gt;00:01 +0 &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;: getMonthName returns correct names &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;E]
+  Expected: &lt;span class=&quot;s1&quot;&gt;'październik'&lt;/span&gt;
+    Actual: &lt;span class=&quot;s1&quot;&gt;'paźdzeirnik'&lt;/span&gt;
+     Which: is different.
+            Expected: październik
+              Actual: paźdzeirnik
+                           ^
+             Differ at offset 5
+
+  package:test_api      expect
+  utils_test.dart 18:7  main.&amp;lt;fn&amp;gt;.&amp;lt;fn&amp;gt;
+
+00:01 +0 &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;: Some tests failed.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Co tym razem? Błąd jakiś inny, ale to dalej nie jest sukces. Zakorkuj szampana, pora wracać do pracy! Test oczekiwał napisu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;październik&lt;/code&gt; i właśnie taki dostał - &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;paźdzeirnik&lt;/code&gt;. Jeszcze próbuje się tłumaczyć, że jest różnica na 5 pozycji (indeksowane od zera). Nawet strzałeczkę w ASCII narysował. Przyglądamy się bliżej i … jest! Literówka. Kaliber błędu mniejszy niż poprzednio, bo przynajmniej aplikacja nie wybucha, ale to dalej dziura do załatania.&lt;/p&gt;
+
+&lt;p&gt;Szybka runda poprawkowa, ponowne uruchomienie testów.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;flutter &lt;span class=&quot;nb&quot;&gt;test
+&lt;/span&gt;00:01 +1: All tests passed!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Wszystkie (słownie jeden) testy przeszły poprawnie. Nie ma więcej błędów, misja zakończona. Można taki kod bezpiecznie dodać do aplikacji i spać spokojnie, bez nocnych telefonów o niespodziewanej awarii. Jakie to uczucie? &lt;strong&gt;Miłe.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;testy-integracyjne&quot;&gt;Testy integracyjne&lt;/h4&gt;
+
+&lt;p&gt;Testy jednostkowe są świetne i powinny stanowić kluczowy system obronny przed błędami i regresją w kodzie. Sprawdzają poprawność działania małych, odizolowanych od siebie fragmentów aplikacji. W rzeczywistości to jednak trochę za mało, aby czuć się w pełni bezpiecznym. Co z tego, że repozytoria poprawnie operują na danych, stan odpowiednio reaguje na zadane zdarzenia, czy funkcje pomocnicze dobrze określają nazwę dnia miesiąca, skoro aplikacja jako całość wysypuje się w momencie startu, bądź działa w sposób nieoczekiwany?&lt;/p&gt;
+
+&lt;p&gt;Właśnie do testowania aplikacji jako całości służą &lt;strong&gt;testy integracyjne&lt;/strong&gt;. Mają za zadanie uruchomić aplikację tak jak robi to prawdziwy użytkownik i zweryfikować jej działanie na żywym organizmie. W przypadku aplikacji mobilnej na urządzeniu fizycznym, bądź wirtualnym.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Czy da się zarejestrować nowe konto wypełniając formularz z pierwszego ekranu?&lt;/li&gt;
+  &lt;li&gt;Czy aplikacja zwraca się do mnie po imieniu, które podałem podczas rejestracji?&lt;/li&gt;
+  &lt;li&gt;Czy mogę na liście produktów odnaleźć daną pozycję i dodać ją do koszyka stukając w odpowiedni przycisk?&lt;/li&gt;
+  &lt;li&gt;…&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Wszystkie powyższe pytania są słuszne. Nawet pomimo faktu, że testy jednostkowe pokrywają te funkcjonalności. Robią to na dużo niższym poziomie, który nie zawsze odzwierciedla efekt końcowy w postaci aplikacji dostarczanej użytkownikowi.&lt;/p&gt;
+
+&lt;p&gt;O testach integracyjnych we &lt;em&gt;Flutterze&lt;/em&gt; przeczytasz w kolejnym wpisie, który jest dedykowany właśnie temu konkretnemu zagadnieniu. Framework mocno nas rozpieszcza i również tym razem dostarczy gotowe i wbudowane rozwiązanie.&lt;/p&gt;
+
+&lt;h2 id=&quot;podsumowanie&quot;&gt;Podsumowanie&lt;/h2&gt;
+
+&lt;p&gt;Pisanie testów nie jest procesem skomplikowanym. Powtarzalnym? Owszem. Trzeba się jednak przemóc i stopniowo wdrażać testy, szczególnie do krytycznych elementów systemu, których działanie jest złożone, a testowanie ręczne trudne, bądź czasochłonne. W takim przypadku raz napisane testy, bardzo szybko się zwrócą, a ty nie musisz przy każdej drobnej zmianie sprawdzać, czy nic po drodze nie wybuchło. Poczucie komfortu przy pracy z otestowanym projektem jest nieporównywalnie wyższe, niż gdy takowych brak. Nie zatracaj się jednak w pisaniu testów jako &lt;em&gt;sztuka dla sztuki&lt;/em&gt; i nie testuj na siłę każdej jednej linii w kodzie. Znajdź umiar i równowagę, a testy staną się twoim przyjacielem.&lt;/p&gt;
+
+&lt;p&gt;Kod pełnej aplikacji znajdziesz na &lt;a href=&quot;https://github.com/vintage/flutter_demo_unit_tests&quot;&gt;GitHubie&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A jak pisanie testów wygląda w twoim projekcie? Napisałeś, dopiero zaczynasz, czy może nie wierzysz w ich pozytywny wpływ na życie projektu? Daj znać!&lt;/strong&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Każdy programista o nich słyszał, ale tylko niewielu przekłada je na praktykę. Czy warto? Zdecydowanie tak. Zwłaszcza jeśli chcesz być pewnym swojego kodu i uniknąć regresji w dłuższej perspektywie czasu.</summary></entry><entry><title type="html">Schludny i czysty kod</title><link href="https://rykowski.dev/blog/flutter-linter/" rel="alternate" type="text/html" title="Schludny i czysty kod" /><published>2020-08-04T00:00:00+02:00</published><updated>2020-08-04T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-linter</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-linter/">&lt;p&gt;Prawdopodobnie często spotykasz się z publicznie udostępnianym kodem. Biblioteki open-source, gotowe snippety, czy kod prezentowany w formie zrzutów ekranu. To może być nawet kod prywatny, wewnątrzzespołowy, gdzie wkład ma więcej niż jeden programista. Można go (kod, nie programistę) najprościej skategoryzować jako &lt;strong&gt;ładny&lt;/strong&gt; oraz &lt;strong&gt;brzydki&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Ładny kod&lt;/strong&gt; jest po prostu ładny. Napisany zgodnie z wytyczonymi standardami i konwencjami języka, dobrze sformatowany, trzymający się spójnej formy. Nie budzi negatywnego pierwszego wrażenia. &lt;strong&gt;Brzydki kod&lt;/strong&gt; natomiast czuć z daleka. Puste linie niewiadomego pochodzenia, dziwne wcięcia, nieużywane importy, polskie nazwy zmiennych i dziesiątki innych rzeczy od których metaforycznie krwawią oczy miłośnikom estetyki.&lt;/p&gt;
 
@@ -4018,309 +4242,4 @@ micro2
 
 &lt;p&gt;Mamy to - &lt;strong&gt;w pełni działająca gra&lt;/strong&gt; typu clicker, bez żadnych udziwnień. Możesz je rzecz jasna dodać i rozszerzyć koncept, a ostatecznie nawet wydać na Android i iOSa. Wierzę, że wszystko okazało się jasne i potrafisz zarządzać stanem swojej Flutterowej aplikacji. Skomentuj wpis jeśli chciałbyś się czymś podzielić, lub masz dowolne pytanie. Wyszeruj dalej, aby więcej Flutter devów dowiedziało się co i jak. Do następnego wpisu!&lt;/p&gt;
 
-&lt;p&gt;Pełny kod aplikacji PokeTap znajdziesz na &lt;a href=&quot;https://github.com/vintage/rykowski.dev/blob/master/samples/poketap.dart&quot;&gt;GitHubie&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Interakcja użytkownika często wymaga aktualizacji wyświetlanych danych na ekranie - m.in. zmiana języka w sekcji ustawień, czy żonglowanie ulubionym elementem. Zarządzaj stanem aplikacji dzięki wbudowanemu rozwiązaniu StatefulWidget.</summary></entry><entry><title type="html">Pozycjonowanie elementów na ekranie</title><link href="https://rykowski.dev/blog/flutter-layout-grid/" rel="alternate" type="text/html" title="Pozycjonowanie elementów na ekranie" /><published>2019-06-23T00:00:00+02:00</published><updated>2019-06-23T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-layout-grid</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-layout-grid/">&lt;p&gt;Ogromną rolę przy tworzeniu aplikacji mobilnych odgrywa część wizualna, czyli User Interface (&lt;strong&gt;UI&lt;/strong&gt;). Możemy tutaj wyodrębnić kilka składowych elementów, które w połączeniu wygenerują nam to co użytkownik zobaczy na ekranie po odpaleniu naszej apki:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;wygląd komponentów (&lt;em&gt;design&lt;/em&gt;)&lt;/li&gt;
-  &lt;li&gt;animacje&lt;/li&gt;
-  &lt;li&gt;rozmieszczenie komponentów (&lt;em&gt;layout&lt;/em&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Wszystkie z nich są ważne i trudno sobie wyobrazić profesjonalny produkt bez chociażby jednej z nich. Dzisiaj skupię się na ostatniej, czyli w jaki sposób rozmieszczać komponenty na ekranie, aby spełniały nasze oczekiwania (lub oczekiwania &lt;em&gt;Design Team-u&lt;/em&gt;). Jest to rzecz, która potrafi być frustrująca - zwłaszcza na początku przygody z technologią. O ile łatwo wyszukać w dokumentacji elementy wizualne, które umiemy sobie wyobrazić - przycisk, listę, czy belkę nawigacji - to znalezienie odpowiedzi na pytanie jak sprawić, żeby rzecz &lt;em&gt;X&lt;/em&gt; była obok rzeczy &lt;em&gt;Y&lt;/em&gt;, która jest nad rzeczą &lt;em&gt;Z&lt;/em&gt; bywa zdecydowanie trudniejsze.&lt;/p&gt;
-
-&lt;h2 id=&quot;layout--widget&quot;&gt;Layout == widget&lt;/h2&gt;
-
-&lt;p&gt;Tak jak człowiek w większości składa się z wody, tak Flutter opiera się w znacznej części na &lt;strong&gt;widgetach&lt;/strong&gt;. Są nimi zarówno przyciski, przełączniki, ikony, a nawet wyświetlany na ekranie tekst, jak również obiekty których nie widzi nasz użytkownik, a mimo to znajdują się na ekranie i pełnią krytyczną rolę. Mowa tutaj o wierszach (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Row&lt;/code&gt;) i kolumnach (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Column&lt;/code&gt;), które w elegancki sposób organizują kolejność wyświetlania widgetów wizualnych.&lt;/p&gt;
-
-&lt;p&gt;W dostępnej skrzynce narzędziowej mamy rzecz jasna do dyspozycji więcej narzędzi niż tylko wiersz/kolumna - o tym przeczytasz w kolejnym wpisie. Nie przedłużając wstępu - przejdźmy do praktyki i realnych zastosowań gridu!&lt;/p&gt;
-
-&lt;h2 id=&quot;centralna-rozgrzewka&quot;&gt;Centralna rozgrzewka&lt;/h2&gt;
-
-&lt;p&gt;Pamiętasz jak zaczyna się każdy kurs dowolnego języka programowania? Oczywiście że tak, trudno zapomnieć te dwa magiczne słowa: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hello world&lt;/code&gt;. Tak samo zaczniemy i my - wyświetlimy ten napis na samym środku ekranu. Jedyna różnica będzie polegała na tym, że posłużymy się polską wersją językową tego zwrotu.&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:flutter/material.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;runApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;App&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MaterialApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-      &lt;span class=&quot;nl&quot;&gt;home:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Scaffold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;backgroundColor:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;body:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;s&quot;&gt;&quot;Witaj świecie&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;style:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextStyle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-              &lt;span class=&quot;nl&quot;&gt;fontSize:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-              &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;white&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Na urządzeniu zobaczysz czarne tło na całej powierzchni, a na środku ekranu napis “Witaj świecie” - tak jak na załączonym poniżej zrzucie. Nie jest to co prawda przykład zbyt złożony, ale od czegoś trzeba zacząć - teraz będzie tylko &lt;del&gt;trudniej&lt;/del&gt; lepiej.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/layout_center.png&quot; alt=&quot;layout_center.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Czy taki layout ma realne zastosowanie w produkcyjnej aplikacji?&lt;/em&gt; Oczywiście! W jednej ze swoich gier wyświetlam ekran informujący gracza o poprawnej odpowiedzi. Jest to prosty ekran z tłem i zadowoloną buźką w środku. Rozwiązanie proste i dające efekt który chciałem osiągnąć:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/zgadula_correct.png&quot; alt=&quot;zgadula_correct.png&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;grid&quot;&gt;Grid&lt;/h2&gt;
-
-&lt;p&gt;Pierwsze rozmieszczenie za nami, jednak trudno zbudować aplikację której layout będzie opierał się wyłącznie na pojedynczym elemencie wyświetlanym na środku ekranu. W przykładzie powyżej możesz zaobserwować, że zarówno &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Container&lt;/code&gt; jak i &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Center&lt;/code&gt; przyjmują parametr &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;child&lt;/code&gt; (z angielskiego dziecko - liczba pojedyncza), któremu można przekazać tylko jeden widget. Nie mamy możliwości przekazania listy elementów które chcemy narysować. &lt;del&gt;&lt;strong&gt;Żegnaj przygodo.&lt;/strong&gt;&lt;/del&gt;&lt;/p&gt;
-
-&lt;p&gt;Jeśli posiadasz doświadczenie jako &lt;em&gt;Web Developer&lt;/em&gt; i pracowałeś chociaż przez krótką chwilę z &lt;em&gt;HTML&lt;/em&gt; to coś Ci tu nie pasuje. Przecież do &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;div&amp;gt;&lt;/code&gt;, czy dowolnego innego znacznika można przekazać tyle elementów ile sobie zażyczę! Co to za herezja, aby blokować taką możliwość? Odpowiedź jest następująca: Flutter musi wiedzieć jak poukładać listę komponentów - &lt;em&gt;pionowo? poziomo?&lt;/em&gt; - i dlatego dostarcza nam dedykowane widgety, które wiedzą co i jak.&lt;/p&gt;
-
-&lt;h3 id=&quot;row&quot;&gt;Row&lt;/h3&gt;
-
-&lt;p&gt;Do umieszczania elementów w poziomie (jeden obok drugiego) posługujemy się widgetem &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Row&lt;/code&gt;. W odróżnieniu od wielu innych wbudowanych komponentów nie przyjmuje on parametru &lt;del&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;child&lt;/code&gt;&lt;/del&gt;, lecz &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;children&lt;/code&gt; (z angielskiego dzieci - liczba mnoga) do którego jesteśmy w stanie przekazać listę obiektów do narysowania.&lt;/p&gt;
-
-&lt;p&gt;Napiszmy prostą aplikację, której zadaniem będzie wyświetlanie pojedynczych liter ze słowa &lt;em&gt;Witaj&lt;/em&gt; w kolorowych bloczkach, które narysujemy jeden obok drugiego (od lewej do prawej).&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;letter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Color&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Container&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;padding:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EdgeInsets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;decoration:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BoxDecoration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;blue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;letter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;style:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextStyle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;fontSize:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-  
-  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MaterialApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-      &lt;span class=&quot;nl&quot;&gt;home:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Scaffold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;backgroundColor:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;body:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Container&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;height:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;300&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;decoration:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BoxDecoration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;green&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;mainAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MainAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;spaceAround&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;crossAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CrossAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;W&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;I&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;white&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;T&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;A&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;white&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;J&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Po uruchomieniu aplikacji powinieneś zobaczyć następujący zrzut:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/layout_row.png&quot; alt=&quot;layout_row.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;O to dokładnie nam chodziło! Czarne tło pochodzi z &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Scaffold&lt;/code&gt;, który zawsze okupuje pełny rozmiar ekranu. Na górze widzimy zieloną część o wysokości 300 jednostek z kontenera &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Container&lt;/code&gt;. Dlaczego ustawiliśmy sztywną wysokość? Widget ten domyślnie zajmie tyle miejsca na ekranie, ile miejsca potrzebuje jego dziecko - w tym wypadku &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Row&lt;/code&gt;. W celu demonstracyjnym konfiguracji tego ostatniego - narzuciliśmy mu wymiar umożliwiający swobodną zmianę dostępnych parametrów pozycjonowania.&lt;/p&gt;
-
-&lt;h4 id=&quot;mainaxisalignment&quot;&gt;mainAxisAlignment&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_row_axis_main.png&quot; alt=&quot;flutter_row_axis_main.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Główna oś na której rozmieszczone są elementy. Jeśli pamiętasz ze szkoły oś współrzędnych &lt;strong&gt;X Y&lt;/strong&gt; to mamy tutaj naszego &lt;strong&gt;X&lt;/strong&gt;. W przykładzie wykorzystaliśmy wartość &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;spaceAround&lt;/code&gt;, jednak dostępne są również inne  warianty konfiguracyjne.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;spaceAround&lt;/strong&gt; - układa elementy na całej dostępnej szerokości i z każdej ze stron dodaje tzw. &lt;em&gt;światło&lt;/em&gt;, czyli pustą przestrzeń. Wolna przestrzeń między dziećmi jest 2x większa, niż ta oddzielająca dziecko od rodzica&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;spaceEvenly&lt;/strong&gt; - identyczne zachowanie jak &lt;strong&gt;spaceAround&lt;/strong&gt;, z tą różnicą, że przestrzeń między elementami i rodzicem jest jednakowej wielkości.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;spaceBetween&lt;/strong&gt; - podobnie jak &lt;strong&gt;spaceAround&lt;/strong&gt; elementy rozłożone są na całej szerokości, jednak bez pustej przestrzeni z przodu i na końcu (przyleganie do krawędzi rodzica).&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;start&lt;/strong&gt; - elementy przylegają do siebie i ustawiane są na początku osi (lewa strona).&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;center&lt;/strong&gt; - elementy przylegają do siebie i ustawiane są na środku osi.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;end&lt;/strong&gt; - analogicznie jak &lt;strong&gt;start&lt;/strong&gt; z tym, że elementy stłoczone są na końcu osi (prawa strona).&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_row_axis_main_table.png&quot; alt=&quot;flutter_row_axis_main_table.png&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;crossaxisalignment&quot;&gt;crossAxisAlignment&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_row_axis_cross.png&quot; alt=&quot;flutter_row_axis_cross.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Dodatkowa oś, która odpowiada za pionowe rozmieszczenie elementów (&lt;strong&gt;Y&lt;/strong&gt;). Nasz przykład używa wartości &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;center&lt;/code&gt;, jednak dostępnych wariantów jest więcej i wszystko zależy od tego jaki efekt chcesz uzyskać.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;center&lt;/strong&gt; - wymusza rozkład w centralnej części wiersza. Elementy znajdują się na środku ekranu, tak jak po użyciu widgetu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Center&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;start&lt;/strong&gt; - elementy umieszczone są na samej górze kontenera.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;end&lt;/strong&gt; - przeciwieństwo &lt;strong&gt;start&lt;/strong&gt;, elementy widoczne są na dole.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;stretch&lt;/strong&gt; - służy do rozciągnięcia elementów w taki sposób, aby zapełniły całą dostępną wysokość.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;baseline&lt;/strong&gt; - opcja przydatna jedynie gdy elementami składowymi wiersza jest bezpośrednio tekst, który chcemy wyrównać względem siebie. Parametr do poprawnego działania wymaga ustawienia dodatkowego parametru &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;textBaseline&lt;/code&gt; na rodzicu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Row&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_row_axis_cross_table.png&quot; alt=&quot;flutter_row_axis_cross_table.png&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;column&quot;&gt;Column&lt;/h3&gt;
-
-&lt;p&gt;Wiemy już jak rozmieszczać elementy w poziomie, czas przyjrzeć się jak zrobić to samo dla pionu (jeden pod drugim). Zadanie to powierzamy widgetowi &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Column&lt;/code&gt;, który działa w sposób analogiczny jak &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Row&lt;/code&gt;. Najważniejsze różnice to:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Elementy rozmieszczone są pionowo, nie poziomo.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Column&lt;/code&gt; okupuje maksymalną dostępną wysokość rodzica, a szerokość tylko taką jakiej potrzebuje do narysowania najszerszego ze swoich dzieci (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Row&lt;/code&gt; zajmuje maksymalną szerokość, a wysokość najwyższego z dzieci).&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Nanieśmy odpowiednie modyfikacje do poprzedniego kodu. Jedynymi zmianami, które wprowadzimy jest ustalanie szerokości zamiast wysokości (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;height&lt;/code&gt; na &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;width&lt;/code&gt;) i podmiana widgetu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Row&lt;/code&gt; na &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Column&lt;/code&gt;. Cała reszta pozostaje bez zmian.&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;letter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Color&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Container&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;padding:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EdgeInsets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;decoration:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BoxDecoration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;blue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;letter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;style:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextStyle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;fontSize:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MaterialApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-      &lt;span class=&quot;nl&quot;&gt;home:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Scaffold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;backgroundColor:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;body:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Container&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;c1&quot;&gt;// height replaced with width&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;width:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;300&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;decoration:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BoxDecoration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;green&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-          &lt;span class=&quot;c1&quot;&gt;// Row changed to Column&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;mainAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MainAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;spaceAround&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;crossAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CrossAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;W&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;I&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;white&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;T&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;A&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;white&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;buildItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;J&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Uruchomienie aplikacji spowoduje wyświetlenie poniższego ekranu:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/layout_column.png&quot; alt=&quot;layout_column.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Ponownie uzyskujemy spodziewany wynik! Elementy narysowane są jeden pod drugim, a czarny pas po prawej stronie to nic innego jak &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Scaffold&lt;/code&gt; umieszczony pod spodem naszego layoutu. Na koniec przyjrzyjmy się opcjom konfiguracyjnym - jest to czysta formalność, gdyż ustawienia przekładają się 1:1 z tym co widzieliśmy w &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Row&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4 id=&quot;mainaxisalignment-1&quot;&gt;mainAxisAlignment&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_column_axis_main.png&quot; alt=&quot;flutter_column_axis_main.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Jako, że widget służy do układania komponentów w pionie to jego główną osią nie jest &lt;strong&gt;X&lt;/strong&gt;, lecz &lt;strong&gt;Y&lt;/strong&gt;. Trzeba o tym pamiętać - mi do tej pory zdarza się sporadycznie ustawić parametry nie tak jak powinienem. Konfiguracja jest identyczna jak w &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Row&lt;/code&gt;, pozwól, więc że nie będę jej tutaj ponownie wklejał.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_column_axis_main_table.png&quot; alt=&quot;flutter_column_axis_main_table.png&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;crossaxisalignment-1&quot;&gt;crossAxisAlignment&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_column_axis_cross.png&quot; alt=&quot;flutter_column_axis_cross.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Druga z osi, która rozmieszcza elementy w poziomie &lt;strong&gt;X&lt;/strong&gt;. Ponownie opcje konfiguracyjne możesz podejrzeć w sekcji w której omawialiśmy widget &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Row&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_column_axis_cross_table.png&quot; alt=&quot;flutter_column_axis_cross_table.png&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;synteza&quot;&gt;Synteza&lt;/h2&gt;
-
-&lt;p&gt;Przeszliśmy przez pozycjonowanie poziome i pionowe - jest to mocny fundament przy projektowaniu layoutu naszej aplikacji. Możesz (a nawet powinieneś) osadzać kolumny w wierszach, a wiersze w kolumnach. W końcu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Column&lt;/code&gt; i &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Row&lt;/code&gt; to widgety, nic więc nie stoi na przeszkodzie aby w drzewie komponentów zawierały się wzajemnie.&lt;/p&gt;
-
-&lt;p&gt;Na zakończenie spójrz jeszcze na bardziej złożony (ale nieskomplikowany!) ekran, który posiada wiele różnych elementów i demonstruje w jaki sposób uzyskać pożądany efekt:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/flutter_layout_complex.png&quot; alt=&quot;flutter_layout_complex.png&quot; /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:flutter/material.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;runApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;App&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buildInfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Icon&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;icon&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-      &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;icon&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Padding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;padding:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EdgeInsets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;only&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;top:&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;8.0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;style:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextStyle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;white&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MaterialApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-      &lt;span class=&quot;nl&quot;&gt;home:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Scaffold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;backgroundColor:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;amber&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;body:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;mainAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MainAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;spaceAround&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-              &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;[&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-                  &lt;span class=&quot;s&quot;&gt;&quot;Pikachu&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                  &lt;span class=&quot;nl&quot;&gt;style:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextStyle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-                    &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                    &lt;span class=&quot;nl&quot;&gt;fontSize:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;48&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                    &lt;span class=&quot;nl&quot;&gt;fontWeight:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FontWeight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;bold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                  &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;network&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-                  &lt;span class=&quot;s&quot;&gt;&quot;http://pluspng.com/img-png/pikachu-face-png-png-svg-512.png&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                  &lt;span class=&quot;nl&quot;&gt;width:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;160&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                  &lt;span class=&quot;nl&quot;&gt;height:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;160&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-              &lt;span class=&quot;s&quot;&gt;&quot;Pikachu jest jednym z najbardziej rozpoznawalnych Pokémonów, &quot;&lt;/span&gt;
-              &lt;span class=&quot;s&quot;&gt;&quot;głównie ze względu na fakt, że jest on centralną postacią w serii anime. &quot;&lt;/span&gt;
-              &lt;span class=&quot;s&quot;&gt;&quot;Pikachu jest powszechnie uważany za najbardziej popularnego Pokémona.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-              &lt;span class=&quot;nl&quot;&gt;textAlign:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextAlign&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-              &lt;span class=&quot;nl&quot;&gt;style:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextStyle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;height:&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;fontSize:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Container&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-              &lt;span class=&quot;nl&quot;&gt;padding:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EdgeInsets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-              &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-                &lt;span class=&quot;nl&quot;&gt;mainAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MainAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;spaceEvenly&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-                  &lt;span class=&quot;n&quot;&gt;buildInfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;Icon&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Icons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;flash_on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;yellowAccent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;&quot;Type&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                  &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-                  &lt;span class=&quot;n&quot;&gt;buildInfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;Icon&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Icons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;insert_emoticon&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;greenAccent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;&quot;Mood&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                  &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-                  &lt;span class=&quot;n&quot;&gt;buildInfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;Icon&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Icons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;do_not_disturb_alt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;redAccent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;&quot;Full HP&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                  &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
-              &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">Jedną z głównych zalet Fluttera jest jego niemal doskonały mechanizm do tworzenia layoutów. Dowiedz się w jaki sposób powiązać ze sobą elementy, aby wyświetlały się dokładnie tam, gdzie im każesz.</summary></entry></feed>
+&lt;p&gt;Pełny kod aplikacji PokeTap znajdziesz na &lt;a href=&quot;https://github.com/vintage/rykowski.dev/blob/master/samples/poketap.dart&quot;&gt;GitHubie&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Interakcja użytkownika często wymaga aktualizacji wyświetlanych danych na ekranie - m.in. zmiana języka w sekcji ustawień, czy żonglowanie ulubionym elementem. Zarządzaj stanem aplikacji dzięki wbudowanemu rozwiązaniu StatefulWidget.</summary></entry></feed>

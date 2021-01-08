@@ -3,9 +3,9 @@ color: rgb(69,190,247)
 title: Testowanie aplikacji - testy jednostkowe
 date: "2021-01-08"
 layout: "post"
-slug: "flutter-tests-unit"
+slug: "flutter-unit-tests"
 excerpt: "Każdy programista o nich słyszał, ale tylko niewielu przekłada je na praktykę. Czy warto? Zdecydowanie tak. Zwłaszcza jeśli chcesz być pewnym swojego kodu i uniknąć regresji w dłuższej perspektywie czasu."
-thumbnail: "assets/img/blog/tests_unit/thumbnail.png"
+thumbnail: "assets/img/blog/unit_tests/thumbnail.png"
 ---
 
 Gdybym w eter rzucił hasło *"Pisanie kodu"* to pierwszą myślą przychodzącą ci do głowy jest zapewne zakodowanie nowej funkcjonalności. Ewentualnie naprawa błędu zgłoszonego przez ~~ten upierdliwy~~ dział QA, mimo tego, że z kodu jasno wynika, że aplikacja nie może się tutaj crashować! Istnieje jednak jeszcze jeden aspekt pisania kodu, a mianowicie pisanie **testów**. To ten mityczny twór typu *każdy wie że trzeba to robić, nikt nie ma czasu na głupoty*.
@@ -230,5 +230,7 @@ O testach integracyjnych we *Flutterze* przeczytasz w kolejnym wpisie, który je
 ## Podsumowanie
 
 Pisanie testów nie jest procesem skomplikowanym. Powtarzalnym? Owszem. Trzeba się jednak przemóc i stopniowo wdrażać testy, szczególnie do krytycznych elementów systemu, których działanie jest złożone, a testowanie ręczne trudne, bądź czasochłonne. W takim przypadku raz napisane testy, bardzo szybko się zwrócą, a ty nie musisz przy każdej drobnej zmianie sprawdzać, czy nic po drodze nie wybuchło. Poczucie komfortu przy pracy z otestowanym projektem jest nieporównywalnie wyższe, niż gdy takowych brak. Nie zatracaj się jednak w pisaniu testów jako *sztuka dla sztuki* i nie testuj na siłę każdej jednej linii w kodzie. Znajdź umiar i równowagę, a testy staną się twoim przyjacielem.
+
+Kod pełnej aplikacji znajdziesz na [GitHubie](https://github.com/vintage/flutter_demo_unit_tests).
 
 **A jak pisanie testów wygląda w twoim projekcie? Napisałeś, dopiero zaczynasz, czy może nie wierzysz w ich pozytywny wpływ na życie projektu? Daj znać!**
