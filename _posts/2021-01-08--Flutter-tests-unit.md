@@ -1,6 +1,6 @@
 ---
 color: rgb(69,190,247)
-title: Testowanie aplikacji - testy jednostkowe
+title: Wstęp do testowania przez testy jednostkowe
 date: "2021-01-08"
 layout: "post"
 slug: "flutter-unit-tests"
@@ -225,7 +225,7 @@ Właśnie do testowania aplikacji jako całości służą **testy integracyjne**
 
 Wszystkie powyższe pytania są słuszne. Nawet pomimo faktu, że testy jednostkowe pokrywają te funkcjonalności. Robią to na dużo niższym poziomie, który nie zawsze odzwierciedla efekt końcowy w postaci aplikacji dostarczanej użytkownikowi.
 
-O testach integracyjnych we *Flutterze* przeczytasz w kolejnym wpisie, który jest dedykowany właśnie temu konkretnemu zagadnieniu. Framework mocno nas rozpieszcza i również tym razem dostarczy gotowe i wbudowane rozwiązanie.
+O testach integracyjnych we *Flutterze* przeczytasz w [następnym wpisie](/blog/flutter-driver-tests/), który jest dedykowany właśnie temu konkretnemu zagadnieniu. Framework mocno nas rozpieszcza i również tym razem dostarczy gotowe i wbudowane rozwiązanie.
 
 ## Podsumowanie
 
