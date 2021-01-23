@@ -4,7 +4,7 @@ title: Testy integracyjne z Flutter Driverem
 date: "2021-01-15"
 layout: "post"
 slug: "flutter-driver-tests"
-excerpt: "Posiadanie wyłącznie testów jednostkowych nie daje nam pełen gwarancji działania systemu. Jak więc go przetestować, aby spać spokojnie? Integracyjnie wraz z wbudowanym narzędziem Flutter Driver."
+excerpt: "Posiadanie wyłącznie testów jednostkowych nie daje pełnej gwarancji działania systemu. Jak więc go przetestować, aby spać spokojnie? Integracyjnie wraz z wbudowanym narzędziem Flutter Driver!"
 thumbnail: "assets/img/blog/driver_tests/thumbnail.png"
 ---
 
