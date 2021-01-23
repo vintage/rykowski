@@ -43,12 +43,6 @@
           </span><a id="cookie-notice-accept" class="button">OK</a>
         </div>
     
-    
-        <!-- Global site tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
-        <!-- Page analysis (analytics.js) -->
-        <script async src='https://www.google-analytics.com/analytics.js'></script>
-    
 
     <!-- seo tags -->
     <!-- Begin Jekyll SEO tag v2.6.1 -->
@@ -534,5 +528,31 @@ flutter run
 
 
 
+
+    
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
+
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+            https://firebase.google.com/docs/web/setup#available-libraries -->
+        <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-analytics.js"></script>
+
+        <script>
+          // Your web app's Firebase configuration
+          // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+          var firebaseConfig = {
+            apiKey: "AIzaSyCSA6ySh9pwqKegEs_93eY6Ex7DaREU_bs",
+            authDomain: "rykowski-dev.firebaseapp.com",
+            projectId: "rykowski-dev",
+            storageBucket: "rykowski-dev.appspot.com",
+            messagingSenderId: "991787015203",
+            appId: "1:991787015203:web:9b1cc3e14b5bee14dd6596",
+            measurementId: "G-J237EH2RK0"
+          };
+          // Initialize Firebase
+          firebase.initializeApp(firebaseConfig);
+          firebase.analytics();
+        </script>
+    
   </body>
 </html>
