@@ -1,4 +1,227 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="pl_PL"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://rykowski.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rykowski.dev/" rel="alternate" type="text/html" hreflang="pl_PL" /><updated>2021-01-08T17:16:14+01:00</updated><id>https://rykowski.dev/feed.xml</id><title type="html">rykowski.dev</title><subtitle>Flutter | Blog o programowaniu aplikacji mobilnych</subtitle><entry><title type="html">Testowanie aplikacji - testy jednostkowe</title><link href="https://rykowski.dev/blog/flutter-unit-tests/" rel="alternate" type="text/html" title="Testowanie aplikacji - testy jednostkowe" /><published>2021-01-08T00:00:00+01:00</published><updated>2021-01-08T00:00:00+01:00</updated><id>https://rykowski.dev/blog/flutter-unit-tests</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-unit-tests/">&lt;p&gt;Gdybym w eter rzucił hasło &lt;em&gt;“Pisanie kodu”&lt;/em&gt; to pierwszą myślą przychodzącą ci do głowy jest zapewne zakodowanie nowej funkcjonalności. Ewentualnie naprawa błędu zgłoszonego przez &lt;del&gt;ten upierdliwy&lt;/del&gt; dział QA, mimo tego, że z kodu jasno wynika, że aplikacja nie może się tutaj crashować! Istnieje jednak jeszcze jeden aspekt pisania kodu, a mianowicie pisanie &lt;strong&gt;testów&lt;/strong&gt;. To ten mityczny twór typu &lt;em&gt;każdy wie że trzeba to robić, nikt nie ma czasu na głupoty&lt;/em&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="pl_PL"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://rykowski.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rykowski.dev/" rel="alternate" type="text/html" hreflang="pl_PL" /><updated>2021-01-23T16:00:43+01:00</updated><id>https://rykowski.dev/feed.xml</id><title type="html">rykowski.dev</title><subtitle>Flutter | Blog o programowaniu aplikacji mobilnych</subtitle><entry><title type="html">Testy integracyjne z Flutter Driverem</title><link href="https://rykowski.dev/blog/flutter-driver-tests/" rel="alternate" type="text/html" title="Testy integracyjne z Flutter Driverem" /><published>2021-01-15T00:00:00+01:00</published><updated>2021-01-15T00:00:00+01:00</updated><id>https://rykowski.dev/blog/flutter-driver-tests</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-driver-tests/">&lt;p&gt;W &lt;a href=&quot;/blog/flutter-unit-tests/&quot;&gt;poprzednim wpisie&lt;/a&gt; rozpoczęliśmy temat pisania testów oraz dlaczego warto zacząć to robić we własnych projektach. Tematem przewodnim były testy jednostkowe. Stanowią one główny filar zapewniający programistę, że projekt działa i zachowuje się w sposób oczekiwany. Jest to świetny krok w rozpoczęciu przygody testowej, ale zdecydowanie nie ostatni. &lt;strong&gt;Testy jednostkowe są mocno oderwane od tego, co prawdziwy użytkownik robi w aplikacji&lt;/strong&gt;. A co takiego czyni?&lt;/p&gt;
+
+&lt;p&gt;Zdecydowanie nie tworzy bezpośrednio repozytoriów, modeli, czy worków na stan. Nie wywołuje funkcji realizujących logikę biznesową. Prawdziwy użytkownik z krwi i kości stuka w przyciski. Wypełnia formularze poprzez wirtualną klawiaturę. Przewija listy w celu znalezienia interesującej go pozycji. Czyta, bądź chociaż pobieżnie przegląda wyświetlaną treść. Czy brzmi to jak użytkownik, którym sam jesteś korzystając z aplikacji zainstalowanych na telefonie? Też nim jestem gdy kończę pracę. Każdy jest.&lt;/p&gt;
+
+&lt;p&gt;Skoro testy jednostkowe nie zostały stworzone do bycia użytkownikiem, to cóż począć? Przeskoczyć na przeciwległy brzeg pisania testów! Tak jak testy jednostkowe utożsamiane są z najniższym możliwym poziomem, tak najwyższym z nich są … &lt;strong&gt;testy integracyjne&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;testy-integracyjne&quot;&gt;Testy integracyjne&lt;/h2&gt;
+
+&lt;p&gt;Kluczowym zadaniem testów integracyjnych jest sprawdzenie, czy aplikacja działa poprawnie jako produkt końcowy. Mają odpowiedzieć na proste pytanie. &lt;strong&gt;Czy użytkownik aplikacji po jej uruchomieniu, otrzyma oczekiwany rezultat?&lt;/strong&gt; Wszystko to przy założeniu, że możliwości testu integracyjnego są mocno ograniczone. Niemal do tych samych funkcjonalności, które posiada żywa persona. &lt;strong&gt;Pełna symulacja&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Testy są całkowicie niezainteresowane szczegółami implementacyjnymi leżącymi pod spodem. &lt;em&gt;Provider&lt;/em&gt;, &lt;em&gt;Bloc&lt;/em&gt;, czy &lt;em&gt;MobX&lt;/em&gt;? Dane zapisują się w chmurze, czy na urządzeniu? &lt;em&gt;Firebase&lt;/em&gt;, a może własny serwer? O ile przy testach jednostkowych ma to znaczenie (można je minimalizować!), to testy integracyjne nawet nie chcą wiedzieć jakie spaghetti siedzi w kodzie. Aplikacja ma tak po ludzku działać. Zapomnij o widgetach, stanie, nawigacji, przekazywaniu kontekstu. Są to rzeczy o których użytkownik nie ma pojęcia, więc test integracyjny również nie wie o czym do niego mówisz. &lt;strong&gt;Pełna izolacja&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;flutter-driver&quot;&gt;Flutter driver&lt;/h3&gt;
+
+&lt;p&gt;Tworzenie testów integracyjnych stanowi część Fluttera, otrzymujemy więc oficjalną paczkę w postaci &lt;a href=&quot;https://api.flutter.dev/flutter/flutter_driver/flutter_driver-library.html&quot; target=&quot;_blank&quot;&gt;flutter_driver&lt;/a&gt;. Jest to dedykowane narzędzie do budowania scenariuszy testowych, uruchamianych zarówno na emulatorach jak i fizycznych urządzeniach. Zgadza się. Scenariusze testowe wykorzystywane są do pokierowania wirtualnego użytkownika przez uprzednio zbudowaną aplikację. Naturalnie wymusza to pewien mankament testów integracyjnych. &lt;strong&gt;Powolność&lt;/strong&gt;. O ile test jednostkowy wykonywany jest w ułamku sekundy, tak jego integracyjny odpowiednik potrzebuje zdecydowanie więcej czasu. Zanim rozpocznie swoją pracę, niezbędne jest zbudowanie świeżej aplikacji. Co w zależności od jej rozmiaru i złożoności potrafi zająć dłuższą chwilę.&lt;/p&gt;
+
+&lt;p&gt;Jako że natura pisania testów integracyjnych, wymaga posiadania gotowej aplikacji, posłużę się domyślnym projektem utworzonym przez &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;flutter create&lt;/code&gt;. Został on delikatnie rozszerzony o wstępny ekran logowania, aby zapobiec nieautoryzowanemu dostępowi i lepiej poznać mechanikę pisania testów. Kod aplikacji znajdziesz na moim GitHubie &lt;a href=&quot;https://github.com/vintage/flutter_demo_integration_tests&quot;&gt;vintage/flutter_demo_integration_tests&lt;/a&gt;, a poniżej załączam zrzut prezentujący pełnię jej możliwości.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/blog/driver_tests/demo_app.png&quot; alt=&quot;demo_app.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;konfiguracja&quot;&gt;Konfiguracja&lt;/h3&gt;
+
+&lt;p&gt;Nowo utworzony projekt nie posiada domyślnie zależności dla testów integracyjnych. Pierwszą więc rzeczą jaką należy zrobić jest dodanie wpisu w &lt;em&gt;pubspec.yaml&lt;/em&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;dependencies&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;flutter&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;sdk&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;flutter&lt;/span&gt;
+
+  &lt;span class=&quot;na&quot;&gt;flutter_driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;sdk&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;flutter&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;any&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Poza samym driverem potrzebujemy również standardowej paczki do pisania testów. Testy integracyjne to wciąż testy, prawda? Racja.&lt;/p&gt;
+
+&lt;p&gt;Ostatnim elementem przygotowawczym jest utworzenie plików konfiguracyjnych do przechowywania scenariuszy testowych. Dobrze przyjęta konwencja zakłada, że wszystko co związane jest z testami integracyjnymi znajduje się w katalogu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test_driver&lt;/code&gt;. W ten sposób bardzo dużo aplikacji na starcie rozgałęzia się na trzy podstawowe katalogi:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lib/&lt;/code&gt; - kod aplikacji wraz z logiką biznesową i wszystkim co jest z nią związane&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test/&lt;/code&gt; - testy jednostkowe, widgetów oraz wszystkie inne które nie są integracyjnymi&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test_driver/&lt;/code&gt; - testy integracyjne kierowane przez drivera&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Korzystanie z dobrodziejstw drivera wymaga dwóch plików. Pierwszy z nich należy do grupy &lt;em&gt;stwórz i zapomnij&lt;/em&gt; i definiuje wyłącznie jak uruchomić aplikację testową. W najprostszym wariancie wywołujemy po prostu funkcję &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; z głównej aplikacji i nigdy tu nie wracamy. Nie jest tak jednak zawsze i może okazać się, że chcemy przykładowo wyłączyć całkowicie analitykę, reklamy, lub dowolną inną funkcjonalność, która nie ma sensu z punktu widzenia testu integracyjnego. Apeluję jednak o ostrożność. Każde takie dostosowanie kodu, oddala drivera od wersji aplikacji, którą dostaje prawdziwy użytkownik&lt;/p&gt;
+
+&lt;p&gt;Wybieramy wariant prosty tworząc plik &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test_driver/app.dart&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:flutter_driver/driver_extension.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:flutter_demo_integration_tests/main.dart'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;enableFlutterDriverExtension&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Same testy definiowane będą w powiązanym pliku &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test_driver/app_test.dart&lt;/code&gt;. Nazwa nie jest przypadkowa, a budujemy ją poprzez dodanie przyrostka &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_test&lt;/code&gt; do poprzedniego pliku. Zawsze definiując testy integracyjne konieczne jest trzymanie się reguły: &lt;em&gt;dwa pliki, przyrostek _test&lt;/em&gt;. Chociaż szczerze powiedziawszy to nie pracowałem jeszcze przy aplikacji, która miałaby więcej niż jedną parę plików. Zawsze wystarcza pojedyncza para w postaci &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.dart&lt;/code&gt; i &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app_test.dart&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Dodajemy więc do projektu plik &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test_driver/app_test.dart&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:flutter_driver/flutter_driver.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:test/test.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'App'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;FlutterDriver&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;setUpAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FlutterDriver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;tearDownAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'full flow'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;// Test logic&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Jest to typowy szablon testu integracyjnego, który korzysta z analogicznych mechanizmów jak testy jednostkowe. Funkcja &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;setUpAll&lt;/code&gt; uruchamiana jest jednorazowo dla całego scenariusza, przed uruchomieniem pierwszego testu. Jej zadaniem jest nawiązanie połączenia z driverem, w końcu bez tego nie jesteśmy w stanie nic przetestować. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tearDownAll&lt;/code&gt; jest jej przeciwieństwem. Uruchamiany jest automatycznie po zakończeniu pracy ostatniego testu i zamyka uprzednio nawiązane połączenie z driverem.&lt;/p&gt;
+
+&lt;p&gt;Ciekawszą rzecz stanowi kod w obrębie funkcji &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;test&lt;/code&gt;. W sensie będzie ciekawszy jak już się za moment pojawi, bo póki co świeci pustką. Sama konfiguracja jest już jednak zakończona, pora ruszać dalej.&lt;/p&gt;
+
+&lt;h3 id=&quot;uruchamianie-testu&quot;&gt;Uruchamianie testu&lt;/h3&gt;
+
+&lt;p&gt;W celu weryfikacji można już bez żadnych problemów uruchomić przygotowany zestaw. Co prawda niczego jeszcze nie testujemy, ale warto upewnić się, że konfiguracja przebiegła poprawnie. W celu uruchomienia drivera skorzystamy z polecania &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;flutter drive&lt;/code&gt;, któremu wskażemy gdzie znajduje się zestaw testowy.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;❯ flutter drive &lt;span class=&quot;nt&quot;&gt;--target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;test_driver/app.dart         29s
+
+Using device sdk gphone x86.
+Starting application: test_driver/app.dart
+Installing build/app/outputs/flutter-apk/app.apk...
+Running Gradle task &lt;span class=&quot;s1&quot;&gt;'assembleDebug'&lt;/span&gt;... Done
+✓ Built build/app/outputs/flutter-apk/app-debug.apk.
+Installing build/app/outputs/flutter-apk/app.apk...
+00:00 +0: App &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;setUpAll&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+00:01 +0: App full flow
+
+00:01 +1: App &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;tearDownAll&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+00:01 +1: All tests passed!
+
+Stopping application instance.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;W logach możemy przeczytać, że wybranym urządzeniem do testów został &lt;em&gt;sdk gphone x86&lt;/em&gt; (emulator), pojawiają się typowe informacje dotyczące budowania aplikacji. Gdy aplikacja została zainstalowana na telefonie, uruchomione zostały w następującej kolejności: &lt;em&gt;setUpAll&lt;/em&gt;, test &lt;em&gt;full flow&lt;/em&gt; oraz &lt;em&gt;tearDownAll&lt;/em&gt;. Końcowy komunikat świadczy o tym, że testy zakończyły się sukcesem, acz skoro nic nie robią to trudno było oczekiwać innego rezultatu.&lt;/p&gt;
+
+&lt;p&gt;Polecenie do uruchamiania testów jest w pełni konfigurowalne. Wszystkie dostępne parametry takie jak wskazanie urządzenia, czy ustawienie zmiennych środowiskowych znajdziesz pod &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;flutter drive --help&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;tworzenie-testu&quot;&gt;Tworzenie testu&lt;/h3&gt;
+
+&lt;p&gt;Pora wrócić i zaimplementować właściwy test. Wszystko opiera się na tym, aby przy pomocy dostępnych funkcji instruować drivera jaki następny krok powinien podjąć. Scenariusz przez nas pisany rozpoczyna się w momencie, w którym użytkownik uruchomił aplikację i widzi jej pierwszy ekran. Do dzieła!&lt;/p&gt;
+
+&lt;p&gt;Wcześniej o tym nie wspomniałem, ale pierwszy ekran aplikacji jest specyficzny. Formularz logowania widoczny jest dopiero po przewinięciu ekranu w dół, a domyślnie widoczne są bloczki z odcieniami szarości. Pierwszym naszym testem będzie więc zmuszenie drivera, aby właśnie poprzez przewijanie ekranu odnalazł właściwy formularz.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Interakcje z elementami aplikacji są możliwe tylko wtedy, gdy widoczne są one na ekranie. Nie można powiedzieć driverowi aby stuknął przycisk, który jest narysowany na samym dole przewijalnej listy. Tak samo jak użytkownik nie widzi przycisku bez przewinięcia, tak driver nie jest go świadomy.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/blog/driver_tests/demo_app_scroll.gif&quot; alt=&quot;demo_app_scroll.gif&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Pierwszą rzeczą do zrobienia jest powiedzenie driverowi jak odnaleźć właściwe elementy ekranu. Użytkownik widzi je oczami, driver takiej mocy nie posiada. Musimy przewinąć ekran, potrzebny jest więc uchwyt listy, a także uchwyt do formularza którego szukamy. Operacje wyszukiwania elementów są realizowane przez globalnie zaimportowany obiekt &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find&lt;/code&gt;. Dostarcza on kilka sposobów wyszukiwań, gdzie najczęściej stosowane to:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.byType&lt;/code&gt; do szukania po nazwie klasy&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.byValueKey&lt;/code&gt; do szukania po nazwie klucza (&lt;em&gt;key&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.text&lt;/code&gt; do odnalezienia widgetu &lt;strong&gt;Text&lt;/strong&gt; wyświetlającego konkretny napis&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Wywołanie metody obiektu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find&lt;/code&gt; nie przeprowadza żadnego wyszukiwania. Jest to meta informacja dla drivera z instrukcją jak dany obiekt odnaleźć. Jeśli &lt;em&gt;widget&lt;/em&gt; jest skarbem, to obiekt zwrócony przez &lt;em&gt;find&lt;/em&gt; jest mapą do skarbu, a &lt;em&gt;driver&lt;/em&gt; piratem który chce do niego trafić.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'full flow'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scrollable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;byType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ListView&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loginForm&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;byValueKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;myForm&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;scrollUntilVisible&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;scrollable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;loginForm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nl&quot;&gt;dyScroll:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Uchwyty zdefiniowane. Pora rozpocząć przewijanie listy, aż do momentu gdy wyświetlony zostanie poszukiwany formularz. Posłużymy się wygodnym &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scrollUntilVisible&lt;/code&gt;, któremu powiemy jaki element i w którą stronę przewijać (wartość ujemna oznacza w tym wypadku dół) oraz czego szukamy. Gotowe. Czy aby jednak na pewno? Test jednostkowy sprawdza wynik zero-jedynkowo, a jak jest tutaj?&lt;/p&gt;
+
+&lt;p&gt;Przewijanie listy trwa do momentu odnalezienia wybrańca. Jak długo? Kiedy test zorientuje się, że wybrańca zabrakło na ekranie? Aspektem, który warto trzymać z tyłu głowy pisząc testy integracyjne jest &lt;strong&gt;czas&lt;/strong&gt;. Każda operacja w driverze potrzebuje czasu, aby stwierdzić czy wszystko jest pod kontrolą. To dlatego wszystkie udostępniane interakcje z driverem posiadają konfigurowalny &lt;strong&gt;timeout&lt;/strong&gt;, którego przekroczenie oznacza przerwanie całego testu z wynikiem negatywnym. Domyślnie nie jest ustawiony, acz nie oznacza to, że operacja będzie trwała w nieskończoność. Każdy pojedynczy test również posiada zadeklarowany czas życia, który domyślnie wynosi zaledwie 30 sekund. Przekroczenie tego czasu wiąże się z błyskawicznym jego przerwaniem i wystawieniem negatywnego wyniku. Parametr jest w pełni konfigurowalny i jeśli potrzebujesz więcej czasu w samym teście - nic nie stoi na przeszkodzie.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'full flow'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{},&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;timeout:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Timeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Duration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;days:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Dodajmy &lt;em&gt;timeout&lt;/em&gt; do wyszukania formularza na ekranie. Jeśli w ciągu 3 sekund nie uda się go odnaleźć - przerwij test, nie ma sensu szukać go dłużej.&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;scrollUntilVisible&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;scrollable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;loginForm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;dyScroll:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;timeout:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Duration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;seconds:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Formularz odnaleziony, test przechodzi. Następny krok? Trzeba się zalogować, czyli wypełnić formularz danymi testowymi. Analogicznie jak poprzednio musimy:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find&lt;/code&gt; - wyznaczyć niezbędne elementy ekranu&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;driver&lt;/code&gt; - wykonać z ich udziałem adekwatne operacje&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;usernameInput&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;byValueKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;username_input&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;passwordInput&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;byValueKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;password_input&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;submitButton&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Login&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;usernameInput&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;enterText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;test&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;passwordInput&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;enterText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;12345&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;submitButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;waitFor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Wrong credentials!&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Mądry ten driver, zachowuje się zupełnie jak prawdziwy użytkownik. Krok po kroku. Do celu.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Stuknij w pole nazwy użytkownika, aby stało się aktywne (złapało focus)&lt;/li&gt;
+  &lt;li&gt;Podaj nazwę użytkownika&lt;/li&gt;
+  &lt;li&gt;Wybierz następne pole&lt;/li&gt;
+  &lt;li&gt;Wprowadź hasło&lt;/li&gt;
+  &lt;li&gt;Stuknij w przycisk zatwierdzający&lt;/li&gt;
+  &lt;li&gt;Na sam koniec potwierdź, że na ekranie widoczny jest komunikat o błędnych danych&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/blog/driver_tests/auth_failed.png&quot; alt=&quot;auth_failed.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Poprawne dane logowania to &lt;em&gt;admin:12345&lt;/em&gt;, wystarczy więc poprawić nazwę użytkownika i wysłać formularz ponownie …&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;usernameInput&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;enterText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;admin&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;submitButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;… aby test przeszedł do kolejnego ekranu, który również warto zautomatyzować.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/blog/driver_tests/auth_passed.png&quot; alt=&quot;auth_passed.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nie ma na nim jednak niczego, czego nie posiadał ekran poprzedni! Jest tekst, przycisk. Nuda. Nic odkrywczego, nie zatrzymujemy się tutaj, bo szkoda czasu. Przykładowy test sprawdzający trzykrotne stuknięcie w przycisk:&lt;/p&gt;
+
+&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;waitFor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;incrementButton&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;byType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;FloatingActionButton&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incrementButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incrementButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incrementButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;waitFor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;3&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;podsumowanie&quot;&gt;Podsumowanie&lt;/h2&gt;
+
+&lt;p&gt;Pisanie testów z driverem jest nieraz nawet łatwiejsze, niż poprawne zbudowanie pełnego scenariusza jednostkowego. Nie trzeba się zastanawiać jak zamockować usługi, jak przeprojektować klasy, żeby testowanie było bardziej wyizolowane. Jest gotowa aplikacja dla której wymyślasz kroki i powoli je realizujesz. Nie trzeba nawet dobrze znać dziedziny domenowej, czy kodu aplikacji, aby pchnąć do przodu temat testów integracyjnych. Bajka.&lt;/p&gt;
+
+&lt;p&gt;Trzeba jednak pamiętać, że ich uruchomienie jest powolne, więc testowanie wszystkich możliwych przypadków jest niemożliwe, lub co najmniej mocno ograniczone. Nie stanowią one również swoistego kontraktu samego kodu. Tak jak test jednostkowy jest w stanie wykazać spaghetti w kodzie i nieintuicyjny interfejs klasy, tak test integracyjny nie ma szans tego wyłapać. Oba rodzaje testów świetnie się uzupełniają i warto je posiadać w swoich projektach. Nawet jeśli z reguły posiadasz tylko jeden test integracyjny na pokrycie całej aplikacji i nie rozbijasz go na mniejsze fragmenty (to ja!).&lt;/p&gt;</content><author><name></name></author><summary type="html">Posiadanie wyłącznie testów jednostkowych nie daje nam pełen gwarancji działania systemu. Jak więc go przetestować, aby spać spokojnie? Integracyjnie wraz z wbudowanym narzędziem Flutter Driver.</summary></entry><entry><title type="html">Wstęp do testowania przez testy jednostkowe</title><link href="https://rykowski.dev/blog/flutter-unit-tests/" rel="alternate" type="text/html" title="Wstęp do testowania przez testy jednostkowe" /><published>2021-01-08T00:00:00+01:00</published><updated>2021-01-08T00:00:00+01:00</updated><id>https://rykowski.dev/blog/flutter-unit-tests</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-unit-tests/">&lt;p&gt;Gdybym w eter rzucił hasło &lt;em&gt;“Pisanie kodu”&lt;/em&gt; to pierwszą myślą przychodzącą ci do głowy jest zapewne zakodowanie nowej funkcjonalności. Ewentualnie naprawa błędu zgłoszonego przez &lt;del&gt;ten upierdliwy&lt;/del&gt; dział QA, mimo tego, że z kodu jasno wynika, że aplikacja nie może się tutaj crashować! Istnieje jednak jeszcze jeden aspekt pisania kodu, a mianowicie pisanie &lt;strong&gt;testów&lt;/strong&gt;. To ten mityczny twór typu &lt;em&gt;każdy wie że trzeba to robić, nikt nie ma czasu na głupoty&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Czym tak właściwie są te testy?&lt;/strong&gt; Niezależną częścią aplikacji (w postaci kodu), która powstaje z boku i sama w sobie nie ma specjalnej wartości dla użytkownika końcowego. Na prawdę nie da się powiedzieć, że testy są integralną częścią aplikacji, nawet jeśli skacze ci teraz ciśnienie z powodu testo-dyskryminacji. Można je pisać, można nie, możesz nawet wyrzucić wszystkie istniejące testy z projektu, a aplikacja nadal będzie działała tak samo. Tak to już jest.&lt;/p&gt;
 
@@ -214,7 +437,7 @@
 
 &lt;p&gt;Wszystkie powyższe pytania są słuszne. Nawet pomimo faktu, że testy jednostkowe pokrywają te funkcjonalności. Robią to na dużo niższym poziomie, który nie zawsze odzwierciedla efekt końcowy w postaci aplikacji dostarczanej użytkownikowi.&lt;/p&gt;
 
-&lt;p&gt;O testach integracyjnych we &lt;em&gt;Flutterze&lt;/em&gt; przeczytasz w kolejnym wpisie, który jest dedykowany właśnie temu konkretnemu zagadnieniu. Framework mocno nas rozpieszcza i również tym razem dostarczy gotowe i wbudowane rozwiązanie.&lt;/p&gt;
+&lt;p&gt;O testach integracyjnych we &lt;em&gt;Flutterze&lt;/em&gt; przeczytasz w &lt;a href=&quot;/blog/flutter-driver-tests/&quot;&gt;następnym wpisie&lt;/a&gt;, który jest dedykowany właśnie temu konkretnemu zagadnieniu. Framework mocno nas rozpieszcza i również tym razem dostarczy gotowe i wbudowane rozwiązanie.&lt;/p&gt;
 
 &lt;h2 id=&quot;podsumowanie&quot;&gt;Podsumowanie&lt;/h2&gt;
 
@@ -3729,509 +3952,4 @@ micro2
 
 &lt;h2 id=&quot;podsumowanie&quot;&gt;Podsumowanie&lt;/h2&gt;
 
-&lt;p&gt;Masz teraz mocne i solidne podstawy - zarówno teoretyczne jak i praktyczne - dotyczące monetyzacji przez reklamy. Nie ma żadnych przeciwwskazań, abyś wybrał innego dostawcę reklam pod warunkiem, że istnieje stabilna paczka pod Fluttera. Pełny kod aplikacji reklamowej znajdziesz na &lt;a href=&quot;https://github.com/vintage/flutter_demo_ads&quot;&gt;GitHubie&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Darmowe aplikacje mobilne również na siebie zarabiają. W jaki sposób? Istnieje wiele strategii monetyzacyjnych, a jedną z nich są reklamy AdMob w różnych wariantach. Pierwszy krok w zarabianiu na aplikacji pisanej we Flutter.</summary></entry><entry><title type="html">Zarządzanie stanem aplikacji - StatefulWidget</title><link href="https://rykowski.dev/blog/flutter-state-management-stateful/" rel="alternate" type="text/html" title="Zarządzanie stanem aplikacji - StatefulWidget" /><published>2019-07-05T00:00:00+02:00</published><updated>2019-07-05T00:00:00+02:00</updated><id>https://rykowski.dev/blog/flutter-state-management-stateful</id><content type="html" xml:base="https://rykowski.dev/blog/flutter-state-management-stateful/">&lt;p&gt;&lt;strong&gt;Aplikacje mobilne&lt;/strong&gt; - a także webowe, czy desktopowe - nie opierają się wyłącznie na statycznych kontrolkach, które widzi nasz użytkownik. Aplikacja to nie tylko zbiór obrazków, przycisków i list, zawsze jest coś więcej. W przeciwnym wypadku zbudowaliśmy wydmuszkę której jedynym zadaniem jest jej podziwianie - dzieło sztuki, nieprawdaż?&lt;/p&gt;
-
-&lt;p&gt;Nie ma znaczenia na jaką platformę budujemy nasz program - zawsze potrzebujemy interakcji ze strony użytkownika. Skupmy się jednak na wersji mobilnej. Jakie przykładowe akcje mogą zajść w aplikacji na które musimy odpowiednio zareagować?&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;oznaczenie elementu jako ulubiony&lt;/li&gt;
-  &lt;li&gt;dodanie przedmiotu do koszyka&lt;/li&gt;
-  &lt;li&gt;stuknięcie w ikonkę koszyka&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Każda z tych akcji, wymaga odpowiedniej reakcji po stronie naszego kodu. Musimy przykładowo zaprezentować użytkownikowi co ma w koszyku, ale żeby tego dokonać potrzebujemy … tak - informacji o stanie koszyka (co w nim właściwie jest). Możemy także żonglować ulubionymi produktami, aby łatwiej móc je odnaleźć w przyszłości. Wszystkie wymienione funkcjonalności łączy część wspólna - &lt;strong&gt;operują na danych (stanie) aplikacji&lt;/strong&gt; w trakcie jej działania.&lt;/p&gt;
-
-&lt;h2 id=&quot;stan-aplikacji&quot;&gt;Stan aplikacji&lt;/h2&gt;
-
-&lt;p&gt;Stanem aplikacji nazywamy taki zestaw danych, który spełnia następujące kryteria:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;odczyt danych dostępny jest w sposób synchroniczny podczas budowania widgetu (metoda &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build&lt;/code&gt;).&lt;/li&gt;
-  &lt;li&gt;dane mogą (ale nie muszą) zmieniać się w trakcie trwania programu.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Jeśli masz doświadczenie z &lt;em&gt;backendem (np. API)&lt;/em&gt; w aplikacjach webowych, to tam również operujesz na stanie. Nazywa się co prawda bardziej formalnie - &lt;strong&gt;baza danych&lt;/strong&gt; - ale chodzi podobny koncept. Przechowujesz w niej dane, które od czasu do czasu się zmieniają i korzystasz z nich, aby odpowiadać aplikacji mobilnej na przesłane żądania (np. zwracając listę wszystkich zamówień użytkownika).&lt;/p&gt;
-
-&lt;p&gt;I tyle? To ten szumny &lt;strong&gt;stan aplikacji&lt;/strong&gt;? W skrócie to tak, trudno się bardziej nad nim rozpisywać - formułka oddaje całość tego czym jest. Bardziej złożonym problemem jest jednak to w jaki sposób nim zarządzać, ale o tym dowiesz się już za chwilę.&lt;/p&gt;
-
-&lt;h2 id=&quot;zarządzanie-stanem&quot;&gt;Zarządzanie stanem&lt;/h2&gt;
-
-&lt;p&gt;Skoro stan aplikacji oznacza zbiór danych używanych podczas działania programu, to zarządzanie stanem odnosi się do manipulacji tymi danymi i reagowaniem w interfejsie na te zmiany. Przykładowo poprzez usunięcie danej pozycji z koszyka, gdy użytkownik tapnie w ikonkę ❌ obok jej nazwy. Jako że mam podłoże mocno backendowe, to często utożsamiam akcje na stanie jako typowy &lt;strong&gt;CRUD&lt;/strong&gt; (&lt;strong&gt;C&lt;/strong&gt;reate &lt;strong&gt;R&lt;/strong&gt;ead &lt;strong&gt;U&lt;/strong&gt;pdate &lt;strong&gt;D&lt;/strong&gt;elete):&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Odczyt&lt;/strong&gt; danych (wyświetlenie wszystkich pozycji w koszyku)&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Dodawanie&lt;/strong&gt; nowych danych (dodanie nowego produktu do koszyka)&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Modyfikacja&lt;/strong&gt; istniejących rekordów (zmiana ilości danego produktu w koszyku)&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Usuwanie&lt;/strong&gt; zbędnych wpisów (usunięcie produktu z koszyka)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Każda z tych akcji (poza odczytem) zmienia dane, które trzymamy w stanie. Pamiętaj - zmienia dane, ale nie modyfikuje &lt;strong&gt;BEZPOŚREDNIO&lt;/strong&gt; elementów wyświetlanych na ekranie. Funkcja uruchamiana w celu usunięcia pozycji z koszyka, aktualizuje tylko stan aplikacji i nic więcej. Nie odpowiada za to, żeby listing koszyka się &lt;em&gt;magicznie&lt;/em&gt; odświeżył i usunął z ekranu stary element. Programowanie wokół stanu, a nie bezpośrednio na UI nazywamy &lt;strong&gt;programowaniem deklaratywnym&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;deklaratywny-vs-imperatywny&quot;&gt;Deklaratywny vs imperatywny&lt;/h2&gt;
-
-&lt;p&gt;Trudne słowa, które w rzeczywistości łatwo jest zrozumieć. Osobiście sporo czasu pisałem w sposób &lt;strong&gt;deklaratywny&lt;/strong&gt;, a jeszcze więcej w &lt;strong&gt;imperatywny&lt;/strong&gt;, a dopiero dwa lata temu dowiedziałem się o istnieniu tych dwóch pojęć. Chodzi o sposób w jaki programujemy nasz interfejs użytkownika - o to jak wygląda początkowo (po uruchomieniu aplikacji) i jak zmienia się w trakcie działania.&lt;/p&gt;
-
-&lt;h3 id=&quot;styl-imperatywny&quot;&gt;Styl imperatywny&lt;/h3&gt;
-
-&lt;p&gt;Styl imperatywny dotyczy przede wszystkim starszych technologii - Android SDK, czy iOS UIKit. Nie mam z nimi większego komercyjnego doświadczenia, dlatego posłużę się przykładem z aplikacji webowych i technologią jQuery. Niegdyś brylująca technologia do tworzenia aplikacji, dzisiaj leciwy i schorowany dziad(ek). Nie jesteśmy tu jednak żeby wspominać historię, czy wgłębiać się w wady i zalety jQuery, a zrozumieć imperatywny UI. Spójrzmy więc na prosty przykład, który łatwo zrozumieć nawet bez znajomości tej biblioteki:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;input.name&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;change&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.greeting&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;Witaj &lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Nasłuchujemy eventu &lt;em&gt;change&lt;/em&gt; na polu tekstowym &lt;em&gt;name&lt;/em&gt; i gdy on nastąpi - aktualizujemy komponent &lt;em&gt;greeting&lt;/em&gt; o nową wartość tekstową np. &lt;em&gt;“Witaj Kamil”&lt;/em&gt;. Rozsądne i eleganckie rozwiązanie, prawda? &lt;del&gt;&lt;strong&gt;TAK&lt;/strong&gt;&lt;/del&gt; &lt;strong&gt;NIE&lt;/strong&gt;. O ile trudno odmówić prostoty, to mamy tutaj co najmniej dwa problemy:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Jeśli jakikolwiek inny komponent w aplikacji chciałby również się aktualizować po zmianie imienia to musimy rozszerzyć naszą funkcję (fuj), lub w innym miejscu w kodzie również wpiąć się w ten sam event (genialne). Co jednak zrobisz, gdy w pewnym momencie okaże się, że imię można zmieniać w inny sposób niż początkowy &lt;strong&gt;input.name&lt;/strong&gt;? Tak - zaktualizujesz 100 miejsc w aplikacji (nikt tego nie lubi).&lt;/li&gt;
-  &lt;li&gt;Debugowanie jest tak trudne jak granie w Diablo 2 w trybie &lt;strong&gt;hardcore&lt;/strong&gt; (no wiesz - permanentna śmierć). Im większa aplikacja, tym więcej się dzieje i w pewnym momencie nie potrafisz odpowiedzieć na pytanie kolegi z działu QA - &lt;em&gt;“Dlaczego ten przycisk jest zablokowany?”&lt;/em&gt; (swoją drogą - autentyk). Wchodzisz do kodu, odnajdujesz stosowny przycisk, ale nie ma on w swojej deklaracji nic o blokowaniu. To czy jest zablokowany, czy też nie jest wysterowane przez 50 funkcji, które żonglują jego dostępnością.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Podsumowując - styl imperatywny jest &lt;strong&gt;łatwy w zrozumieniu&lt;/strong&gt; (&lt;em&gt;“zmieniam imię to zmienia się nagłówek”&lt;/em&gt;), ale niesie ze sobą &lt;strong&gt;burdel w kodzie&lt;/strong&gt;, szczególnie gdy aplikacja się rozrasta i dochodzą nowe funkcjonalności. W pewnym momencie utrzymanie takiego stwora staje się problematyczne i czasochłonne - acz możliwe. Na rynku mamy miliony aplikacji napisanych w taki sposób - nie twierdzę bynajmniej że to coś nierealnego.&lt;/p&gt;
-
-&lt;h3 id=&quot;styl-deklaratywny&quot;&gt;Styl deklaratywny&lt;/h3&gt;
-
-&lt;p&gt;Nowy nurt w tworzeniu interfejsu użytkownika, który zakłada, że my jako programiści nie musimy przejmować się tym, aby konkretny element na ekranie zmienił swoje właściwości (kolor, tekst, cokolwiek) po zadziałaniu się akcji X. Naszym zadaniem jest natomiast stworzenie komponentów (widgetów), które w zależności od otrzymanego stanu mogą zmienić swój “wizerunek”. Jest to styl wykorzystywany przez takie technologie jak Swift UI, React, a także rzecz jasna &lt;strong&gt;Flutter&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;A teraz podejdźmy do tego bardziej łopatologicznie na pseudo-przykładzie (pamiętaj - to jest pseudokod, nie używaj go w domu):&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;RaisedButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-  &lt;span class=&quot;nl&quot;&gt;onPressed:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clickCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;},&lt;/span&gt;
-  &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Kliki: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${clickCount}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clickCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Za klikanie jest nagroda.&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Żartowałem :)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Mamy tutaj przycisk, który po tapnięciu zwiększa wartość zmiennej &lt;strong&gt;clickCount&lt;/strong&gt;, a dodatkowo wyświetla jej aktualny stan jako tekst. Dalej w drzewie umieściliśmy dodatkowy tekst, który w zależności od wspomnianego stanu zmienia prezentowaną formę.&lt;/p&gt;
-
-&lt;p&gt;Jak widzisz w funkcji &lt;strong&gt;onPressed&lt;/strong&gt; nie zmieniamy ani tekstu na przycisku, ani tego na dole drzewa. Aktualizujemy wyłącznie stan aplikacji, a Flutter sam zajmie się resztą. Automatycznie rozwiązują nam się problemy stylu imperatywnego:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Stan jest jedynym źródłem prawdy, które każdy komponent może odczytać w dowolnym momencie. Nie ma znaczenia kiedy i jaka akcja zmieni stan - nasz UI odświeży się samoczynnie.&lt;/li&gt;
-  &lt;li&gt;Ponownie - tylko stan aplikacji określa obecny UI. Wystarczy znaleźć zbugowany komponent i określić jaki stan musi zajść, aby przycisk się zablokował.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;W zależności od Twoich poprzednich doświadczeń - albo już to zaakceptowałeś i czujesz się w domu, albo będziesz potrzebował trochę czasu aby przestawić swój proces myślowy na nowe tory. Z własnego doświadczenia (a naprawdę długo pisałem imperatywnie) powiem, że &lt;strong&gt;WARTO&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;Jeśli chciałbym w jednym zdaniu podsumować styl deklaratywny to byłaba to następująca fraza:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;UI aplikacji budowany jest w celu zaprezentowania aktualnie posiadanego stanu.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;poketap&quot;&gt;PokeTap&lt;/h2&gt;
-
-&lt;p&gt;Dość teorii, daj praktykę! Najłatwiej uczyć się i walidować zdobytą wiedzę na przykładach, tak też zrobimy w tym przypadku. Nie lubię jednak demonstrować czegokolwiek na kolejnej aplikacji typu &lt;em&gt;lista TODO&lt;/em&gt;. Możliwe że to niezdiagnozowane uczulenie, a może po prostu jest w sieci zbyt wiele rozwiązań tego typu i gdy widzę że będę poznawał nowe zagadnienie przez &lt;em&gt;“listę rzeczy do zrobienia”&lt;/em&gt; to dopada mnie nagły atak &lt;del&gt;spawacza&lt;/del&gt; mini-migreny.&lt;/p&gt;
-
-&lt;p&gt;Co więc proponuję? &lt;strong&gt;GRĘ!&lt;/strong&gt; Duże (bo drukowane) słowo na mały projekt, ale stworzymy prostego clickera limitowanego czasem. Nie będzie miał zbyt wiele polotu, ale na pewno będziemy się przy nim lepiej bawili niż wiesz przy czym (⬆️), a dodatkowo opanujemy niezbędne &lt;strong&gt;techniki zarządzania stanem&lt;/strong&gt;. Poniżej możesz zerknąć na nasz docelowy design, który będzie nam towarzyszył przez resztę wpisu.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/poketap_layout.png&quot; alt=&quot;poketap_layout.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Gra polega na klikanie w przycisk &lt;strong&gt;Trenuj&lt;/strong&gt; tak wiele razy jak to możliwe w ciągu limitowanego czasu 60 sekund. Każdy klik zwiększa nasz poziom oraz atrybuty ataku i obrony. Typowy &lt;strong&gt;grind&lt;/strong&gt;, ale bez endgame. Zaczynajmy!&lt;/p&gt;
-
-&lt;h2 id=&quot;szybki-prototyp-statelesswidget&quot;&gt;Szybki prototyp (StatelessWidget)&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;StatelessWidget&lt;/strong&gt; (z ang. widget bezstanowy) to prosty element wizualny nie posiadający z definicji stanu oraz nie potrafiący sam się przerysować, gdy użytkownik wykona odpowiednią akcję. Przykładami są wbudowane we Fluttera &lt;strong&gt;Text&lt;/strong&gt;, &lt;strong&gt;RaisedButton&lt;/strong&gt;, czy &lt;strong&gt;Container&lt;/strong&gt;. Przyjmują one parametry podczas tworzenia, ale nie zmieniają swojego wyglądu same z siebie podczas działania aplikacji.&lt;/p&gt;
-
-&lt;p&gt;Od designu do kodu. Nie potrafimy jeszcze wykorzystać możliwości stanu, ale nic nie stoi na przeszkodzie, aby skupić się wpierw na części wizualnej. Tajemnicą poliszynela jest fakt, że tak przygotowany layout przekłada się 1:1 na wersję stanową, więc nie tracimy nawet minuty na bezsensowną implementację.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;strong&gt;StatelessWidget&lt;/strong&gt; - używaj go zawsze, gdy nie potrzebujesz przechowywać wewnętrznego stanu, który doprowadziłby do przerysowania komponentu.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'package:flutter/material.dart'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;runApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;App&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MaterialApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-      &lt;span class=&quot;nl&quot;&gt;home:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Scaffold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;backgroundColor:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;amber&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;body:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HomeScreen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HomeScreen&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-      &lt;span class=&quot;nl&quot;&gt;mainAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MainAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;spaceAround&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-      &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;s&quot;&gt;&quot;60 sekund&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;style:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextStyle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;fontSize:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;network&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;s&quot;&gt;&quot;http://pluspng.com/img-png/pikachu-face-png-png-svg-512.png&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;width:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;160&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;height:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;160&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;RaisedButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;onPressed:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{},&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Padding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;padding:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EdgeInsets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Trenuj&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;style:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextStyle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;white&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Container&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;padding:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EdgeInsets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;mainAxisAlignment:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MainAxisAlignment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;spaceEvenly&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;StatsBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;label:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Poziom&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;value:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;StatsBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;label:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Atak&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;value:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;StatsBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;label:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Obrona&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;value:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StatsBox&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;StatsBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;({&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Key&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;})&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;key:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-      &lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;style:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextStyle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;amber&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;fontSize:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Padding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;padding:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EdgeInsets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;only&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;top:&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;8.0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;child:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt;
-            &lt;span class=&quot;nl&quot;&gt;style:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextStyle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-              &lt;span class=&quot;nl&quot;&gt;color:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Colors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;white&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-              &lt;span class=&quot;nl&quot;&gt;fontSize:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;24&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-              &lt;span class=&quot;nl&quot;&gt;fontWeight:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FontWeight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;bold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Rozbiliśmy nasz layout na 3 widgety:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;App&lt;/strong&gt; - komponent startowy, okala resztę aplikacji pod kątem wykorzystania &lt;em&gt;Material UI&lt;/em&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;HomeScreen&lt;/strong&gt; - główny ekran rysujący naszą aplikację&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;StatsBox&lt;/strong&gt; - pojedynczy rekord, który wyświetla jedną z dostępnych statystyk: poziom, atak, obrona.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Kod wygląda sensownie, więc budujemy naszą aplikację na emulatorze, lub urządzeniu. Po chwili mamy zbudowanego i działającego &lt;em&gt;PokeTapa&lt;/em&gt;! Kliknięcie w przycisk &lt;strong&gt;Trenuj&lt;/strong&gt; nie aktualizuje oczywiście naszych statystyk, a czasomierz na górze nie odlicza nieuniknionego. Zdawaliśmy sobie z tego sprawę (mam nadzieję) i wiemy co stanowi problem - brakuje nam &lt;strong&gt;stanu aplikacji&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;praktyczny-stan-statefulwidget&quot;&gt;Praktyczny stan (StatefulWidget)&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;StatefulWidget&lt;/strong&gt; (z ang. widget stanowy) to element posiadający własny stan, którego zmiana wywołuje przerysowanie elementu wizualnego na ekranie. Dobrymi przykładami są widgety używane w formularzach takie jak &lt;strong&gt;TextField&lt;/strong&gt;, czy &lt;strong&gt;Checkbox&lt;/strong&gt;, które “pamiętają” wprowadzone do siebie dane i każda taka zmiana (np. wpisanie litery w polu tekstowym) prowadzi do automatycznej aktualizacji kontrolki na ekranie.&lt;/p&gt;
-
-&lt;p&gt;W przeciwieństwie do widgetu bezstanowego, który swoje działanie opiera na pojedynczej klasie dziedziczącej po &lt;em&gt;StatelessWidget&lt;/em&gt;, tutaj musimy się napracować ciut mocniej. Potrzebujemy dwóch części - &lt;strong&gt;stałej&lt;/strong&gt; (publicznej) i &lt;strong&gt;zmiennej&lt;/strong&gt; (prywatnej).&lt;/p&gt;
-
-&lt;h3 id=&quot;definicja-publiczna-stała&quot;&gt;Definicja publiczna (stała)&lt;/h3&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyWidget&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatefulWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;MyWidget&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;({&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;Key&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}):&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;key:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    
-    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    
-	&lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;_MyWidgetState&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;createState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_MyWidgetState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Publiczna część komponentu, której używasz w kodzie wyżej zupełnie jak dowolny &lt;strong&gt;StatelessWidget&lt;/strong&gt;. W momencie gdy chcesz dodać element stanowy do drzewa - tworzysz instancję klasy poprzez &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;new MyWidget()&lt;/code&gt; i gotowe.&lt;/p&gt;
-
-&lt;p&gt;Z racji tego, że &lt;strong&gt;StatefulWidget&lt;/strong&gt; rozszerza klasę &lt;strong&gt;Widget&lt;/strong&gt; - wymusza to na niej bycie niezmienną (&lt;strong&gt;immutable&lt;/strong&gt;) - jest to główny powód, dla którego wymagana jest dodatkowa część (z reguły prywatna). Więcej na ten temat znajdziesz na &lt;a href=&quot;https://stackoverflow.com/a/50613000/1047825&quot;&gt;Stack Overflow&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;definicja-prywatna-zmienna&quot;&gt;Definicja prywatna (zmienna)&lt;/h3&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;_MyWidgetState&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;State&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyWidget&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-	    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;widget&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Druga wymagana składowa do utworzenia widgetu stanowego. Jest to część zmienna (&lt;strong&gt;mutable&lt;/strong&gt;), która może zmieniać swoje dane w trakcie życia - co spowoduje automatyczne przebudowanie elementu wizualnego. Zwróć uwagę na znak &lt;strong&gt;_&lt;/strong&gt; przed nazwą klasy - oznacza on, że klasa jest prywatna i nie można jej przykładowo zaimportować z innego pliku. Jeśli potrzebujesz do niej dostępu z zewnątrz - nie używaj prefixu &lt;strong&gt;_&lt;/strong&gt;, nie jest on wymagany, lecz zalecany.&lt;/p&gt;
-
-&lt;p&gt;Dostęp do parametrów &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MyWidget&lt;/code&gt; z klasy &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_MyWidgetState&lt;/code&gt; odbywa się poprzez obiekt &lt;strong&gt;widget&lt;/strong&gt;. W zademonstrowanym przykładie metoda build rysuje wartość z pola &lt;em&gt;widget.name&lt;/em&gt; (&lt;em&gt;name&lt;/em&gt; zadeklarowane jest w &lt;em&gt;MyWidget&lt;/em&gt;).&lt;/p&gt;
-
-&lt;p&gt;Obiekt stanu przechowuje wszelkie dane, które mogą zmieniać się w trakcie działania (np. poziom naszego stworka), a także metodę &lt;em&gt;build&lt;/em&gt;, która jest uruchamiana przy każdorazowej zmianie stanu przez wywołanie funkcji &lt;strong&gt;setState(() {})&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;zmiana-stanu-setstate&quot;&gt;Zmiana stanu (setState)&lt;/h3&gt;
-
-&lt;p&gt;W celu zmiany aktualnego stanu obiektu posługujemy się funkcją &lt;strong&gt;setState&lt;/strong&gt;, która dostępna jest na StatefulWidget. Powiadomi ona framework o tym, że stan został zmieniony, co spowoduje automatyczne przerysowanie. Mamy dwie możliwości na jego używanie - brzydką, lub oficjalną.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Brzydka&lt;/strong&gt;:&lt;/p&gt;
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;clickCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;setState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{});&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;Oficjalna:&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;setState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;clickCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Obie zadziałają identycznie, jednak ze względu na czytelność kodu mocno zalecam wariant &lt;strong&gt;oficjalny&lt;/strong&gt;, bo:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Oficjalny jest zalecany przez framework&lt;/li&gt;
-  &lt;li&gt;Przy code review od razu widać co się dzieje i mamy zgrupowane miejsce w którym dokonujemy zmiany stanu.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Korzystając z podejścia oficjalnego pamiętaj o jeszcze jednej rzeczy - wewnątrz funkcji dostarczanej do &lt;em&gt;setState&lt;/em&gt; nie wykonuj ciężkich obliczeń, ani innych operacji - dokonaj w niej jedynie przypisania wartości do stanu.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Źle:&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;setState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;doSomeHeavyCalc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;clickCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;someMoreExtraWork&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;Dobrze:&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;setState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;clickCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-  
-  &lt;span class=&quot;n&quot;&gt;doSomeHeavyCalc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;someMoreExtraWork&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Używaj widgetu stanowego, gdy potrzebujesz wewnętrznego stanu, który będzie automatycznie aktualizował wizualną część kontrolki.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;zebranie-myśli&quot;&gt;Zebranie myśli&lt;/h3&gt;
-
-&lt;p&gt;Wiemy już co należy zrobić - musimy &lt;strong&gt;zamienić StatelessWidget na StatefulWidget&lt;/strong&gt; i stworzyć dodatkową klasę na wymagany stan. Tylko który widget ma być stanowy? Wszystkie, czy wystarczy jeden? Żadna interakcja nie zachodzi zarówno w &lt;em&gt;App&lt;/em&gt; jak i w &lt;em&gt;StatsBox&lt;/em&gt;, możemy je więc zostawić w spokoju. &lt;strong&gt;HomeScreen&lt;/strong&gt; jednak definitywnie potrzebuje pomocy - ma przycisk, który zmienia stan, a dodatkowo powinien się umieć przerysować w odpowiednim momencie. Mamy kandydata do przerobienia, &lt;strong&gt;sukces&lt;/strong&gt;!&lt;/p&gt;
-
-&lt;h2 id=&quot;działający-prototyp-statefulwidget&quot;&gt;Działający prototyp (StatefulWidget)&lt;/h2&gt;
-
-&lt;p&gt;Wprowadzanie niezbędnych zmian zaczniemy od przemiany &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HomeScreen&lt;/code&gt; na wersję stanową. Będziemy potrzebować dwóch klas, pamiętasz?&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Przed:&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HomeScreen&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatelessWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;Po:&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HomeScreen&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StatefulWidget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;_HomeScreenState&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;createState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_HomeScreenState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;_HomeScreenState&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;State&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HomeScreen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;secondsLeft&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attack&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defense&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-  
-  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;Widget&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BuildContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Widget nabiera kształtu/rzeźby/masy. Sprawiliśmy, że potrafi się automatycznie przebudować poprzez posiadany stan, a dodatkowo zadeklarowaliśmy atrybuty, które przydadzą nam się już za moment do nadania trochę życia tej smutnej grze.&lt;/p&gt;
-
-&lt;p&gt;Mam nadzieję, że zadajesz sobie teraz pytanie &lt;em&gt;“Co dalej?”&lt;/em&gt;, a nie &lt;em&gt;“Dlaczego to jeszcze nie działa?”&lt;/em&gt;. Kolejną rzeczą której potrzebujemy jest wykorzystanie zadeklarowanych atrybutów w metodzie &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build&lt;/code&gt;, zamiast zahardkodowanych wartości. Mamy takie miejsca dwa - licznik na górze ekranu i statystyki na dole. Do pracy!&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Przed:&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;&quot;60 sekund&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-&lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;StatsBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;label:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Poziom&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;value:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;StatsBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;label:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Atak&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;value:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;StatsBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;label:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Obrona&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;value:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;Po:&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$secondsLeft&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; sekund&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-&lt;span class=&quot;nl&quot;&gt;children:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;StatsBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;label:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Poziom&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;value:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;StatsBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;label:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Atak&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;value:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;StatsBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;label:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Obrona&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;value:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defense&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Jeśli nie spotkałeś się wcześniej z zapisem w formacie &lt;strong&gt;“$secondsLeft sekund”&lt;/strong&gt; to jest to tzw. string interpolation. Służy on do wyświetlania ciągu znaków z dynamicznymi wartościami w środku.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Jesteśmy prawie u celu ukończenia naszej gry. Działa co prawda zupełnie jak wersja bezstanowa (wydmuszka), ale stan jest i czeka tylko aż go uaktywnimy. A kiedy chcemy to zrobić? Co w naszej aplikacji wymusza odświeżenie ekranu jak nie kliknięcie przycisku &lt;em&gt;Trenuj&lt;/em&gt;! &lt;strong&gt;Eureka&lt;/strong&gt; - brakuje obsługi kliknięcia w przycisk!&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Przed:&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;RaisedButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-  &lt;span class=&quot;nl&quot;&gt;onPressed:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{},&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;Po:&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;RaisedButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-  &lt;span class=&quot;nl&quot;&gt;onPressed:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;train&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Dodatkowo w obrębie klasy trzymającej stan zaimplementuj metodę &lt;strong&gt;train&lt;/strong&gt;, która przeprowadzi jednorazowy trening stworka. Co powinna zrobić? Przede wszystkim zwiększyć poziom o jedno oczko (szybki grind) i podbić statystyki zgodnie ze wzorem podbijania statystyk:&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;setState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;random&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;attack&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nextInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;defense&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nextInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Mój wzór opiera się na wartościach losowych, gdzie atak zwiększam między 1-4, a obronę o 1-3 punkty. Jeśli podoba Ci się koncept losowości (każda rozgrywka będzie inna!) to pamiętaj o zaimportowaniu na górze pliku &lt;strong&gt;modułu obsługującego liczby pseudolosowe&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'dart:math'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Jeśli masz inny pomysł, np. zależny od tego jaki poziom już posiadamy, lub ile czasu pozostało w grze to śmiało zrób to po swojemu - jesteś od teraz Indie Game Developerem.&lt;/p&gt;
-
-&lt;p&gt;Gra gotowa - można się zagrywać &lt;del&gt;godzinami&lt;/del&gt; sekundami. A jeśli już przy sekundach jesteśmy to co z licznikiem czasu? Dlaczego nie odlicza nieuniknionego i pozwala expić w nieskończoność? Cóż - &lt;strong&gt;secondsLeft&lt;/strong&gt; otrzymuje na starcie wartość &lt;em&gt;60&lt;/em&gt; i nigdy jej nie zmienia, bo i kiedy? Jaką akcję ma wykonać użytkownik, żebyśmy zareagowali odjęciem sekundy z zegarka?&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;…&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;To było ciut podchwytliwe, bo przecież użytkownik nie musi podejmować żadnej akcji żeby czas upływał (zupełnie jak w realnym życiu). Ot - czas płynie nieubłaganie nawet jeśli nasz gracz patrzy tylko w ekran, nie dotykając i nie stukając w żadne miejsce na ekranie. Czy to oznacza, że &lt;strong&gt;stan można zaktualizować bez zewnętrznej ingerencji&lt;/strong&gt;? Nie inaczej. To, że w większości przypadków aktualizujemy go po stosownej akcji, nie oznacza że nie możemy robić tego w dowolnym momencie. No to wio!&lt;/p&gt;
-
-&lt;h2 id=&quot;oszlifowany-diament-lifecycle-events&quot;&gt;Oszlifowany diament (lifecycle events)&lt;/h2&gt;
-
-&lt;p&gt;Na zakończenie potrzebujemy aktualizować zmienną &lt;strong&gt;secondsLeft&lt;/strong&gt;, co sekundę odejmując &lt;em&gt;1&lt;/em&gt; od jej aktualnej wartości, aż do momentu gdy osiągniemy zero. Zero arbitralnie - po prostu nie chciałbym pokazywać użytkownikowi ujemnego czasu. Na nasze szczęście Dart dostarcza nam gotowe rozwiązanie w postaci &lt;strong&gt;Timer.periodic&lt;/strong&gt;, którego zadanie polega na ciągłym odliczaniu określonego czasu (np. 1 sekundy) i uruchamianiu określonego kodu (np. setState). Brzmi legitnie. Zdefiniujmy funkcję aktualizującą stan zegara (na tym samym poziomie co funkcja &lt;strong&gt;train&lt;/strong&gt;):&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;updateClock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Timer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;secondsLeft&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// Do nothing&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    
-  &lt;span class=&quot;n&quot;&gt;setState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;    
-    &lt;span class=&quot;n&quot;&gt;secondsLeft&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Funkcja &lt;strong&gt;updateClock&lt;/strong&gt; przyjmuje obiekt typu &lt;strong&gt;Timer&lt;/strong&gt; - jest to wymaganie pochodzące z faktu, iż &lt;strong&gt;Timer.periodic&lt;/strong&gt; jako parametru wymaga właśnie funkcji o takiej sygnaturze. Dodajmy brakujący import na górze pliku:&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'dart:async'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Ostatni krok stanowi uruchamianie funkcji &lt;strong&gt;updateClock&lt;/strong&gt; co sekundę, do czego przyda nam się poniższa wstawka:&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Timer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;periodic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Duration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;seconds:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateClock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Umieść ją &lt;strong&gt;na samym początku metody build&lt;/strong&gt; - chcemy aby licznik zaczął się odświeżać niezwłocznie przed pierwszym narysowaniem. Uruchamiamy aplikację i voila - dostępny czas ucieka jak przez palce. Zaraz, zaraz. Chyba jednak trochę za szybko!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/poketap_broken_counter.gif&quot; alt=&quot;poketap_broken_counter.gif&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Uruchamiamy nowy timer za każdym przebudowaniem widgetu, które następuje po każdorazowej aktualizacji stanu, które z kolei … dzieje się raz na sekundę za sprawą licznika. Zobrazujmy sobie początek tego szaleństwa:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Pierwsze narysowanie widgetu tworzy timer, który co sekundę zmienia pozostały czas (stan)&lt;/li&gt;
-  &lt;li&gt;Po sekundzie timer zmienia &lt;em&gt;secondsLeft&lt;/em&gt; z &lt;strong&gt;60 na 59&lt;/strong&gt; poprzez wywołanie &lt;strong&gt;setState&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;Następuje przerysowanie komponentu (uruchamiana jest metoda &lt;em&gt;build&lt;/em&gt;) i wystartowanie dodatkowego timera (taki sam jak w punkcie 1)&lt;/li&gt;
-  &lt;li&gt;Po kolejnej sekundzie timer1 aktualizuje stan z &lt;strong&gt;59 na 58&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;Mikrosekundę po nim timer2 aktualizuje stan z &lt;strong&gt;58 na 57&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;Każda aktualizacja stanu rozpędza zegar coraz mocniej&lt;/li&gt;
-  &lt;li&gt;No profit&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Idealnym rozwiązaniem problemu wydaje się uruchomienie tylko jednego timera i to w momencie pierwszego rysowania. Można by dodać flagę typu &lt;strong&gt;isFirstDraw&lt;/strong&gt;, ale z pomocą przychodzą nam specjalne metody wbudowane, które automatycznie wołane są przez Fluttera w odpowiednim czasie życia widgetu tzw. &lt;strong&gt;lifecycle&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;dodanie-do-drzewa-initstate&quot;&gt;Dodanie do drzewa (initState)&lt;/h3&gt;
-
-&lt;p&gt;Funkcja &lt;strong&gt;initState&lt;/strong&gt; uruchamiana jest jednorazowo na czas życia widgetu. Nazwa sugeruje, że możemy tutaj zainicjalizować wstępny stan, ale możemy również bez obaw wystartować nasz unikalny timer i mieć pewność, że &lt;strong&gt;initState&lt;/strong&gt; nie zostanie zawołany więcej niż raz. Wyrzuć timer z builda i dodaj następującą funkcję:&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Timer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;initState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;initState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;timer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Timer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;periodic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Duration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;seconds:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateClock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Od razu lepiej - licznik nie gna na złamanie karku i odlicza sekunda-po-sekundzie. Właśnie tego oczekiwaliśmy po naszej spokojnej grze.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/blog/poketap_fixed_counter.gif&quot; alt=&quot;poketap_fixed_counter.gif&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;zdjęcie-z-drzewa-dispose&quot;&gt;Zdjęcie z drzewa (dispose)&lt;/h3&gt;
-
-&lt;p&gt;&lt;em&gt;PokeTap&lt;/em&gt; jest grą bardzo prostą, która posiada wyłącznie jeden ekran. Wyobraź sobie jednak sytuację w której się rozrasta i możliwa jest nawigacja między różnymi ekranami (np. listing stworków). W takim przypadku warto rozważyć czy kod, który uruchamiamy w &lt;strong&gt;initState&lt;/strong&gt; wymaga “posprzątania” przed opuszczeniem ekranu.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;initState&lt;/strong&gt; startuje nowy timer, który co sekundę wywoła funkcję &lt;em&gt;uploadClock&lt;/em&gt;. Jeśli wyjdziemy z tego ekranu (w przyszłości, gdy będzie to możliwe) to timer dalej będzie robił swoje. Flutter nie posprząta za nas wszystkiego - wyczyści widget oraz jego stan, ale nie zdaje sobie sprawy z naszych programistycznych poczynań. Musimy znaleźć więc sposób aby wykonać dodatkowy kod, który zatrzyma timer w momencie usuwania widgetu z ekranu. &lt;strong&gt;Dispose&lt;/strong&gt; &lt;em&gt;to the rescue!&lt;/em&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-dart highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;dispose&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;timer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;cancel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;dispose&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Pamiętaj - kod nie ma żadnego praktycznego zastosowania w aktualnej wersji aplikacji, nie musisz go więc nanosić na swój projekt. Wspominam o metodzie &lt;strong&gt;dispose&lt;/strong&gt; wyłącznie dla dopełnienia przeciwieństwa &lt;strong&gt;initState&lt;/strong&gt;. Sam temat metod &lt;strong&gt;lifecycle&lt;/strong&gt; jest na tyle ważny i warty poznania, że na pewno pojawi się krótki wpis na blogu dedykowany właśnie nim.&lt;/p&gt;
-
-&lt;h2 id=&quot;dalsze-plany&quot;&gt;Dalsze plany&lt;/h2&gt;
-
-&lt;p&gt;Mamy to - &lt;strong&gt;w pełni działająca gra&lt;/strong&gt; typu clicker, bez żadnych udziwnień. Możesz je rzecz jasna dodać i rozszerzyć koncept, a ostatecznie nawet wydać na Android i iOSa. Wierzę, że wszystko okazało się jasne i potrafisz zarządzać stanem swojej Flutterowej aplikacji. Skomentuj wpis jeśli chciałbyś się czymś podzielić, lub masz dowolne pytanie. Wyszeruj dalej, aby więcej Flutter devów dowiedziało się co i jak. Do następnego wpisu!&lt;/p&gt;
-
-&lt;p&gt;Pełny kod aplikacji PokeTap znajdziesz na &lt;a href=&quot;https://github.com/vintage/rykowski.dev/blob/master/samples/poketap.dart&quot;&gt;GitHubie&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Interakcja użytkownika często wymaga aktualizacji wyświetlanych danych na ekranie - m.in. zmiana języka w sekcji ustawień, czy żonglowanie ulubionym elementem. Zarządzaj stanem aplikacji dzięki wbudowanemu rozwiązaniu StatefulWidget.</summary></entry></feed>
+&lt;p&gt;Masz teraz mocne i solidne podstawy - zarówno teoretyczne jak i praktyczne - dotyczące monetyzacji przez reklamy. Nie ma żadnych przeciwwskazań, abyś wybrał innego dostawcę reklam pod warunkiem, że istnieje stabilna paczka pod Fluttera. Pełny kod aplikacji reklamowej znajdziesz na &lt;a href=&quot;https://github.com/vintage/flutter_demo_ads&quot;&gt;GitHubie&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Darmowe aplikacje mobilne również na siebie zarabiają. W jaki sposób? Istnieje wiele strategii monetyzacyjnych, a jedną z nich są reklamy AdMob w różnych wariantach. Pierwszy krok w zarabianiu na aplikacji pisanej we Flutter.</summary></entry></feed>

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.2.4
+    Copyright 2016-2019 Sylhare
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Main JS (navbar.js, katex_init.js and masonry_init.js)-->
+    <script defer src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://rykowski.dev/blog/flutter-driver-tests/">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="rykowski.dev" href="https://rykowski.dev/feed.xml"/>
+    
+    
+
+    <!-- KaTeX 0.8.3 -->
+    <!-- if you have any issue check https://github.com/KaTeX/KaTeX -->
+    
+
+    <!-- Google Analytics / Cookie Consent -->
+    <script>
+      const cookieName = 'cookie-notice-dismissed-https://rykowski.dev';
+      const isCookieConsent = 'true';
+      const analyticsName = 'UA-77793311-12';
+    </script>
+
+    
+        <div id="cookie-notice"><span>Strona wykorzystuje pliki cookies.
+          </span><a id="cookie-notice-accept" class="button">OK</a>
+        </div>
+    
+    
+        <!-- Global site tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-77793311-12"></script>
+        <!-- Page analysis (analytics.js) -->
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+    
+
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Testy integracyjne z Flutter Driverem | rykowski.dev</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Testy integracyjne z Flutter Driverem" />
+<meta property="og:locale" content="pl_PL" />
+<meta name="description" content="Posiadanie wyłącznie testów jednostkowych nie daje nam pełen gwarancji działania systemu. Jak więc go przetestować, aby spać spokojnie? Integracyjnie wraz z wbudowanym narzędziem Flutter Driver." />
+<meta property="og:description" content="Posiadanie wyłącznie testów jednostkowych nie daje nam pełen gwarancji działania systemu. Jak więc go przetestować, aby spać spokojnie? Integracyjnie wraz z wbudowanym narzędziem Flutter Driver." />
+<link rel="canonical" href="https://rykowski.dev/blog/flutter-driver-tests/" />
+<meta property="og:url" content="https://rykowski.dev/blog/flutter-driver-tests/" />
+<meta property="og:site_name" content="rykowski.dev" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-15T00:00:00+01:00" />
+<script type="application/ld+json">
+{"url":"https://rykowski.dev/blog/flutter-driver-tests/","headline":"Testy integracyjne z Flutter Driverem","dateModified":"2021-01-15T00:00:00+01:00","datePublished":"2021-01-15T00:00:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-driver-tests/"},"description":"Posiadanie wyłącznie testów jednostkowych nie daje nam pełen gwarancji działania systemu. Jak więc go przetestować, aby spać spokojnie? Integracyjnie wraz z wbudowanym narzędziem Flutter Driver.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta property="og:image" content="https://rykowski.dev/assets/img/blog/driver_tests/thumbnail.png">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:title" content="Testy integracyjne z Flutter Driverem">
+    <meta name="twitter:description" content="W poprzednim wpisie rozpoczęliśmy temat pisania testów oraz dlaczego warto zacząć to robić we własnych projektach. Tematem przewodnim były testy jednostkowe....">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://rykowski.dev/assets/img/blog/driver_tests/thumbnail.png">
+</head>
+
+  <body>
+    <header class="site-header">
+
+    <!-- Logo and title -->
+	<div class="branding">
+        
+
+		<h1 class="site-title">
+			<a aria-label="rykowski.dev" href="/">
+        rykowski.dev
+      </a>
+		</h1>
+	</div>
+
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a aria-label="pull" id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <!-- Menu -->
+    <ul class="hide">
+        
+
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="O mnie" title="O mnie" href="/about/">
+                     O mnie 
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wystąpienia" title="Wystąpienia" href="/talks/">
+                     Wystąpienia 
+                </a>
+            </li>
+            
+            
+        
+            
+            <li class="separator"> | </li>
+            <li>
+                <a class="clear" aria-label="Wyszukiwarka" title="Wyszukiwarka" href="/search/">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                    
+                </a>
+            </li>
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+    </ul>
+
+	</nav>
+</header>
+
+    <div class="content">
+      <article class="feature-image" >
+  <header id="main" style="">
+    <div class="title-padder">
+      
+      <h1 id="Testy+integracyjne+z+Flutter+Driverem" class="title">Testy integracyjne z Flutter Driverem</h1>
+      
+
+
+<div class="post-info">
+    <p class="meta">
+      
+      
+      Styczeń
+        
+      2021
+    </p></div>
+
+      
+    </div>
+  </header>
+
+  <section class="post-content">
+  
+      <p>W <a href="/blog/flutter-unit-tests/">poprzednim wpisie</a> rozpoczęliśmy temat pisania testów oraz dlaczego warto zacząć to robić we własnych projektach. Tematem przewodnim były testy jednostkowe. Stanowią one główny filar zapewniający programistę, że projekt działa i zachowuje się w sposób oczekiwany. Jest to świetny krok w rozpoczęciu przygody testowej, ale zdecydowanie nie ostatni. <strong>Testy jednostkowe są mocno oderwane od tego, co prawdziwy użytkownik robi w aplikacji</strong>. A co takiego czyni?</p>
+
+<p>Zdecydowanie nie tworzy bezpośrednio repozytoriów, modeli, czy worków na stan. Nie wywołuje funkcji realizujących logikę biznesową. Prawdziwy użytkownik z krwi i kości stuka w przyciski. Wypełnia formularze poprzez wirtualną klawiaturę. Przewija listy w celu znalezienia interesującej go pozycji. Czyta, bądź chociaż pobieżnie przegląda wyświetlaną treść. Czy brzmi to jak użytkownik, którym sam jesteś korzystając z aplikacji zainstalowanych na telefonie? Też nim jestem gdy kończę pracę. Każdy jest.</p>
+
+<p>Skoro testy jednostkowe nie zostały stworzone do bycia użytkownikiem, to cóż począć? Przeskoczyć na przeciwległy brzeg pisania testów! Tak jak testy jednostkowe utożsamiane są z najniższym możliwym poziomem, tak najwyższym z nich są … <strong>testy integracyjne</strong>.</p>
+
+<h2 id="testy-integracyjne">Testy integracyjne</h2>
+
+<p>Kluczowym zadaniem testów integracyjnych jest sprawdzenie, czy aplikacja działa poprawnie jako produkt końcowy. Mają odpowiedzieć na proste pytanie. <strong>Czy użytkownik aplikacji po jej uruchomieniu, otrzyma oczekiwany rezultat?</strong> Wszystko to przy założeniu, że możliwości testu integracyjnego są mocno ograniczone. Niemal do tych samych funkcjonalności, które posiada żywa persona. <strong>Pełna symulacja</strong>.</p>
+
+<p>Testy są całkowicie niezainteresowane szczegółami implementacyjnymi leżącymi pod spodem. <em>Provider</em>, <em>Bloc</em>, czy <em>MobX</em>? Dane zapisują się w chmurze, czy na urządzeniu? <em>Firebase</em>, a może własny serwer? O ile przy testach jednostkowych ma to znaczenie (można je minimalizować!), to testy integracyjne nawet nie chcą wiedzieć jakie spaghetti siedzi w kodzie. Aplikacja ma tak po ludzku działać. Zapomnij o widgetach, stanie, nawigacji, przekazywaniu kontekstu. Są to rzeczy o których użytkownik nie ma pojęcia, więc test integracyjny również nie wie o czym do niego mówisz. <strong>Pełna izolacja</strong>.</p>
+
+<h3 id="flutter-driver">Flutter driver</h3>
+
+<p>Tworzenie testów integracyjnych stanowi część Fluttera, otrzymujemy więc oficjalną paczkę w postaci <a href="https://api.flutter.dev/flutter/flutter_driver/flutter_driver-library.html" target="_blank">flutter_driver</a>. Jest to dedykowane narzędzie do budowania scenariuszy testowych, uruchamianych zarówno na emulatorach jak i fizycznych urządzeniach. Zgadza się. Scenariusze testowe wykorzystywane są do pokierowania wirtualnego użytkownika przez uprzednio zbudowaną aplikację. Naturalnie wymusza to pewien mankament testów integracyjnych. <strong>Powolność</strong>. O ile test jednostkowy wykonywany jest w ułamku sekundy, tak jego integracyjny odpowiednik potrzebuje zdecydowanie więcej czasu. Zanim rozpocznie swoją pracę, niezbędne jest zbudowanie świeżej aplikacji. Co w zależności od jej rozmiaru i złożoności potrafi zająć dłuższą chwilę.</p>
+
+<p>Jako że natura pisania testów integracyjnych, wymaga posiadania gotowej aplikacji, posłużę się domyślnym projektem utworzonym przez <code class="language-plaintext highlighter-rouge">flutter create</code>. Został on delikatnie rozszerzony o wstępny ekran logowania, aby zapobiec nieautoryzowanemu dostępowi i lepiej poznać mechanikę pisania testów. Kod aplikacji znajdziesz na moim GitHubie <a href="https://github.com/vintage/flutter_demo_integration_tests">vintage/flutter_demo_integration_tests</a>, a poniżej załączam zrzut prezentujący pełnię jej możliwości.</p>
+
+<p><img src="/assets/img/blog/driver_tests/demo_app.png" alt="demo_app.png" /></p>
+
+<h3 id="konfiguracja">Konfiguracja</h3>
+
+<p>Nowo utworzony projekt nie posiada domyślnie zależności dla testów integracyjnych. Pierwszą więc rzeczą jaką należy zrobić jest dodanie wpisu w <em>pubspec.yaml</em>.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">dependencies</span><span class="pi">:</span>
+  <span class="na">flutter</span><span class="pi">:</span>
+    <span class="na">sdk</span><span class="pi">:</span> <span class="s">flutter</span>
+
+  <span class="na">flutter_driver</span><span class="pi">:</span>
+    <span class="na">sdk</span><span class="pi">:</span> <span class="s">flutter</span>
+  <span class="na">test</span><span class="pi">:</span> <span class="s">any</span>
+</code></pre></div></div>
+
+<p>Poza samym driverem potrzebujemy również standardowej paczki do pisania testów. Testy integracyjne to wciąż testy, prawda? Racja.</p>
+
+<p>Ostatnim elementem przygotowawczym jest utworzenie plików konfiguracyjnych do przechowywania scenariuszy testowych. Dobrze przyjęta konwencja zakłada, że wszystko co związane jest z testami integracyjnymi znajduje się w katalogu <code class="language-plaintext highlighter-rouge">test_driver</code>. W ten sposób bardzo dużo aplikacji na starcie rozgałęzia się na trzy podstawowe katalogi:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">lib/</code> - kod aplikacji wraz z logiką biznesową i wszystkim co jest z nią związane</li>
+  <li><code class="language-plaintext highlighter-rouge">test/</code> - testy jednostkowe, widgetów oraz wszystkie inne które nie są integracyjnymi</li>
+  <li><code class="language-plaintext highlighter-rouge">test_driver/</code> - testy integracyjne kierowane przez drivera</li>
+</ul>
+
+<p>Korzystanie z dobrodziejstw drivera wymaga dwóch plików. Pierwszy z nich należy do grupy <em>stwórz i zapomnij</em> i definiuje wyłącznie jak uruchomić aplikację testową. W najprostszym wariancie wywołujemy po prostu funkcję <code class="language-plaintext highlighter-rouge">main</code> z głównej aplikacji i nigdy tu nie wracamy. Nie jest tak jednak zawsze i może okazać się, że chcemy przykładowo wyłączyć całkowicie analitykę, reklamy, lub dowolną inną funkcjonalność, która nie ma sensu z punktu widzenia testu integracyjnego. Apeluję jednak o ostrożność. Każde takie dostosowanie kodu, oddala drivera od wersji aplikacji, którą dostaje prawdziwy użytkownik</p>
+
+<p>Wybieramy wariant prosty tworząc plik <code class="language-plaintext highlighter-rouge">test_driver/app.dart</code>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter_driver/driver_extension.dart'</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">'package:flutter_demo_integration_tests/main.dart'</span> <span class="k">as</span> <span class="n">app</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">enableFlutterDriverExtension</span><span class="o">();</span>
+  <span class="n">app</span><span class="o">.</span><span class="na">main</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Same testy definiowane będą w powiązanym pliku <code class="language-plaintext highlighter-rouge">test_driver/app_test.dart</code>. Nazwa nie jest przypadkowa, a budujemy ją poprzez dodanie przyrostka <code class="language-plaintext highlighter-rouge">_test</code> do poprzedniego pliku. Zawsze definiując testy integracyjne konieczne jest trzymanie się reguły: <em>dwa pliki, przyrostek _test</em>. Chociaż szczerze powiedziawszy to nie pracowałem jeszcze przy aplikacji, która miałaby więcej niż jedną parę plików. Zawsze wystarcza pojedyncza para w postaci <code class="language-plaintext highlighter-rouge">app.dart</code> i <code class="language-plaintext highlighter-rouge">app_test.dart</code>.</p>
+
+<p>Dodajemy więc do projektu plik <code class="language-plaintext highlighter-rouge">test_driver/app_test.dart</code>.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:flutter_driver/flutter_driver.dart'</span><span class="o">;</span>
+<span class="kn">import</span> <span class="s">'package:test/test.dart'</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">group</span><span class="o">(</span><span class="s">'App'</span><span class="o">,</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="n">FlutterDriver</span> <span class="n">driver</span><span class="o">;</span>
+
+    <span class="n">setUpAll</span><span class="o">(()</span> <span class="n">async</span> <span class="o">{</span>
+      <span class="n">driver</span> <span class="o">=</span> <span class="n">await</span> <span class="n">FlutterDriver</span><span class="o">.</span><span class="na">connect</span><span class="o">();</span>
+    <span class="o">});</span>
+    <span class="n">tearDownAll</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">driver</span><span class="o">?.</span><span class="na">close</span><span class="o">());</span>
+
+    <span class="n">test</span><span class="o">(</span><span class="s">'full flow'</span><span class="o">,</span> <span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+      <span class="c1">// Test logic</span>
+    <span class="o">});</span>
+  <span class="o">});</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Jest to typowy szablon testu integracyjnego, który korzysta z analogicznych mechanizmów jak testy jednostkowe. Funkcja <code class="language-plaintext highlighter-rouge">setUpAll</code> uruchamiana jest jednorazowo dla całego scenariusza, przed uruchomieniem pierwszego testu. Jej zadaniem jest nawiązanie połączenia z driverem, w końcu bez tego nie jesteśmy w stanie nic przetestować. <code class="language-plaintext highlighter-rouge">tearDownAll</code> jest jej przeciwieństwem. Uruchamiany jest automatycznie po zakończeniu pracy ostatniego testu i zamyka uprzednio nawiązane połączenie z driverem.</p>
+
+<p>Ciekawszą rzecz stanowi kod w obrębie funkcji <code class="language-plaintext highlighter-rouge">test</code>. W sensie będzie ciekawszy jak już się za moment pojawi, bo póki co świeci pustką. Sama konfiguracja jest już jednak zakończona, pora ruszać dalej.</p>
+
+<h3 id="uruchamianie-testu">Uruchamianie testu</h3>
+
+<p>W celu weryfikacji można już bez żadnych problemów uruchomić przygotowany zestaw. Co prawda niczego jeszcze nie testujemy, ale warto upewnić się, że konfiguracja przebiegła poprawnie. W celu uruchomienia drivera skorzystamy z polecania <code class="language-plaintext highlighter-rouge">flutter drive</code>, któremu wskażemy gdzie znajduje się zestaw testowy.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>❯ flutter drive <span class="nt">--target</span><span class="o">=</span>test_driver/app.dart         29s
+
+Using device sdk gphone x86.
+Starting application: test_driver/app.dart
+Installing build/app/outputs/flutter-apk/app.apk...
+Running Gradle task <span class="s1">'assembleDebug'</span>... Done
+✓ Built build/app/outputs/flutter-apk/app-debug.apk.
+Installing build/app/outputs/flutter-apk/app.apk...
+00:00 +0: App <span class="o">(</span>setUpAll<span class="o">)</span>
+
+00:01 +0: App full flow
+
+00:01 +1: App <span class="o">(</span>tearDownAll<span class="o">)</span>
+
+00:01 +1: All tests passed!
+
+Stopping application instance.
+</code></pre></div></div>
+
+<p>W logach możemy przeczytać, że wybranym urządzeniem do testów został <em>sdk gphone x86</em> (emulator), pojawiają się typowe informacje dotyczące budowania aplikacji. Gdy aplikacja została zainstalowana na telefonie, uruchomione zostały w następującej kolejności: <em>setUpAll</em>, test <em>full flow</em> oraz <em>tearDownAll</em>. Końcowy komunikat świadczy o tym, że testy zakończyły się sukcesem, acz skoro nic nie robią to trudno było oczekiwać innego rezultatu.</p>
+
+<p>Polecenie do uruchamiania testów jest w pełni konfigurowalne. Wszystkie dostępne parametry takie jak wskazanie urządzenia, czy ustawienie zmiennych środowiskowych znajdziesz pod <code class="language-plaintext highlighter-rouge">flutter drive --help</code>.</p>
+
+<h3 id="tworzenie-testu">Tworzenie testu</h3>
+
+<p>Pora wrócić i zaimplementować właściwy test. Wszystko opiera się na tym, aby przy pomocy dostępnych funkcji instruować drivera jaki następny krok powinien podjąć. Scenariusz przez nas pisany rozpoczyna się w momencie, w którym użytkownik uruchomił aplikację i widzi jej pierwszy ekran. Do dzieła!</p>
+
+<p>Wcześniej o tym nie wspomniałem, ale pierwszy ekran aplikacji jest specyficzny. Formularz logowania widoczny jest dopiero po przewinięciu ekranu w dół, a domyślnie widoczne są bloczki z odcieniami szarości. Pierwszym naszym testem będzie więc zmuszenie drivera, aby właśnie poprzez przewijanie ekranu odnalazł właściwy formularz.</p>
+
+<blockquote>
+  <p>Interakcje z elementami aplikacji są możliwe tylko wtedy, gdy widoczne są one na ekranie. Nie można powiedzieć driverowi aby stuknął przycisk, który jest narysowany na samym dole przewijalnej listy. Tak samo jak użytkownik nie widzi przycisku bez przewinięcia, tak driver nie jest go świadomy.</p>
+</blockquote>
+
+<p><img src="/assets/img/blog/driver_tests/demo_app_scroll.gif" alt="demo_app_scroll.gif" /></p>
+
+<p>Pierwszą rzeczą do zrobienia jest powiedzenie driverowi jak odnaleźć właściwe elementy ekranu. Użytkownik widzi je oczami, driver takiej mocy nie posiada. Musimy przewinąć ekran, potrzebny jest więc uchwyt listy, a także uchwyt do formularza którego szukamy. Operacje wyszukiwania elementów są realizowane przez globalnie zaimportowany obiekt <code class="language-plaintext highlighter-rouge">find</code>. Dostarcza on kilka sposobów wyszukiwań, gdzie najczęściej stosowane to:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">.byType</code> do szukania po nazwie klasy</li>
+  <li><code class="language-plaintext highlighter-rouge">.byValueKey</code> do szukania po nazwie klucza (<em>key</em>)</li>
+  <li><code class="language-plaintext highlighter-rouge">.text</code> do odnalezienia widgetu <strong>Text</strong> wyświetlającego konkretny napis</li>
+</ul>
+
+<blockquote>
+  <p>Wywołanie metody obiektu <code class="language-plaintext highlighter-rouge">find</code> nie przeprowadza żadnego wyszukiwania. Jest to meta informacja dla drivera z instrukcją jak dany obiekt odnaleźć. Jeśli <em>widget</em> jest skarbem, to obiekt zwrócony przez <em>find</em> jest mapą do skarbu, a <em>driver</em> piratem który chce do niego trafić.</p>
+</blockquote>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">test</span><span class="o">(</span><span class="s">'full flow'</span><span class="o">,</span> <span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">scrollable</span> <span class="o">=</span> <span class="n">find</span><span class="o">.</span><span class="na">byType</span><span class="o">(</span><span class="s">"ListView"</span><span class="o">);</span>
+  <span class="kd">final</span> <span class="n">loginForm</span> <span class="o">=</span> <span class="n">find</span><span class="o">.</span><span class="na">byValueKey</span><span class="o">(</span><span class="s">"myForm"</span><span class="o">);</span>
+
+  <span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">scrollUntilVisible</span><span class="o">(</span>
+    <span class="n">scrollable</span><span class="o">,</span>
+    <span class="n">loginForm</span><span class="o">,</span>
+    <span class="nl">dyScroll:</span> <span class="o">-</span><span class="mi">200</span><span class="o">,</span>
+  <span class="o">);</span>
+<span class="o">})</span>
+</code></pre></div></div>
+
+<p>Uchwyty zdefiniowane. Pora rozpocząć przewijanie listy, aż do momentu gdy wyświetlony zostanie poszukiwany formularz. Posłużymy się wygodnym <code class="language-plaintext highlighter-rouge">scrollUntilVisible</code>, któremu powiemy jaki element i w którą stronę przewijać (wartość ujemna oznacza w tym wypadku dół) oraz czego szukamy. Gotowe. Czy aby jednak na pewno? Test jednostkowy sprawdza wynik zero-jedynkowo, a jak jest tutaj?</p>
+
+<p>Przewijanie listy trwa do momentu odnalezienia wybrańca. Jak długo? Kiedy test zorientuje się, że wybrańca zabrakło na ekranie? Aspektem, który warto trzymać z tyłu głowy pisząc testy integracyjne jest <strong>czas</strong>. Każda operacja w driverze potrzebuje czasu, aby stwierdzić czy wszystko jest pod kontrolą. To dlatego wszystkie udostępniane interakcje z driverem posiadają konfigurowalny <strong>timeout</strong>, którego przekroczenie oznacza przerwanie całego testu z wynikiem negatywnym. Domyślnie nie jest ustawiony, acz nie oznacza to, że operacja będzie trwała w nieskończoność. Każdy pojedynczy test również posiada zadeklarowany czas życia, który domyślnie wynosi zaledwie 30 sekund. Przekroczenie tego czasu wiąże się z błyskawicznym jego przerwaniem i wystawieniem negatywnego wyniku. Parametr jest w pełni konfigurowalny i jeśli potrzebujesz więcej czasu w samym teście - nic nie stoi na przeszkodzie.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">test</span><span class="o">(</span><span class="s">'full flow'</span><span class="o">,</span> <span class="o">()</span> <span class="n">async</span> <span class="o">{},</span> <span class="nl">timeout:</span> <span class="n">Timeout</span><span class="o">(</span><span class="n">Duration</span><span class="o">(</span><span class="nl">days:</span> <span class="mi">1</span><span class="o">)))</span>
+</code></pre></div></div>
+
+<p>Dodajmy <em>timeout</em> do wyszukania formularza na ekranie. Jeśli w ciągu 3 sekund nie uda się go odnaleźć - przerwij test, nie ma sensu szukać go dłużej.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="o">.</span><span class="na">scrollUntilVisible</span><span class="o">(</span>
+  <span class="n">scrollable</span><span class="o">,</span>
+  <span class="n">loginForm</span><span class="o">,</span>
+  <span class="nl">dyScroll:</span> <span class="o">-</span><span class="mi">200</span><span class="o">,</span>
+  <span class="nl">timeout:</span> <span class="n">Duration</span><span class="o">(</span><span class="nl">seconds:</span> <span class="mi">3</span><span class="o">),</span>
+<span class="o">);</span>
+</code></pre></div></div>
+
+<p>Formularz odnaleziony, test przechodzi. Następny krok? Trzeba się zalogować, czyli wypełnić formularz danymi testowymi. Analogicznie jak poprzednio musimy:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">find</code> - wyznaczyć niezbędne elementy ekranu</li>
+  <li><code class="language-plaintext highlighter-rouge">driver</code> - wykonać z ich udziałem adekwatne operacje</li>
+</ol>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="n">usernameInput</span> <span class="o">=</span> <span class="n">find</span><span class="o">.</span><span class="na">byValueKey</span><span class="o">(</span><span class="s">"username_input"</span><span class="o">);</span>
+<span class="kd">final</span> <span class="n">passwordInput</span> <span class="o">=</span> <span class="n">find</span><span class="o">.</span><span class="na">byValueKey</span><span class="o">(</span><span class="s">"password_input"</span><span class="o">);</span>
+<span class="kd">final</span> <span class="n">submitButton</span> <span class="o">=</span> <span class="n">find</span><span class="o">.</span><span class="na">text</span><span class="o">(</span><span class="s">"Login"</span><span class="o">);</span>
+
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">usernameInput</span><span class="o">);</span>
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">enterText</span><span class="o">(</span><span class="s">"test"</span><span class="o">);</span>
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">passwordInput</span><span class="o">);</span>
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">enterText</span><span class="o">(</span><span class="s">"12345"</span><span class="o">);</span>
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">submitButton</span><span class="o">);</span>
+
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">waitFor</span><span class="o">(</span><span class="n">find</span><span class="o">.</span><span class="na">text</span><span class="o">(</span><span class="s">"Wrong credentials!"</span><span class="o">));</span>
+</code></pre></div></div>
+
+<p>Mądry ten driver, zachowuje się zupełnie jak prawdziwy użytkownik. Krok po kroku. Do celu.</p>
+
+<ol>
+  <li>Stuknij w pole nazwy użytkownika, aby stało się aktywne (złapało focus)</li>
+  <li>Podaj nazwę użytkownika</li>
+  <li>Wybierz następne pole</li>
+  <li>Wprowadź hasło</li>
+  <li>Stuknij w przycisk zatwierdzający</li>
+  <li>Na sam koniec potwierdź, że na ekranie widoczny jest komunikat o błędnych danych</li>
+</ol>
+
+<p><img src="/assets/img/blog/driver_tests/auth_failed.png" alt="auth_failed.png" /></p>
+
+<p>Poprawne dane logowania to <em>admin:12345</em>, wystarczy więc poprawić nazwę użytkownika i wysłać formularz ponownie …</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">usernameInput</span><span class="o">);</span>
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">enterText</span><span class="o">(</span><span class="s">"admin"</span><span class="o">);</span>
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">submitButton</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>… aby test przeszedł do kolejnego ekranu, który również warto zautomatyzować.</p>
+
+<p><img src="/assets/img/blog/driver_tests/auth_passed.png" alt="auth_passed.png" /></p>
+
+<p>Nie ma na nim jednak niczego, czego nie posiadał ekran poprzedni! Jest tekst, przycisk. Nuda. Nic odkrywczego, nie zatrzymujemy się tutaj, bo szkoda czasu. Przykładowy test sprawdzający trzykrotne stuknięcie w przycisk:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">waitFor</span><span class="o">(</span><span class="n">find</span><span class="o">.</span><span class="na">text</span><span class="o">(</span><span class="s">"0"</span><span class="o">));</span>
+
+<span class="kd">final</span> <span class="n">incrementButton</span> <span class="o">=</span> <span class="n">find</span><span class="o">.</span><span class="na">byType</span><span class="o">(</span><span class="s">"FloatingActionButton"</span><span class="o">);</span>
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">incrementButton</span><span class="o">);</span>
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">incrementButton</span><span class="o">);</span>
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">incrementButton</span><span class="o">);</span>
+
+<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">waitFor</span><span class="o">(</span><span class="n">find</span><span class="o">.</span><span class="na">text</span><span class="o">(</span><span class="s">"3"</span><span class="o">));</span>
+</code></pre></div></div>
+
+<h2 id="podsumowanie">Podsumowanie</h2>
+
+<p>Pisanie testów z driverem jest nieraz nawet łatwiejsze, niż poprawne zbudowanie pełnego scenariusza jednostkowego. Nie trzeba się zastanawiać jak zamockować usługi, jak przeprojektować klasy, żeby testowanie było bardziej wyizolowane. Jest gotowa aplikacja dla której wymyślasz kroki i powoli je realizujesz. Nie trzeba nawet dobrze znać dziedziny domenowej, czy kodu aplikacji, aby pchnąć do przodu temat testów integracyjnych. Bajka.</p>
+
+<p>Trzeba jednak pamiętać, że ich uruchomienie jest powolne, więc testowanie wszystkich możliwych przypadków jest niemożliwe, lub co najmniej mocno ograniczone. Nie stanowią one również swoistego kontraktu samego kodu. Tak jak test jednostkowy jest w stanie wykazać spaghetti w kodzie i nieintuicyjny interfejs klasy, tak test integracyjny nie ma szans tego wyłapać. Oba rodzaje testów świetnie się uzupełniają i warto je posiadać w swoich projektach. Nawet jeśli z reguły posiadasz tylko jeden test integracyjny na pokrycie całej aplikacji i nie rozbijasz go na mniejsze fragmenty (to ja!).</p>
+
+
+    
+  </section>
+
+  <!-- Social media shares -->
+  
+
+<div class="share-buttons">
+    <ul class="share-buttons">
+        <div class="meta">Podziel się na</div>
+        
+        <li>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-driver-tests%2F" target="_blank" title=" Facebook">
+			<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Facebook</span>
+		</a>
+        </li>
+         
+        <li>
+            <a href="https://twitter.com/intent/tweet?text=Testy+integracyjne+z+Flutter+Driverem%20https%3A%2F%2Frykowski.dev%2Fblog%2Fflutter-driver-tests%2F" target="_blank" title="">
+			<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Tweet</span>
+		</a>
+        </li>
+            
+        <li>
+            <a href="http://www.reddit.com/submit?url=https://rykowski.dev/blog/flutter-driver-tests/&title=Testy+integracyjne+z+Flutter+Driverem%20%7C%20rykowski.dev" target="_blank" title=" Reddit">
+			<i class="fa fa-reddit-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Share on Reddit</span>
+		</a>
+        </li>
+           
+        <li>
+            <a href="mailto:?subject=Testy+integracyjne+z+Flutter+Driverem%20%7C%20rykowski.dev&body=:%20https://rykowski.dev/blog/flutter-driver-tests/" target="_blank" title="">
+			<i class="fa fa-envelope-square fa-2x" aria-hidden="true"></i>
+			<span class="sr-only">Email</span>
+		</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list"></div>
+</footer>
+
+
+</article>
+
+<!-- Disqus -->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'rykowski-dev';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Włącz obsługę JavaScript, aby wyświetlić komentarze</noscript>
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+    
+
+    
+    <div id="next-post">
+        <a alt="Wstęp do testowania przez testy jednostkowe" href="/blog/flutter-unit-tests/">
+            <p>Następny wpis</p>
+            Wstęp do testowania przez testy jednostkowe
+        </a>
+    </div>
+    
+</div>
+
+
+
+<!-- To change color of links in the page -->
+<style>
+  
+  .feature-image a { color: rgb(69,190,247) !important; }
+  div#post-nav a { color: rgb(69,190,247) !important; }
+  footer a { color: rgb(69,190,247) !important; }
+  .site-header nav a:hover {  color: rgb(69,190,247) !important; }
+  header#main { background-color: rgb(69,190,247) !important; }
+  
+
+  header#main {
+    background-repeat:no-repeat;
+  background-image: url('/assets/img/lineart.png');  
+  }
+</style>
+
+    </div>
+    <footer class="site-footer">
+    <p class="text">
+        Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+    <a feed.xml href="/feed.xml"
+       title="Obserwuj kanał RSS">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+<li>
+    <a href="mailto:kamil.rykowski@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a href="https://github.com/vintage" title="Obserwuj na GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+    <a class="type" href="https://twitter.com/KamilRykowski"
+       title="Obserwuj na Twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+</li>
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+  </body>
+</html>
