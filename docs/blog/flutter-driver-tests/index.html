@@ -45,9 +45,9 @@
     
 
     <!-- seo tags -->
-    <!-- Begin Jekyll SEO tag v2.6.1 -->
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>Testy integracyjne z Flutter Driverem | rykowski.dev</title>
-<meta name="generator" content="Jekyll v4.1.1" />
+<meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="Testy integracyjne z Flutter Driverem" />
 <meta property="og:locale" content="pl_PL" />
 <meta name="description" content="Posiadanie wyłącznie testów jednostkowych nie daje pełnej gwarancji działania systemu. Jak więc go przetestować, aby spać spokojnie? Integracyjnie wraz z wbudowanym narzędziem Flutter Driver!" />
@@ -57,8 +57,10 @@
 <meta property="og:site_name" content="rykowski.dev" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2021-01-15T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Testy integracyjne z Flutter Driverem" />
 <script type="application/ld+json">
-{"url":"https://rykowski.dev/blog/flutter-driver-tests/","headline":"Testy integracyjne z Flutter Driverem","dateModified":"2021-01-15T00:00:00+01:00","datePublished":"2021-01-15T00:00:00+01:00","description":"Posiadanie wyłącznie testów jednostkowych nie daje pełnej gwarancji działania systemu. Jak więc go przetestować, aby spać spokojnie? Integracyjnie wraz z wbudowanym narzędziem Flutter Driver!","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-driver-tests/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"description":"Posiadanie wyłącznie testów jednostkowych nie daje pełnej gwarancji działania systemu. Jak więc go przetestować, aby spać spokojnie? Integracyjnie wraz z wbudowanym narzędziem Flutter Driver!","url":"https://rykowski.dev/blog/flutter-driver-tests/","headline":"Testy integracyjne z Flutter Driverem","dateModified":"2021-01-15T00:00:00+01:00","datePublished":"2021-01-15T00:00:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-driver-tests/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <meta property="og:image" content="https://rykowski.dev/assets/img/blog/driver_tests/thumbnail.png">
@@ -244,12 +246,12 @@
   <span class="n">group</span><span class="o">(</span><span class="s">'App'</span><span class="o">,</span> <span class="o">()</span> <span class="o">{</span>
     <span class="n">FlutterDriver</span> <span class="n">driver</span><span class="o">;</span>
 
-    <span class="n">setUpAll</span><span class="o">(()</span> <span class="n">async</span> <span class="o">{</span>
-      <span class="n">driver</span> <span class="o">=</span> <span class="n">await</span> <span class="n">FlutterDriver</span><span class="o">.</span><span class="na">connect</span><span class="o">();</span>
+    <span class="n">setUpAll</span><span class="o">(()</span> <span class="kd">async</span> <span class="o">{</span>
+      <span class="n">driver</span> <span class="o">=</span> <span class="k">await</span> <span class="n">FlutterDriver</span><span class="o">.</span><span class="na">connect</span><span class="o">();</span>
     <span class="o">});</span>
     <span class="n">tearDownAll</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">driver</span><span class="o">?.</span><span class="na">close</span><span class="o">());</span>
 
-    <span class="n">test</span><span class="o">(</span><span class="s">'full flow'</span><span class="o">,</span> <span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+    <span class="n">test</span><span class="o">(</span><span class="s">'full flow'</span><span class="o">,</span> <span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
       <span class="c1">// Test logic</span>
     <span class="o">});</span>
   <span class="o">});</span>
@@ -311,11 +313,11 @@ Stopping application instance.
   <p>Wywołanie metody obiektu <code class="language-plaintext highlighter-rouge">find</code> nie przeprowadza żadnego wyszukiwania. Jest to meta informacja dla drivera z instrukcją jak dany obiekt odnaleźć. Jeśli <em>widget</em> jest skarbem, to obiekt zwrócony przez <em>find</em> jest mapą do skarbu, a <em>driver</em> piratem który chce do niego trafić.</p>
 </blockquote>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">test</span><span class="o">(</span><span class="s">'full flow'</span><span class="o">,</span> <span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">test</span><span class="o">(</span><span class="s">'full flow'</span><span class="o">,</span> <span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
   <span class="kd">final</span> <span class="n">scrollable</span> <span class="o">=</span> <span class="n">find</span><span class="o">.</span><span class="na">byType</span><span class="o">(</span><span class="s">"ListView"</span><span class="o">);</span>
   <span class="kd">final</span> <span class="n">loginForm</span> <span class="o">=</span> <span class="n">find</span><span class="o">.</span><span class="na">byValueKey</span><span class="o">(</span><span class="s">"myForm"</span><span class="o">);</span>
 
-  <span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">scrollUntilVisible</span><span class="o">(</span>
+  <span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">scrollUntilVisible</span><span class="o">(</span>
     <span class="n">scrollable</span><span class="o">,</span>
     <span class="n">loginForm</span><span class="o">,</span>
     <span class="nl">dyScroll:</span> <span class="o">-</span><span class="mi">200</span><span class="o">,</span>
@@ -327,7 +329,7 @@ Stopping application instance.
 
 <p>Przewijanie listy trwa do momentu odnalezienia wybrańca. Jak długo? Kiedy test zorientuje się, że wybrańca zabrakło na ekranie? Aspektem, który warto trzymać z tyłu głowy pisząc testy integracyjne jest <strong>czas</strong>. Każda operacja w driverze potrzebuje czasu, aby stwierdzić czy wszystko jest pod kontrolą. To dlatego wszystkie udostępniane interakcje z driverem posiadają konfigurowalny <strong>timeout</strong>, którego przekroczenie oznacza przerwanie całego testu z wynikiem negatywnym. Domyślnie nie jest ustawiony, acz nie oznacza to, że operacja będzie trwała w nieskończoność. Każdy pojedynczy test również posiada zadeklarowany czas życia, który domyślnie wynosi zaledwie 30 sekund. Przekroczenie tego czasu wiąże się z błyskawicznym jego przerwaniem i wystawieniem negatywnego wyniku. Parametr jest w pełni konfigurowalny i jeśli potrzebujesz więcej czasu w samym teście - nic nie stoi na przeszkodzie.</p>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">test</span><span class="o">(</span><span class="s">'full flow'</span><span class="o">,</span> <span class="o">()</span> <span class="n">async</span> <span class="o">{},</span> <span class="nl">timeout:</span> <span class="n">Timeout</span><span class="o">(</span><span class="n">Duration</span><span class="o">(</span><span class="nl">days:</span> <span class="mi">1</span><span class="o">)))</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">test</span><span class="o">(</span><span class="s">'full flow'</span><span class="o">,</span> <span class="o">()</span> <span class="kd">async</span> <span class="o">{},</span> <span class="nl">timeout:</span> <span class="n">Timeout</span><span class="o">(</span><span class="n">Duration</span><span class="o">(</span><span class="nl">days:</span> <span class="mi">1</span><span class="o">)))</span>
 </code></pre></div></div>
 
 <p>Dodajmy <em>timeout</em> do wyszukania formularza na ekranie. Jeśli w ciągu 3 sekund nie uda się go odnaleźć - przerwij test, nie ma sensu szukać go dłużej.</p>
@@ -351,13 +353,13 @@ Stopping application instance.
 <span class="kd">final</span> <span class="n">passwordInput</span> <span class="o">=</span> <span class="n">find</span><span class="o">.</span><span class="na">byValueKey</span><span class="o">(</span><span class="s">"password_input"</span><span class="o">);</span>
 <span class="kd">final</span> <span class="n">submitButton</span> <span class="o">=</span> <span class="n">find</span><span class="o">.</span><span class="na">text</span><span class="o">(</span><span class="s">"Login"</span><span class="o">);</span>
 
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">usernameInput</span><span class="o">);</span>
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">enterText</span><span class="o">(</span><span class="s">"test"</span><span class="o">);</span>
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">passwordInput</span><span class="o">);</span>
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">enterText</span><span class="o">(</span><span class="s">"12345"</span><span class="o">);</span>
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">submitButton</span><span class="o">);</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">usernameInput</span><span class="o">);</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">enterText</span><span class="o">(</span><span class="s">"test"</span><span class="o">);</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">passwordInput</span><span class="o">);</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">enterText</span><span class="o">(</span><span class="s">"12345"</span><span class="o">);</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">submitButton</span><span class="o">);</span>
 
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">waitFor</span><span class="o">(</span><span class="n">find</span><span class="o">.</span><span class="na">text</span><span class="o">(</span><span class="s">"Wrong credentials!"</span><span class="o">));</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">waitFor</span><span class="o">(</span><span class="n">find</span><span class="o">.</span><span class="na">text</span><span class="o">(</span><span class="s">"Wrong credentials!"</span><span class="o">));</span>
 </code></pre></div></div>
 
 <p>Mądry ten driver, zachowuje się zupełnie jak prawdziwy użytkownik. Krok po kroku. Do celu.</p>
@@ -375,9 +377,9 @@ Stopping application instance.
 
 <p>Poprawne dane logowania to <em>admin:12345</em>, wystarczy więc poprawić nazwę użytkownika i wysłać formularz ponownie …</p>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">usernameInput</span><span class="o">);</span>
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">enterText</span><span class="o">(</span><span class="s">"admin"</span><span class="o">);</span>
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">submitButton</span><span class="o">);</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">usernameInput</span><span class="o">);</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">enterText</span><span class="o">(</span><span class="s">"admin"</span><span class="o">);</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">submitButton</span><span class="o">);</span>
 </code></pre></div></div>
 
 <p>… aby test przeszedł do kolejnego ekranu, który również warto zautomatyzować.</p>
@@ -386,14 +388,14 @@ Stopping application instance.
 
 <p>Nie ma na nim jednak niczego, czego nie posiadał ekran poprzedni! Jest tekst, przycisk. Nuda. Nic odkrywczego, nie zatrzymujemy się tutaj, bo szkoda czasu. Przykładowy test sprawdzający trzykrotne stuknięcie w przycisk:</p>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">waitFor</span><span class="o">(</span><span class="n">find</span><span class="o">.</span><span class="na">text</span><span class="o">(</span><span class="s">"0"</span><span class="o">));</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">waitFor</span><span class="o">(</span><span class="n">find</span><span class="o">.</span><span class="na">text</span><span class="o">(</span><span class="s">"0"</span><span class="o">));</span>
 
 <span class="kd">final</span> <span class="n">incrementButton</span> <span class="o">=</span> <span class="n">find</span><span class="o">.</span><span class="na">byType</span><span class="o">(</span><span class="s">"FloatingActionButton"</span><span class="o">);</span>
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">incrementButton</span><span class="o">);</span>
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">incrementButton</span><span class="o">);</span>
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">incrementButton</span><span class="o">);</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">incrementButton</span><span class="o">);</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">incrementButton</span><span class="o">);</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">tap</span><span class="o">(</span><span class="n">incrementButton</span><span class="o">);</span>
 
-<span class="n">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">waitFor</span><span class="o">(</span><span class="n">find</span><span class="o">.</span><span class="na">text</span><span class="o">(</span><span class="s">"3"</span><span class="o">));</span>
+<span class="k">await</span> <span class="n">driver</span><span class="o">.</span><span class="na">waitFor</span><span class="o">(</span><span class="n">find</span><span class="o">.</span><span class="na">text</span><span class="o">(</span><span class="s">"3"</span><span class="o">));</span>
 </code></pre></div></div>
 
 <h2 id="podsumowanie">Podsumowanie</h2>

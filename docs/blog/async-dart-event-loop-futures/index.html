@@ -45,9 +45,9 @@
     
 
     <!-- seo tags -->
-    <!-- Begin Jekyll SEO tag v2.6.1 -->
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>Event Loop, Futures, async/await | rykowski.dev</title>
-<meta name="generator" content="Jekyll v4.1.1" />
+<meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="Event Loop, Futures, async/await" />
 <meta property="og:locale" content="pl_PL" />
 <meta name="description" content="Dart jako język jednowątkowy jest w stanie wykonywać tylko jedną operację w danym czasie. Jedna za drugą. Brzmi powolnie? Nic z tych rzeczy! Dowiedz się jak działa Event Loop i kod asynchroniczny." />
@@ -57,8 +57,10 @@
 <meta property="og:site_name" content="rykowski.dev" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-27T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Event Loop, Futures, async/await" />
 <script type="application/ld+json">
-{"url":"https://rykowski.dev/blog/async-dart-event-loop-futures/","headline":"Event Loop, Futures, async/await","dateModified":"2020-06-27T00:00:00+02:00","datePublished":"2020-06-27T00:00:00+02:00","description":"Dart jako język jednowątkowy jest w stanie wykonywać tylko jedną operację w danym czasie. Jedna za drugą. Brzmi powolnie? Nic z tych rzeczy! Dowiedz się jak działa Event Loop i kod asynchroniczny.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/async-dart-event-loop-futures/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"description":"Dart jako język jednowątkowy jest w stanie wykonywać tylko jedną operację w danym czasie. Jedna za drugą. Brzmi powolnie? Nic z tych rzeczy! Dowiedz się jak działa Event Loop i kod asynchroniczny.","url":"https://rykowski.dev/blog/async-dart-event-loop-futures/","headline":"Event Loop, Futures, async/await","dateModified":"2020-06-27T00:00:00+02:00","datePublished":"2020-06-27T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/async-dart-event-loop-futures/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <meta property="og:image" content="https://rykowski.dev/assets/img/blog/async/thumbnail.png">
@@ -210,7 +212,7 @@
 <span class="o">}</span>
 
 
-<span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">randomSort</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+<span class="kt">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">randomSort</span><span class="o">(</span><span class="kt">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
   <span class="kd">final</span> <span class="n">easy</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">sort</span><span class="o">();</span>
   <span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">shuffle</span><span class="o">();</span>
   
@@ -391,7 +393,7 @@
 <span class="o">}</span>
 
 
-<span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">randomSort</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+<span class="kt">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">randomSort</span><span class="o">(</span><span class="kt">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
   <span class="kd">final</span> <span class="n">easy</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">sort</span><span class="o">();</span>
   <span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">shuffle</span><span class="o">();</span>
   
@@ -403,7 +405,7 @@
 <span class="o">}</span>
 
 <span class="kt">bool</span> <span class="nf">listsAreEqual</span><span class="p">(</span><span class="n">l1</span><span class="o">,</span> <span class="n">l2</span><span class="o">)</span> <span class="o">{</span>
-  <span class="k">return</span> <span class="n">List</span><span class="o">.</span><span class="na">generate</span><span class="o">(</span>
+  <span class="k">return</span> <span class="kt">List</span><span class="o">.</span><span class="na">generate</span><span class="o">(</span>
     <span class="n">l1</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">l1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="n">l2</span><span class="o">[</span><span class="n">i</span><span class="o">]</span>
   <span class="o">).</span><span class="na">where</span><span class="o">((</span><span class="n">r</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">r</span><span class="o">)</span>
   <span class="o">.</span><span class="na">toList</span><span class="o">().</span><span class="na">length</span> <span class="o">==</span> <span class="n">l1</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
@@ -640,12 +642,12 @@ packages/cloud_functions/cloud_functions/lib/src/https_callable.dart#L30"><img s
   <li>Typ zwracany przez funkcję automatycznie staje się <em>Future&lt;T&gt;</em>. Nawet w najprostszym scenariuszu jak ten:</li>
 </ol>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">getOne</span><span class="p">(</span><span class="o">)</span> <span class="n">async</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="o">;</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">getOne</span><span class="p">(</span><span class="o">)</span> <span class="kd">async</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="o">;</span>
 </code></pre></div></div>
 
 <p>Uruchomienie takiej funkcji zakończy się błędem, bo zwrócony typ to nie <em>int</em>, a <em>Future&lt;int&gt;</em>. Poprawny kod:</p>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">getOne</span><span class="o">()</span> <span class="n">async</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="o">;</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">getOne</span><span class="o">()</span> <span class="kd">async</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="o">;</span>
 </code></pre></div></div>
 
 <ol>
@@ -658,11 +660,11 @@ packages/cloud_functions/cloud_functions/lib/src/https_callable.dart#L30"><img s
 
 <div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'dart:async'</span><span class="o">;</span>
 
-<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
   <span class="n">print</span><span class="o">(</span><span class="s">"1"</span><span class="o">);</span>
 
   <span class="k">try</span> <span class="o">{</span>
-    <span class="n">await</span> <span class="n">Future</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="k">await</span> <span class="n">Future</span><span class="o">(()</span> <span class="o">{</span>
       <span class="n">print</span><span class="o">(</span><span class="s">"2"</span><span class="o">);</span>
       <span class="kt">int</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"future"</span><span class="o">);</span>
     <span class="o">});</span>

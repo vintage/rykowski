@@ -45,9 +45,9 @@
     
 
     <!-- seo tags -->
-    <!-- Begin Jekyll SEO tag v2.6.1 -->
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>Monetyzacja aplikacji z reklamami AdMob | rykowski.dev</title>
-<meta name="generator" content="Jekyll v4.1.1" />
+<meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="Monetyzacja aplikacji z reklamami AdMob" />
 <meta property="og:locale" content="pl_PL" />
 <meta name="description" content="Darmowe aplikacje mobilne również na siebie zarabiają. W jaki sposób? Istnieje wiele strategii monetyzacyjnych, a jedną z nich są reklamy AdMob w różnych wariantach. Pierwszy krok w zarabianiu na aplikacji pisanej we Flutter." />
@@ -57,8 +57,10 @@
 <meta property="og:site_name" content="rykowski.dev" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-07-17T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Monetyzacja aplikacji z reklamami AdMob" />
 <script type="application/ld+json">
-{"url":"https://rykowski.dev/blog/flutter-monetization-admob/","headline":"Monetyzacja aplikacji z reklamami AdMob","dateModified":"2019-07-17T00:00:00+02:00","datePublished":"2019-07-17T00:00:00+02:00","description":"Darmowe aplikacje mobilne również na siebie zarabiają. W jaki sposób? Istnieje wiele strategii monetyzacyjnych, a jedną z nich są reklamy AdMob w różnych wariantach. Pierwszy krok w zarabianiu na aplikacji pisanej we Flutter.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-monetization-admob/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"description":"Darmowe aplikacje mobilne również na siebie zarabiają. W jaki sposób? Istnieje wiele strategii monetyzacyjnych, a jedną z nich są reklamy AdMob w różnych wariantach. Pierwszy krok w zarabianiu na aplikacji pisanej we Flutter.","url":"https://rykowski.dev/blog/flutter-monetization-admob/","headline":"Monetyzacja aplikacji z reklamami AdMob","dateModified":"2019-07-17T00:00:00+02:00","datePublished":"2019-07-17T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/flutter-monetization-admob/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <meta property="og:image" content="https://rykowski.dev/assets/img/blog/admob/thumbnail.png">
@@ -399,7 +401,7 @@
 
 <p>W aplikacji przyjęliśmy wstępny scenariusz, że to użytkownik klika w przycisk, aby zobaczyć baner reklamowy. Tak też zróbmy poprzez odpowiednią implementację powiązanej metody:</p>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">showBanner</span><span class="p">(</span><span class="o">)</span> <span class="n">async</span> <span class="o">{</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">showBanner</span><span class="p">(</span><span class="o">)</span> <span class="kd">async</span> <span class="o">{</span>
   <span class="kd">var</span> <span class="n">banner</span> <span class="o">=</span> <span class="n">BannerAd</span><span class="o">(</span>
     <span class="nl">adUnitId:</span> <span class="n">BannerAd</span><span class="o">.</span><span class="na">testAdUnitId</span><span class="o">,</span>
     <span class="nl">targetingInfo:</span> <span class="n">MobileAdTargetingInfo</span><span class="o">(),</span>
@@ -500,7 +502,7 @@
 <p>Dostępne kwadraty trzymane są w stanie aplikacji, aby w momencie przejścia na kolejny poziom móc je zaktualizować. Zainicjalizujmy wstępnie listę wartościami.</p>
 
 <div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">_AppState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">App</span><span class="o">&gt;</span> <span class="o">{</span>
-  <span class="n">List</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">boxes</span> <span class="o">=</span> <span class="o">[];</span>
+  <span class="kt">List</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">boxes</span> <span class="o">=</span> <span class="o">[];</span>
   
   <span class="nd">@override</span>
   <span class="kt">void</span> <span class="n">initState</span><span class="o">()</span> <span class="o">{</span>
@@ -508,7 +510,7 @@
     <span class="c1">// ...</span>
   <span class="o">}</span>
   
-  <span class="n">List</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">getInitialBoxes</span><span class="o">()</span> <span class="o">{</span>
+  <span class="kt">List</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">getInitialBoxes</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="o">[</span>
       <span class="n">Container</span><span class="o">(</span><span class="nl">width:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">height:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">green</span><span class="o">),</span>
       <span class="n">Container</span><span class="o">(</span><span class="nl">width:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">height:</span> <span class="mi">50</span><span class="o">,</span> <span class="nl">color:</span> <span class="n">Colors</span><span class="o">.</span><span class="na">green</span><span class="o">),</span>
@@ -645,7 +647,7 @@
 
 <p>Przejście pojedynczego poziomu nagradza 1 monetą …</p>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">showInterstitial</span><span class="p">(</span><span class="o">)</span> <span class="n">async</span> <span class="o">{</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">showInterstitial</span><span class="p">(</span><span class="o">)</span> <span class="kd">async</span> <span class="o">{</span>
   <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
     <span class="n">coins</span><span class="o">++;</span>
     <span class="n">boxes</span><span class="o">.</span><span class="na">shuffle</span><span class="o">();</span>

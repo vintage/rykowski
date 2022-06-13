@@ -45,9 +45,9 @@
     
 
     <!-- seo tags -->
-    <!-- Begin Jekyll SEO tag v2.6.1 -->
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>Ciężkie obliczenia z Isolate | rykowski.dev</title>
-<meta name="generator" content="Jekyll v4.1.1" />
+<meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="Ciężkie obliczenia z Isolate" />
 <meta property="og:locale" content="pl_PL" />
 <meta name="description" content="Równoległe przetwarzania w Darcie? Jak najbardziej możliwe! Rozbijmy skorupę jednowątkowości dzięki dodatkowej mocy dostarczanej przez izolaty. Jednowątkowość z wieloma wątkami." />
@@ -57,8 +57,10 @@
 <meta property="og:site_name" content="rykowski.dev" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-07-05T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Ciężkie obliczenia z Isolate" />
 <script type="application/ld+json">
-{"url":"https://rykowski.dev/blog/async-dart-isolates/","headline":"Ciężkie obliczenia z Isolate","dateModified":"2020-07-05T00:00:00+02:00","datePublished":"2020-07-05T00:00:00+02:00","description":"Równoległe przetwarzania w Darcie? Jak najbardziej możliwe! Rozbijmy skorupę jednowątkowości dzięki dodatkowej mocy dostarczanej przez izolaty. Jednowątkowość z wieloma wątkami.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/async-dart-isolates/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"description":"Równoległe przetwarzania w Darcie? Jak najbardziej możliwe! Rozbijmy skorupę jednowątkowości dzięki dodatkowej mocy dostarczanej przez izolaty. Jednowątkowość z wieloma wątkami.","url":"https://rykowski.dev/blog/async-dart-isolates/","headline":"Ciężkie obliczenia z Isolate","dateModified":"2020-07-05T00:00:00+02:00","datePublished":"2020-07-05T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rykowski.dev/blog/async-dart-isolates/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <meta property="og:image" content="https://rykowski.dev/assets/img/blog/async-2/thumbnail.png">
@@ -202,10 +204,10 @@
 <div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
 <span class="kn">import</span> <span class="s">"dart:isolate"</span><span class="o">;</span>
 
-<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
   <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
 
-  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="n">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
+  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
     <span class="n">isolateEntry</span><span class="o">,</span>
     <span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">,</span>
   <span class="o">);</span>
@@ -243,13 +245,13 @@ Isolate says: Hi
 
 <p>Poniżej zamieszczony jest przykład izolata, który jako punkt wejściowy otrzymuje funkcję zdefiniowaną w obrębie innej funkcji. Uruchomienie takiego programu zakończy się błędem, gdyż jedyny poprawny punkt wejścia to funkcja statyczna, lub top-level. Pamiętaj o tym!</p>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
   <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
 
   <span class="kt">void</span> <span class="n">isolateEntry</span><span class="o">(</span><span class="n">SendPort</span> <span class="n">port</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">"Hi"</span><span class="o">);</span>
 
   <span class="c1">// Error!</span>
-  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="n">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
+  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
     <span class="n">isolateEntry</span><span class="o">,</span>
     <span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">,</span>
   <span class="o">);</span>
@@ -266,10 +268,10 @@ Isolate says: Hi
 <span class="c1">// Define dummy flag</span>
 <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 
-<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
   <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
 
-  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="n">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
+  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
     <span class="n">isolateEntry</span><span class="o">,</span>
     <span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">,</span>
   <span class="o">);</span>
@@ -316,10 +318,10 @@ Isolate says: Hi
 <div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
 <span class="kn">import</span> <span class="s">"dart:isolate"</span><span class="o">;</span>
 
-<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
   <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
 
-  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="n">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
+  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
     <span class="n">isolateEntry</span><span class="o">,</span>
     <span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">,</span>
   <span class="o">);</span>
@@ -375,10 +377,10 @@ Isolate says: Hi
 <div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">"dart:async"</span><span class="o">;</span>
 <span class="kn">import</span> <span class="s">"dart:isolate"</span><span class="o">;</span>
 
-<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">main</span><span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
   <span class="kd">final</span> <span class="n">receivePort</span> <span class="o">=</span> <span class="n">ReceivePort</span><span class="o">();</span>
 
-  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="n">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
+  <span class="n">Isolate</span> <span class="n">isolate</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Isolate</span><span class="o">.</span><span class="na">spawn</span><span class="o">(</span>
     <span class="n">isolateEntry</span><span class="o">,</span>
     <span class="n">receivePort</span><span class="o">.</span><span class="na">sendPort</span><span class="o">,</span>
   <span class="o">);</span>
@@ -462,12 +464,12 @@ Isolate says: Hi
 <span class="o">}</span>
 
 <span class="kd">class</span> <span class="nc">_MyAppState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">MyApp</span><span class="o">&gt;</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">unsortedList</span> <span class="o">=</span> <span class="o">[</span>
+  <span class="kd">final</span> <span class="kt">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">unsortedList</span> <span class="o">=</span> <span class="o">[</span>
     <span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span>
   <span class="o">];</span>
   <span class="kt">bool</span> <span class="n">sorting</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
   <span class="kt">int</span> <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-  <span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sortedList</span><span class="o">;</span>
+  <span class="kt">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sortedList</span><span class="o">;</span>
 
   <span class="nd">@override</span>
   <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
@@ -505,7 +507,7 @@ Isolate says: Hi
     <span class="o">});</span>
   <span class="o">}</span>
 
-  <span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">sortList</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+  <span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">sortList</span><span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
     <span class="c1">// Update UI to reflect the sort has started</span>
     <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
       <span class="n">sorting</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
@@ -522,7 +524,7 @@ Isolate says: Hi
   <span class="o">}</span>
 <span class="o">}</span>
 
-<span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sortNumbers</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+<span class="kt">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sortNumbers</span><span class="o">(</span><span class="kt">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">return</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">sort</span><span class="o">();</span>
 <span class="o">}</span>
 </code></pre></div></div>
@@ -533,7 +535,7 @@ Isolate says: Hi
 
 <p>Pora wymienić domyślne sortowanie na własny mechanizm:</p>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sortNumbers</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sortNumbers</span><span class="o">(</span><span class="kt">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
   <span class="kd">final</span> <span class="n">easy</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">sort</span><span class="o">();</span>
   <span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="o">[...</span><span class="na">numbers</span><span class="o">]..</span><span class="na">shuffle</span><span class="o">();</span>
 
@@ -572,7 +574,7 @@ Isolate says: Hi
 
 <p>Skoro jeden wątek to jedna instrukcja, pora uruchomić pomocnika w postaci izolata. Nie będziemy go jednak tworzyć ręcznie, bo opisany <strong>compute</strong> sprawdzi się tutaj doskonale. Nie potrzebujemy przecież stałej komunikacji w obie strony. Wystarczy, że funkcja uruchomi się z zadanymi parametrami i dostarczy wynik gdy będzie już gotowy.</p>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="n">await</span> <span class="n">compute</span><span class="o">(</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="k">await</span> <span class="n">compute</span><span class="o">(</span>
   <span class="n">sortNumbers</span><span class="o">,</span> <span class="n">unsortedList</span><span class="o">,</span>
 <span class="o">);</span>
 <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
@@ -582,13 +584,13 @@ Isolate says: Hi
 
 <p>Pełny kod funkcji <em>sortList</em>:</p>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">sortList</span><span class="o">()</span> <span class="n">async</span> <span class="o">{</span>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">sortList</span><span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
   <span class="c1">// Update UI to reflect the sort has started</span>
   <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
     <span class="n">sorting</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
   <span class="o">});</span>
 
-  <span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="n">await</span> <span class="n">compute</span><span class="o">(</span>
+  <span class="kd">final</span> <span class="n">sorted</span> <span class="o">=</span> <span class="k">await</span> <span class="n">compute</span><span class="o">(</span>
     <span class="n">sortNumbers</span><span class="o">,</span> <span class="n">unsortedList</span><span class="o">,</span>
   <span class="o">);</span>
   <span class="n">setState</span><span class="o">(()</span> <span class="o">{</span>
